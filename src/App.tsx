@@ -27,8 +27,6 @@ function AppContent() {
 
   // Modal states
   const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [bookingBusinessName, setBookingBusinessName] = useState("");
-  const [bookingWebsiteUrl, setBookingWebsiteUrl] = useState("");
 
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedArticle, setSelectedArticle] = useState<InsightArticle | null>(null);
@@ -97,17 +95,8 @@ function AppContent() {
     }
   };
 
-  // Open booking modal with prefilled data from Audit
-  const handleScheduleWithAuditData = (business: string, webUrl: string) => {
-    setBookingBusinessName(business);
-    setBookingWebsiteUrl(webUrl);
-    setIsBookingOpen(true);
-  };
-
-  // Open empty booking modal
+  // Open the Google Calendar booking modal
   const handleScheduleGeneral = () => {
-    setBookingBusinessName("");
-    setBookingWebsiteUrl("");
     setIsBookingOpen(true);
   };
 
@@ -182,7 +171,6 @@ function AppContent() {
                   activeStageId={activeStageId}
                   setActiveStageId={setActiveStageId}
                   onScheduleCall={handleScheduleGeneral}
-                  onScheduleWithAuditData={handleScheduleWithAuditData}
                   onSelectProject={setSelectedProject}
                   onSelectArticle={setSelectedArticle}
                   newsletterEmail={newsletterEmail}
@@ -248,7 +236,6 @@ function AppContent() {
                   activeStageId={activeStageId}
                   setActiveStageId={setActiveStageId}
                   onScheduleCall={handleScheduleGeneral}
-                  onScheduleWithAuditData={handleScheduleWithAuditData}
                   onSelectProject={setSelectedProject}
                   onSelectArticle={setSelectedArticle}
                   newsletterEmail={newsletterEmail}
@@ -268,8 +255,6 @@ function AppContent() {
       <BookingModal 
         isOpen={isBookingOpen} 
         onClose={() => setIsBookingOpen(false)}
-        prefillBusinessName={bookingBusinessName}
-        prefillWebsiteUrl={bookingWebsiteUrl}
       />
 
       <ProjectModal 

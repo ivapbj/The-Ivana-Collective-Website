@@ -38,7 +38,6 @@ interface HomeProps {
   activeStageId: string;
   setActiveStageId: (stageId: string) => void;
   onScheduleCall: () => void;
-  onScheduleWithAuditData: (biz: string, web: string) => void;
   onSelectProject: (p: Project) => void;
   onSelectArticle: (a: InsightArticle) => void;
   newsletterEmail: string;
@@ -54,7 +53,6 @@ export default function Home({
   activeStageId,
   setActiveStageId,
   onScheduleCall,
-  onScheduleWithAuditData,
   onSelectProject,
   onSelectArticle,
   newsletterEmail,
@@ -868,7 +866,7 @@ export default function Home({
           </div>
 
           {/* Audit Tool master component */}
-          <AuditTool onScheduleCallWithData={onScheduleWithAuditData} />
+          <AuditTool onScheduleCall={onScheduleCall} />
         </div>
       </section>
 

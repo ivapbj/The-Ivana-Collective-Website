@@ -16,6 +16,7 @@ import {
   ShieldAlert,
   Phone
 } from "lucide-react";
+import { normalizeWebsiteUrl, WEBSITE_URL_ERROR } from "../../shared/websiteUrl";
 
 // Types and Schemas
 interface Palette {
@@ -328,6 +329,12 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
       return;
     }
 
+    const normalizedWebsiteUrl = normalizeWebsiteUrl(websiteUrl);
+    if (normalizedWebsiteUrl === null) {
+      setSubmitError(WEBSITE_URL_ERROR);
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -340,7 +347,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
           industry,
           email,
           phone,
-          websiteUrl,
+          websiteUrl: normalizedWebsiteUrl,
           theme: selectedDirection.name,
           palette: selectedPalette.name,
           notes,
@@ -587,8 +594,8 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                         </label>
                         <input
                           id="website-url"
-                          type="url"
-                          placeholder="e.g. https://elite.com"
+                          type="text"
+                          placeholder="yourbusiness.com"
                           value={websiteUrl}
                           onChange={(e) => setWebsiteUrl(e.target.value)}
                           className="w-full bg-[#061C1A] border border-white/10 rounded-xl px-4 py-3 text-xs text-[#F4F5F1] focus:outline-none focus:border-[#B9D8CE]/50 transition-colors"

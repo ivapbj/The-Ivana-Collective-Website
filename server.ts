@@ -3,6 +3,7 @@ import path from "path";
 import { GoogleGenAI, Type } from "@google/genai";
 import { createServer as createViteServer } from "vite";
 import dotenv from "dotenv";
+import { normalizeWebsiteUrl, WEBSITE_URL_ERROR } from "./shared/websiteUrl";
 
 // Load environment variables
 dotenv.config();
@@ -130,6 +131,11 @@ async function startServer() {
       return res.status(400).json({ error: "You must consent to being contacted by The Ivana Collective to save your preview." });
     }
 
+    const normalizedWebsiteUrl = normalizeWebsiteUrl(websiteUrl ?? "");
+    if (normalizedWebsiteUrl === null) {
+      return res.status(400).json({ error: WEBSITE_URL_ERROR });
+    }
+
     // 3. Prevent Duplicate Submissions (within 15 seconds)
     const now = new Date();
     const isDuplicate = previewsStore.some(
@@ -176,7 +182,7 @@ async function startServer() {
       industry: industry.trim(),
       email: email.trim(),
       phone: (phone || "").trim(),
-      websiteUrl: (websiteUrl || "").trim(),
+      websiteUrl: normalizedWebsiteUrl,
       theme: theme || "Luxury Editorial",
       palette: palette || "Collective Forest",
       notes: (notes || "").trim(),
@@ -284,12 +290,17 @@ A visitor has finalized their Website Style Preview parameters:
       return res.status(400).json({ error: "Name, email, date, and time slot are required." });
     }
 
+    const normalizedWebsiteUrl = normalizeWebsiteUrl(websiteUrl ?? "");
+    if (normalizedWebsiteUrl === null) {
+      return res.status(400).json({ error: WEBSITE_URL_ERROR });
+    }
+
     const newBooking = {
       id: "bk-" + Math.random().toString(36).substr(2, 9),
       name,
       email,
       businessName: businessName || "",
-      websiteUrl: websiteUrl || "",
+      websiteUrl: normalizedWebsiteUrl,
       date,
       timeSlot,
       notes: notes || "",
@@ -314,6 +325,11 @@ A visitor has finalized their Website Style Preview parameters:
       return res.status(400).json({ error: "Business name, location, and services are required." });
     }
 
+    const normalizedWebsiteUrl = normalizeWebsiteUrl(websiteUrl ?? "");
+    if (normalizedWebsiteUrl === null) {
+      return res.status(400).json({ error: WEBSITE_URL_ERROR });
+    }
+
     try {
       const ai = getGeminiClient();
 
@@ -322,7 +338,7 @@ A visitor has finalized their Website Style Preview parameters:
         - Business Name: "${businessName}"
         - Location / Service Area: "${location}"
         - Services Provided: "${services}"
-        ${websiteUrl ? `- Existing Website URL: "${websiteUrl}"` : ""}
+        ${normalizedWebsiteUrl ? `- Existing Website URL: "${normalizedWebsiteUrl}"` : ""}
 
         Provide realistic, expert, highly actionable insights. Be professional, boutique-agency status, encouraging but highly strategic.
       `;

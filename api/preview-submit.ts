@@ -1,3 +1,5 @@
+import { normalizeWebsiteUrl, WEBSITE_URL_ERROR } from "../shared/websiteUrl";
+
 type JsonObject = Record<string, unknown>;
 
 const recentSubmissions = new Map<string, number>();
@@ -95,6 +97,11 @@ async function handlePost(request: Request): Promise<Response> {
     return jsonResponse(400, { error: "The submitted form data is invalid." });
   }
 
+  const normalizedWebsiteUrl = normalizeWebsiteUrl(websiteUrl);
+  if (normalizedWebsiteUrl === null) {
+    return jsonResponse(400, { error: WEBSITE_URL_ERROR });
+  }
+
   const now = new Date();
   const duplicateKey = `${email}\u0000${businessName}`;
   const previousSubmission = recentSubmissions.get(duplicateKey);
@@ -109,6 +116,7 @@ async function handlePost(request: Request): Promise<Response> {
     submissionId,
     businessName,
     email,
+    websiteUrl: normalizedWebsiteUrl,
     notificationEmail: process.env.FORM_NOTIFICATION_EMAIL || "info@theivanacollective.com",
     senderEmail: process.env.FROM_EMAIL || "no-reply@theivanacollective.com",
     theme: theme || "Luxury Editorial",

@@ -12,12 +12,13 @@ import {
   AlertCircle 
 } from "lucide-react";
 import { AuditResponse } from "../types";
+import { normalizeWebsiteUrl, WEBSITE_URL_ERROR } from "../../shared/websiteUrl";
 
 interface AuditToolProps {
-  onScheduleCallWithData: (businessName: string, websiteUrl: string) => void;
+  onScheduleCall: () => void;
 }
 
-export default function AuditTool({ onScheduleCallWithData }: AuditToolProps) {
+export default function AuditTool({ onScheduleCall }: AuditToolProps) {
   const [businessName, setBusinessName] = useState("");
   const [location, setLocation] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
@@ -54,6 +55,12 @@ export default function AuditTool({ onScheduleCallWithData }: AuditToolProps) {
       return;
     }
 
+    const normalizedWebsiteUrl = normalizeWebsiteUrl(websiteUrl);
+    if (normalizedWebsiteUrl === null) {
+      setError(WEBSITE_URL_ERROR);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     setResult(null);
@@ -65,7 +72,7 @@ export default function AuditTool({ onScheduleCallWithData }: AuditToolProps) {
         body: JSON.stringify({
           businessName,
           location,
-          websiteUrl,
+          websiteUrl: normalizedWebsiteUrl,
           services
         })
       });
@@ -158,10 +165,10 @@ export default function AuditTool({ onScheduleCallWithData }: AuditToolProps) {
                   CURRENT WEBSITE (OPTIONAL)
                 </label>
                 <input
-                  type="url"
+                  type="text"
                   value={websiteUrl}
                   onChange={(e) => setWebsiteUrl(e.target.value)}
-                  placeholder="e.g., https://elitepilates.com"
+                  placeholder="yourbusiness.com"
                   className="w-full bg-[#061C1A] border border-white/10 rounded-lg px-4 py-3 text-sm text-[#F4F5F1] focus:outline-none focus:border-[#B9D8CE] focus:ring-1 focus:ring-[#B9D8CE]/20 transition-all placeholder:text-white/20"
                 />
               </div>
@@ -403,7 +410,7 @@ export default function AuditTool({ onScheduleCallWithData }: AuditToolProps) {
                 Reset Audit
               </button>
               <button
-                onClick={() => onScheduleCallWithData(businessName, websiteUrl)}
+                onClick={onScheduleCall}
                 className="
                   flex items-center space-x-2 px-6 py-3 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold
                   bg-[#B9D8CE] text-[#061C1A] hover:bg-[#F4F5F1] transition-all cursor-pointer shadow-md

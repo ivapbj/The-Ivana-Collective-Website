@@ -352,16 +352,36 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
         })
       });
 
-      const data = await response.json();
+      const responseText = await response.text();
+      let data: { success?: boolean; message?: string; error?: string } | null = null;
+
+      if (responseText) {
+        try {
+          data = JSON.parse(responseText);
+        } catch {
+          data = null;
+        }
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || "Submission failed. Please check your inputs.");
+        throw new Error(
+          data?.error ||
+          "We could not submit your website direction right now. Please try again shortly."
+        );
+      }
+
+      if (!data || data.success !== true) {
+        throw new Error("We received an unexpected response. Please try submitting the form again.");
       }
 
       setSubmitSuccess(data.message || "Your website direction has been submitted.");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Submission Error:", err);
-      setSubmitError(err.message || "We could not submit your website direction. Please review your information and try again.");
+      setSubmitError(
+        err instanceof Error
+          ? err.message
+          : "We could not submit your website direction. Please review your information and try again."
+      );
     } finally {
       setIsSubmitting(false);
     }

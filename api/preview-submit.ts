@@ -1,10 +1,47 @@
-import { normalizeWebsiteUrl, WEBSITE_URL_ERROR } from "../shared/websiteUrl";
-
 type JsonObject = Record<string, unknown>;
 
+const WEBSITE_URL_ERROR = "Please enter a valid website, such as yourbusiness.com.";
 const recentSubmissions = new Map<string, number>();
 const DUPLICATE_WINDOW_MS = 15_000;
 const MAX_REQUEST_CHARACTERS = 4_000_000;
+
+function normalizeWebsiteUrl(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+
+  const trimmedValue = value.trim();
+  if (!trimmedValue) return "";
+  if (/\s/.test(trimmedValue)) return null;
+
+  const normalizedValue = /^https?:\/\//i.test(trimmedValue)
+    ? trimmedValue
+    : `https://${trimmedValue}`;
+
+  try {
+    const parsedUrl = new URL(normalizedValue);
+    const hostnameLabels = parsedUrl.hostname.split(".");
+    const hasValidHostname =
+      hostnameLabels.length >= 2 &&
+      hostnameLabels.every(
+        (label) =>
+          label.length > 0 &&
+          label.length <= 63 &&
+          /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i.test(label)
+      );
+
+    if (
+      !["http:", "https:"].includes(parsedUrl.protocol) ||
+      !hasValidHostname ||
+      parsedUrl.username ||
+      parsedUrl.password
+    ) {
+      return null;
+    }
+
+    return normalizedValue;
+  } catch {
+    return null;
+  }
+}
 
 function jsonResponse(status: number, body: JsonObject, extraHeaders?: HeadersInit): Response {
   const headers = new Headers(extraHeaders);

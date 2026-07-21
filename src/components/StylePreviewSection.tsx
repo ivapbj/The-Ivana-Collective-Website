@@ -202,11 +202,14 @@ const INDUSTRIES = [
   "Other"
 ];
 
-interface StylePreviewSectionProps {
-  onScheduleCall: () => void;
+const PREVIEW_BOOKING_URL = "https://calendar.app.google/fsvawrwZfkYNESyeA";
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function isValidEmail(value: string): boolean {
+  return EMAIL_PATTERN.test(value.trim());
 }
 
-export default function StylePreviewSection({ onScheduleCall }: StylePreviewSectionProps) {
+export default function StylePreviewSection() {
   // 1. Core Configurator States
   const [businessName, setBusinessName] = useState("");
   const [tagline, setTagline] = useState("");
@@ -243,6 +246,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const hasValidEmail = isValidEmail(email);
 
   // File Upload Reference
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -315,12 +319,12 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
       setSubmitError("Please select a Business Industry.");
       return;
     }
-    if (!email.trim()) {
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail) {
       setSubmitError("Please fill in the required field: Business Email.");
       return;
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!isValidEmail(trimmedEmail)) {
       setSubmitError("Please enter a valid business email address.");
       return;
     }
@@ -345,7 +349,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
           businessName,
           tagline,
           industry,
-          email,
+          email: trimmedEmail,
           phone,
           websiteUrl: normalizedWebsiteUrl,
           theme: selectedDirection.name,
@@ -897,27 +901,30 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                         >
                           <RotateCcw className="w-3.5 h-3.5" /> Start New
                         </button>
-                        <button
-                          type="button"
-                          onClick={onScheduleCall}
+                        <a
+                          href={PREVIEW_BOOKING_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           style={{ fontFamily: 'Inter, Arial, sans-serif' }}
                           className="px-4 py-2 rounded-lg bg-[#B9D8CE] text-[#061C1A] hover:bg-[#a3cbbf] text-xs uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 shadow-md"
                         >
                           Schedule a Strategy Call <ArrowRight className="w-3.5 h-3.5" />
-                        </button>
+                        </a>
                       </div>
                     </div>
                   ) : (
                     <button
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || !hasValidEmail}
                       style={{ fontFamily: 'Inter, Arial, sans-serif' }}
-                      className="
-                        w-full py-3.5 rounded-xl bg-[#B9D8CE] text-[#061C1A] hover:bg-[#a3cbbf] 
-                        text-xs uppercase tracking-wider font-bold transition-all duration-300
-                        disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:-translate-y-0.5
-                        flex items-center justify-center gap-2 cursor-pointer
-                      "
+                      className={`
+                        w-full py-3.5 rounded-xl text-xs uppercase tracking-wider font-bold transition-all duration-300
+                        flex items-center justify-center gap-2
+                        ${hasValidEmail
+                          ? "bg-[#B9D8CE] text-[#061C1A] hover:bg-[#a3cbbf] shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                          : "bg-gray-600 text-gray-300 shadow-none hover:shadow-none hover:translate-y-0 cursor-not-allowed"
+                        }
+                      `}
                     >
                       {isSubmitting ? (
                         <>
@@ -1067,13 +1074,15 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                     {/* Right Column: CTA button (Desktop) OR Hamburger Menu (Tablet/Mobile) */}
                     <div className="justify-self-end flex items-center">
                       {previewDevice === "desktop" ? (
-                        <button 
-                          type="button"
+                        <a
+                          href={PREVIEW_BOOKING_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           style={{ fontFamily: selectedDirection.fontBody }}
                           className={`px-4 py-1.5 text-[9px] font-semibold ${getPrimaryButtonClass()} transition-all whitespace-nowrap`}
                         >
                           Get Started
-                        </button>
+                        </a>
                       ) : (
                         /* Hamburger Menu in Mobile and Tablet */
                         <button
@@ -1120,12 +1129,14 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                           <span className="py-2 opacity-75 hover:text-[var(--preview-accent)] cursor-pointer transition-colors border-b border-[var(--preview-border)]/20 pb-2">Services</span>
                           <span className="py-2 opacity-75 hover:text-[var(--preview-accent)] cursor-pointer transition-colors border-b border-[var(--preview-border)]/20 pb-2">About</span>
                           <span className="py-2 opacity-75 hover:text-[var(--preview-accent)] cursor-pointer transition-colors border-b border-[var(--preview-border)]/20 pb-2">Contact</span>
-                          <button 
-                            type="button"
+                          <a
+                            href={PREVIEW_BOOKING_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className={`mt-2 w-full py-2 text-[10px] font-semibold ${getPrimaryButtonClass()} transition-all`}
                           >
                             Get Started
-                          </button>
+                          </a>
                         </nav>
                       </div>
                     )}
@@ -1174,13 +1185,15 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                         </p>
 
                         <div className="flex flex-wrap gap-3 pt-2">
-                          <button 
-                            type="button"
+                          <a
+                            href={PREVIEW_BOOKING_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             style={{ fontFamily: selectedDirection.id === "luxury-editorial" ? selectedDirection.fontHeading : selectedDirection.fontBody }}
                             className={`px-5 py-2.5 text-[10px] font-semibold ${getPrimaryButtonClass()} transition-all`}
                           >
                             Get Started
-                          </button>
+                          </a>
                           <button 
                             type="button"
                             style={{ fontFamily: selectedDirection.id === "luxury-editorial" ? selectedDirection.fontHeading : selectedDirection.fontBody }}
@@ -1349,13 +1362,15 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                       >
                         Schedule a signature digital consultation with {businessName.trim() || "our studio"} to secure your territory and establish search dominance today.
                       </p>
-                      <button 
-                        type="button"
+                      <a
+                        href={PREVIEW_BOOKING_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         style={{ fontFamily: selectedDirection.id === "luxury-editorial" ? selectedDirection.fontHeading : selectedDirection.fontBody }}
                         className={`px-6 py-3 text-[10px] font-semibold ${getPrimaryButtonClass()} transition-all inline-block`}
                       >
                         Book Your Consultation
-                      </button>
+                      </a>
                     </div>
                   </section>
 

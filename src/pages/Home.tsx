@@ -108,7 +108,7 @@ export default function Home({
       </section>
 
       {/* Interactive Website Style Preview Section */}
-      <StylePreviewSection onScheduleCall={onScheduleCall} />
+      <StylePreviewSection />
 
       {/* 3. Services preview */}
       <section id="services" className="py-24 md:py-32 bg-[#061C1A] border-b border-white/5 relative">

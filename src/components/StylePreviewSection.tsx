@@ -879,9 +879,9 @@ export default function StylePreviewSection() {
                       <div className="flex items-start gap-2.5 text-[#B9D8CE]">
                         <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" />
                         <div>
-                          <h5 style={{ fontFamily: 'Georgia, "Times New Roman", serif' }} className="font-serif text-sm font-semibold text-[#F4F5F1]">Your website direction has been submitted.</h5>
+                          <h5 style={{ fontFamily: 'Georgia, "Times New Roman", serif' }} className="font-serif text-sm font-semibold text-[#F4F5F1]">Your Website Direction has been sent.</h5>
                           <p className="text-xs text-[#B8C6C1] font-light mt-1">
-                            The Ivana Collective will review your selections and contact you using the information you provided.
+                            {submitSuccess}
                           </p>
                         </div>
                       </div>

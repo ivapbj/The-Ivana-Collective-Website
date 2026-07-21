@@ -232,11 +232,20 @@ export default function StylePreviewSection() {
   // Responsive device simulator size
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [isPreviewMenuOpen, setIsPreviewMenuOpen] = useState(false);
+  const [isNarrowViewport, setIsNarrowViewport] = useState(false);
 
   // Close preview menu when simulator device is toggled
   useEffect(() => {
     setIsPreviewMenuOpen(false);
   }, [previewDevice]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    const updateViewport = () => setIsNarrowViewport(mediaQuery.matches);
+    updateViewport();
+    mediaQuery.addEventListener("change", updateViewport);
+    return () => mediaQuery.removeEventListener("change", updateViewport);
+  }, []);
 
   // Consent checkboxes
   const [contactConsent, setContactConsent] = useState(false);
@@ -400,6 +409,8 @@ export default function StylePreviewSection() {
 
   const isHypercolor = selectedDirection.id === "hypercolor-modern";
   const isGenZ = selectedDirection.id === "gen-z-brutalist";
+  const useCompactPreviewNavigation = previewDevice !== "desktop" || isNarrowViewport;
+  const useCompactPreviewLayout = previewDevice === "mobile" || isNarrowViewport;
 
   const getPrimaryButtonClass = () => {
     if (isGenZ) {
@@ -460,8 +471,8 @@ export default function StylePreviewSection() {
       className="py-24 md:py-32 bg-[#061C1A] border-b border-white/5 relative overflow-hidden"
     >
       {/* Visual background atmospheric elements */}
-      <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-[#89B7A7]/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-10 left-10 w-[300px] h-[300px] bg-[#163C36]/20 rounded-full blur-[80px] pointer-events-none" />
+      <div className="absolute right-0 top-1/3 aspect-square w-full max-w-[500px] rounded-full bg-[#89B7A7]/5 blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-10 left-0 aspect-square w-full max-w-[300px] rounded-full bg-[#163C36]/20 blur-[80px] pointer-events-none sm:left-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -950,18 +961,18 @@ export default function StylePreviewSection() {
           <div className="lg:col-span-7 space-y-4">
             
             {/* Device selector panel */}
-            <div style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="bg-[#0D2623] border border-[#123B35] rounded-xl px-4 py-3 flex items-center justify-between shadow-md">
+            <div style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="bg-[#0D2623] border border-[#123B35] rounded-xl px-3 sm:px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md min-w-0 max-w-full">
               <span style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="text-[9px] tracking-widest text-[#7CA99B] uppercase font-bold flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#B9D8CE] animate-pulse" /> LIVE WEBSITE PREVIEW
               </span>
 
               {/* Controls */}
-              <div className="flex items-center bg-[#061C1A]/60 p-1 rounded-lg border border-white/5">
+              <div className="grid w-full grid-cols-3 sm:w-auto sm:flex items-center bg-[#061C1A]/60 p-1 rounded-lg border border-white/5 min-w-0">
                 <button
                   type="button"
                   onClick={() => setPreviewDevice("desktop")}
                   style={{ fontFamily: 'Inter, Arial, sans-serif' }}
-                  className={`px-3 py-1.5 rounded-md text-[9px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-all focus:outline-none ${previewDevice === "desktop" ? "bg-[#123B35] text-[#B9D8CE]" : "text-[#B8C6C1] hover:text-[#F4F5F1]"}`}
+                  className={`min-w-0 justify-center px-1.5 sm:px-3 py-2 rounded-md text-[8px] sm:text-[9px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-all focus:outline-none ${previewDevice === "desktop" ? "bg-[#123B35] text-[#B9D8CE]" : "text-[#B8C6C1] hover:text-[#F4F5F1]"}`}
                   title="Simulate Desktop Layout"
                 >
                   <Laptop className="w-3 h-3" /> Desktop
@@ -970,7 +981,7 @@ export default function StylePreviewSection() {
                   type="button"
                   onClick={() => setPreviewDevice("tablet")}
                   style={{ fontFamily: 'Inter, Arial, sans-serif' }}
-                  className={`px-3 py-1.5 rounded-md text-[9px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-all focus:outline-none ${previewDevice === "tablet" ? "bg-[#123B35] text-[#B9D8CE]" : "text-[#B8C6C1] hover:text-[#F4F5F1]"}`}
+                  className={`min-w-0 justify-center px-1.5 sm:px-3 py-2 rounded-md text-[8px] sm:text-[9px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-all focus:outline-none ${previewDevice === "tablet" ? "bg-[#123B35] text-[#B9D8CE]" : "text-[#B8C6C1] hover:text-[#F4F5F1]"}`}
                   title="Simulate Tablet Layout (768px)"
                 >
                   <TabletIcon className="w-3 h-3" /> Tablet
@@ -979,7 +990,7 @@ export default function StylePreviewSection() {
                   type="button"
                   onClick={() => setPreviewDevice("mobile")}
                   style={{ fontFamily: 'Inter, Arial, sans-serif' }}
-                  className={`px-3 py-1.5 rounded-md text-[9px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-all focus:outline-none ${previewDevice === "mobile" ? "bg-[#123B35] text-[#B9D8CE]" : "text-[#B8C6C1] hover:text-[#F4F5F1]"}`}
+                  className={`min-w-0 justify-center px-1.5 sm:px-3 py-2 rounded-md text-[8px] sm:text-[9px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-all focus:outline-none ${previewDevice === "mobile" ? "bg-[#123B35] text-[#B9D8CE]" : "text-[#B8C6C1] hover:text-[#F4F5F1]"}`}
                   title="Simulate Mobile Layout (390px)"
                 >
                   <Smartphone className="w-3 h-3" /> Mobile
@@ -988,10 +999,10 @@ export default function StylePreviewSection() {
             </div>
 
             {/* Interactive Browser Frame */}
-            <div className="bg-[#0B211E] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col items-center">
+            <div className="w-full min-w-0 max-w-full bg-[#0B211E] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col items-center">
               
               {/* Browser Header Bar */}
-              <div className="w-full bg-[#0D2623] px-4 py-3 border-b border-white/10 flex items-center gap-3">
+              <div className="w-full min-w-0 bg-[#0D2623] px-2 sm:px-4 py-3 border-b border-white/10 flex items-center gap-2 sm:gap-3">
                 <div className="flex gap-1.5 flex-shrink-0">
                   <span className="w-2.5 h-2.5 rounded-full bg-red-500/20" />
                   <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/20" />
@@ -1004,37 +1015,37 @@ export default function StylePreviewSection() {
               </div>
 
               {/* Dynamic Responsive Workspace Wrapper */}
-              <div className="w-full p-4 overflow-x-auto flex justify-center bg-[#071D1A]/80 min-h-[600px] md:min-h-[720px]">
+              <div className="w-full min-w-0 max-w-full p-2 sm:p-4 overflow-hidden flex justify-center bg-[#071D1A]/80 min-h-[600px] md:min-h-[720px]">
                 
                 {/* Simulated Webpage inside frame */}
                 <div 
                   id="rendered-preview-canvas"
                   style={previewCustomStyles}
                   className={`
-                    bg-[var(--preview-background)] text-[var(--preview-text)] transition-all duration-500 border border-black/10 shadow-2xl flex flex-col
+                    min-w-0 max-w-full overflow-hidden bg-[var(--preview-background)] text-[var(--preview-text)] transition-all duration-500 border border-black/10 shadow-2xl flex flex-col
                     ${getDeviceWidthClass()}
                   `}
                 >
                   
                   {/* Web Nav Bar */}
                   <header 
-                    className={`px-6 py-4 border-b ${isGenZ ? "border-b-4 border-black bg-[var(--preview-surface)]" : isHypercolor ? "border-b-[3px] border-black bg-[var(--preview-surface)]" : "border-b border-[var(--preview-border)]"} grid grid-cols-3 items-center relative`}
+                    className={`${useCompactPreviewNavigation ? "px-3 py-3 grid-cols-[minmax(0,1fr)_auto] gap-2" : "px-6 py-4 grid-cols-3"} border-b ${isGenZ ? "border-b-4 border-black bg-[var(--preview-surface)]" : isHypercolor ? "border-b-[3px] border-black bg-[var(--preview-surface)]" : "border-b border-[var(--preview-border)]"} grid items-center relative min-w-0 max-w-full`}
                     style={{ 
                       borderRadius: selectedDirection.layoutStyle === "organic" ? "0 0 1rem 1rem" : "0"
                     }}
                   >
                     {/* Left Column: Logo Area */}
-                    <div className="flex items-center gap-2 justify-self-start">
+                    <div className="flex min-w-0 max-w-full items-center gap-2 justify-self-start overflow-hidden">
                       {logoUrl ? (
                         <img 
                           src={logoUrl} 
                           alt={businessName || "Business Logo"} 
-                          className="max-h-8 object-contain"
+                          className="max-h-8 max-w-full object-contain"
                         />
                       ) : (
                         <span 
                           style={{ fontFamily: selectedDirection.fontHeading }}
-                          className={`text-sm font-semibold tracking-wider text-[var(--preview-primary)] uppercase ${isGenZ || isHypercolor ? "font-black" : ""}`}
+                          className={`block max-w-full truncate text-xs sm:text-sm font-semibold tracking-wider text-[var(--preview-primary)] uppercase ${isGenZ || isHypercolor ? "font-black" : ""}`}
                         >
                           {businessName.trim() || "Elite Brand"}
                         </span>
@@ -1042,38 +1053,20 @@ export default function StylePreviewSection() {
                     </div>
 
                     {/* Middle Column: Nav Links (Desktop) OR Call Button (Tablet/Mobile) */}
-                    <div className="justify-self-center flex items-center justify-center">
-                      {previewDevice === "desktop" ? (
+                    {!useCompactPreviewNavigation && <div className="justify-self-center flex min-w-0 items-center justify-center">
+                      {previewDevice === "desktop" && (
                         <nav style={{ fontFamily: selectedDirection.fontBody }} className="flex items-center gap-5 text-[11px] font-medium tracking-wide whitespace-nowrap">
                           <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">Home</span>
                           <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">Services</span>
                           <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">About</span>
                           <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">Contact</span>
                         </nav>
-                      ) : (
-                        /* CALL Button visible in the middle of the header on mobile and tablet */
-                        <a
-                          href={phone.trim() ? `tel:${phone.trim()}` : "tel:555-019-2834"}
-                          style={{ fontFamily: selectedDirection.fontBody }}
-                          className={`
-                            flex items-center gap-1.5 px-3 py-1.5 font-semibold text-[9px] uppercase tracking-wider transition-all shadow-sm
-                            ${isGenZ
-                              ? "bg-[var(--preview-accent)] text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-[var(--preview-accent)]/95 rounded-none"
-                              : isHypercolor 
-                                ? "bg-[var(--preview-accent)] text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-[var(--preview-accent)]/95 rounded-full" 
-                                : "bg-[var(--preview-primary)] text-[var(--preview-surface)] hover:opacity-90 rounded-full"}
-                          `}
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <Phone className="w-2.5 h-2.5" />
-                          <span>{phone.trim() || "CALL NOW"}</span>
-                        </a>
                       )}
-                    </div>
+                    </div>}
 
                     {/* Right Column: CTA button (Desktop) OR Hamburger Menu (Tablet/Mobile) */}
-                    <div className="justify-self-end flex items-center">
-                      {previewDevice === "desktop" ? (
+                    <div className="justify-self-end flex min-w-0 items-center">
+                      {!useCompactPreviewNavigation ? (
                         <a
                           href={PREVIEW_BOOKING_URL}
                           target="_blank"
@@ -1112,7 +1105,7 @@ export default function StylePreviewSection() {
                     </div>
 
                     {/* Mobile/Tablet Collapsible Menu Overlay */}
-                    {isPreviewMenuOpen && (previewDevice === "mobile" || previewDevice === "tablet") && (
+                    {isPreviewMenuOpen && useCompactPreviewNavigation && (
                       <div 
                         className={`
                           absolute top-full left-0 right-0 p-4 z-50 transition-all duration-300 origin-top
@@ -1146,12 +1139,12 @@ export default function StylePreviewSection() {
                   <section 
                     className={`
                       flex flex-col text-left justify-center
-                      ${previewDevice === "mobile" ? "py-10 px-4 gap-6" : "py-16 md:py-20 px-8 md:px-12 gap-8"}
+                      ${useCompactPreviewLayout ? "py-10 px-4 gap-6" : "py-16 md:py-20 px-8 md:px-12 gap-8"}
                     `}
                   >
-                    <div className={`grid grid-cols-1 ${previewDevice !== "mobile" ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
+                    <div className={`grid min-w-0 grid-cols-1 ${!useCompactPreviewLayout ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
                       
-                      <div className={`${previewDevice !== "mobile" ? "col-span-7" : ""} space-y-4`}>
+                      <div className={`${!useCompactPreviewLayout ? "col-span-7" : ""} min-w-0 space-y-4`}>
                         <div 
                           style={{ fontFamily: selectedDirection.fontBody }} 
                           className={`
@@ -1170,7 +1163,7 @@ export default function StylePreviewSection() {
                           style={{ fontFamily: selectedDirection.fontHeading }}
                           className={`
                             text-[var(--preview-primary)] leading-tight tracking-tight
-                            ${previewDevice === "mobile" ? "text-2xl" : "text-3xl md:text-4xl"}
+                            ${useCompactPreviewLayout ? "text-[clamp(1.5rem,8vw,2rem)]" : "text-3xl md:text-4xl"}
                             ${selectedDirection.headingClass}
                           `}
                         >
@@ -1184,7 +1177,7 @@ export default function StylePreviewSection() {
                           {tagline.trim() ? `${tagline.trim()}. ` : ""}A polished, strategic website designed to help the right customers understand your value and confidently take the next step with {businessName.trim() || "our elite team"}.
                         </p>
 
-                        <div className="flex flex-wrap gap-3 pt-2">
+                        <div className="flex max-w-full flex-wrap gap-3 pt-2">
                           <a
                             href={PREVIEW_BOOKING_URL}
                             target="_blank"
@@ -1205,7 +1198,7 @@ export default function StylePreviewSection() {
                       </div>
 
                       {/* Featured Image placeholder */}
-                      <div className={`${previewDevice !== "mobile" ? "col-span-5" : ""} relative`}>
+                      <div className={`${!useCompactPreviewLayout ? "col-span-5" : ""} relative min-w-0 max-w-full`}>
                         <div 
                           className={`
                             w-full aspect-[4/3] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden
@@ -1241,7 +1234,7 @@ export default function StylePreviewSection() {
                       borderRadius: selectedDirection.layoutStyle === "organic" ? "1.5rem" : "0"
                     }}
                   >
-                    <div className={`text-left ${previewDevice === "mobile" ? "p-4 space-y-6" : "p-8 md:p-12 space-y-8"}`}>
+                    <div className={`min-w-0 text-left ${useCompactPreviewLayout ? "p-4 space-y-6" : "p-8 md:p-12 space-y-8"}`}>
                       
                       <div className="space-y-1">
                         <span style={{ fontFamily: selectedDirection.fontBody }} className="text-[9px] tracking-widest text-[var(--preview-accent)] font-bold uppercase">
@@ -1256,7 +1249,7 @@ export default function StylePreviewSection() {
                       </div>
 
                       {/* Cards Grid */}
-                      <div className={`grid grid-cols-1 ${previewDevice !== "mobile" ? "grid-cols-3 gap-6" : "gap-4"}`}>
+                      <div className={`grid min-w-0 grid-cols-1 ${!useCompactPreviewLayout ? "grid-cols-3 gap-6" : "gap-4"}`}>
                         
                         {[
                           { title: "Bespoke Consulting", desc: "Tailored strategic architectural blueprints engineered exclusively to scale client-base volume." },
@@ -1303,15 +1296,15 @@ export default function StylePreviewSection() {
 
                   {/* About Preview */}
                   <section className={`bg-[var(--preview-surface)] border-t border-b ${isGenZ ? "border-t-4 border-b-4 border-black" : isHypercolor ? "border-t-[3px] border-b-[3px] border-black" : "border-t border-b border-[var(--preview-border)]"} py-12 px-6 text-left`}>
-                    <div className={`grid grid-cols-1 ${previewDevice !== "mobile" ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
-                      <div className={previewDevice !== "mobile" ? "col-span-5" : ""}>
+                    <div className={`grid min-w-0 grid-cols-1 ${!useCompactPreviewLayout ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
+                      <div className={`${!useCompactPreviewLayout ? "col-span-5" : ""} min-w-0 max-w-full`}>
                         <div className={`aspect-[4/3] bg-[var(--preview-background)] flex items-center justify-center p-4 border ${isGenZ ? "border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none" : isHypercolor ? "border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-none" : "border-[var(--preview-border)] rounded-lg"}`}>
                           <span style={{ fontFamily: selectedDirection.fontHeading }} className={`text-xs uppercase tracking-widest text-[var(--preview-primary)] text-center opacity-60 ${isGenZ || isHypercolor ? "font-black" : ""}`}>
                             Studio Environment
                           </span>
                         </div>
                       </div>
-                      <div className={`${previewDevice !== "mobile" ? "col-span-7" : ""} space-y-3`}>
+                      <div className={`${!useCompactPreviewLayout ? "col-span-7" : ""} min-w-0 space-y-3`}>
                         <span style={{ fontFamily: selectedDirection.fontBody }} className="text-[9px] tracking-widest text-[var(--preview-accent)] font-bold uppercase">
                           BOUTIQUE PHILOSOPHY
                         </span>

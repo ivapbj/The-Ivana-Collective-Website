@@ -84,7 +84,7 @@ export default function Home({
         id="hero" 
         className="relative pt-24 min-h-screen flex flex-col justify-center overflow-hidden px-4 sm:px-6 lg:px-8 border-b border-white/5 bg-[#061C1A]"
       >
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#123B35]/20 to-[#7CA99B]/5 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute left-1/2 top-1/4 aspect-square w-full max-w-[600px] -translate-x-1/2 rounded-full bg-gradient-to-r from-[#123B35]/20 to-[#7CA99B]/5 blur-[120px] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto w-full flex flex-col items-center justify-center py-12 z-10">
           <KeycapComposition onKeyClick={onKeyClick} activeKey={activeKey} />
@@ -910,7 +910,7 @@ export default function Home({
 
       {/* 12. Final CTA */}
       <section id="final-cta" className="relative py-32 overflow-hidden bg-gradient-to-b from-[#061C1A] to-[#041211] border-b border-white/5 text-center">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#123B35]/25 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute left-1/2 top-1/2 aspect-square w-full max-w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#123B35]/25 blur-[140px] pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.015)_1.5px,transparent_1.5px)] bg-[size:24px_24px] pointer-events-none opacity-40" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-8">

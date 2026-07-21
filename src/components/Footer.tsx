@@ -27,7 +27,7 @@ export default function Footer({ onScheduleCall }: FooterProps) {
   return (
     <footer id="footer" className="relative bg-[#041211] border-t border-white/5 pt-20 pb-10 overflow-hidden">
       {/* Decorative ambient background glow */}
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-gradient-to-t from-[#123B35]/15 to-transparent rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 aspect-square w-full max-w-[400px] rounded-full bg-gradient-to-t from-[#123B35]/15 to-transparent blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 pb-16 border-b border-white/5">

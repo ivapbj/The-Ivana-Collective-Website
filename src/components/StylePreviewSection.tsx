@@ -466,7 +466,7 @@ export default function StylePreviewSection() {
 
   return (
     <section 
-      id="interactive-preview" 
+      id="preview" 
       style={{ fontFamily: 'Inter, Arial, sans-serif' }}
       className="py-24 md:py-32 bg-[#061C1A] border-b border-white/5 relative overflow-hidden"
     >

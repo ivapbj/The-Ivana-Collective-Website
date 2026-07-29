@@ -28,6 +28,10 @@ html {
   color: #F4F5F1;
 }
 
+#preview {
+  scroll-margin-top: 100px;
+}
+
 body {
   margin: 0;
   min-width: 0;

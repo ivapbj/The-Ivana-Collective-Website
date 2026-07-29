@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import BookingModal from "./components/BookingModal";
@@ -24,6 +24,36 @@ import { Project, InsightArticle } from "./types";
 
 function AppContent() {
   const { currentPath, navigate } = useNavigation();
+
+  useEffect(() => {
+    let timers: number[] = [];
+
+    const scrollToPreview = () => {
+      timers.forEach(window.clearTimeout);
+      timers = [];
+
+      if (window.location.hash !== "#preview") return;
+
+      [0, 100, 250, 500, 750, 1000].forEach((delay) => {
+        timers.push(
+          window.setTimeout(() => {
+            document.getElementById("preview")?.scrollIntoView({
+              behavior: "auto",
+              block: "start"
+            });
+          }, delay)
+        );
+      });
+    };
+
+    scrollToPreview();
+    window.addEventListener("hashchange", scrollToPreview);
+
+    return () => {
+      timers.forEach(window.clearTimeout);
+      window.removeEventListener("hashchange", scrollToPreview);
+    };
+  }, []);
 
   // Modal states
   const [isBookingOpen, setIsBookingOpen] = useState(false);

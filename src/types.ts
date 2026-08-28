@@ -18,6 +18,7 @@ export interface Project {
   imageName: string;
   imageUrl: string;
   accentColor: string;
+  websiteUrl?: string;
 }
 
 export interface Stage {
@@ -57,10 +58,26 @@ export interface PricingPackage {
   tagline: string;
   price: string;
   period: string;
-  commitment: string;
-  bestFor: string;
+  commitment?: string;
+  bestFor?: string;
   deliverables: string[];
-  isPopular: boolean;
+  isPopular?: boolean;
+  ctaText?: string;
+  ctaLink?: string;
+}
+
+export interface DetailedPricingTier {
+  id: string;
+  title: string;
+  subtitle?: string;
+  tagline?: string;
+  price: string;
+  period?: string;
+  commitment?: string;
+  isPopular?: boolean;
+  features: string[];
+  ctaText?: string;
+  ctaLink?: string;
 }
 
 export interface InsightArticle {

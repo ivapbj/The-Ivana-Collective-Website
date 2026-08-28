@@ -1,6 +1,7 @@
 import React from "react";
-import { X, CheckCircle, Award, Layout, ShieldAlert } from "lucide-react";
+import { X, CheckCircle, Award, Layout, ShieldAlert, ArrowUpRight, ExternalLink } from "lucide-react";
 import { Project } from "../types";
+import { ProjectImage } from "./ProjectImage";
 
 interface ProjectModalProps {
   project: Project | null;
@@ -34,28 +35,69 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         </button>
 
         {/* Hero Image frame */}
-        <div className="relative w-full h-48 md:h-64 rounded-xl overflow-hidden mb-6 border border-white/5 shadow-inner">
-          <img 
-            src={project.imageUrl} 
-            alt={project.client}
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-cover brightness-[0.8]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0D2623] via-[#0D2623]/20 to-transparent" />
-          
-          <div className="absolute bottom-4 left-4">
-            <span className="font-mono text-[9px] tracking-widest uppercase text-[#B9D8CE] bg-[#123B35] px-2.5 py-1 rounded-full border border-white/10">
-              {project.industry}
-            </span>
+        {project.websiteUrl ? (
+          <a
+            href={project.websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative w-full rounded-xl overflow-hidden mb-6 border border-white/5 shadow-inner bg-[#061C1A] flex items-center justify-center block group/modal-img"
+            title={`Visit ${project.client} at ${project.websiteUrl}`}
+          >
+            <ProjectImage 
+              project={project}
+              className="w-full h-auto max-h-[75vh] object-contain object-top transition-transform duration-500 group-hover/modal-img:scale-[1.02]"
+              style={{ width: "100%", height: "auto", objectFit: "contain", objectPosition: "center top" }}
+            />
+            
+            <div className="absolute bottom-4 left-4 z-10 flex items-center space-x-2">
+              <span className="font-mono text-[9px] tracking-widest uppercase text-[#B9D8CE] bg-[#123B35]/90 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/10 shadow">
+                {project.industry}
+              </span>
+            </div>
+
+            <div className="absolute bottom-4 right-4 z-10">
+              <span className="inline-flex items-center space-x-1.5 font-mono text-[9px] tracking-wider uppercase text-[#061C1A] bg-[#B9D8CE] px-3 py-1 rounded-full font-semibold shadow">
+                <span>Visit Live Site</span>
+                <ArrowUpRight className="w-3 h-3" />
+              </span>
+            </div>
+          </a>
+        ) : (
+          <div className="relative w-full rounded-xl overflow-hidden mb-6 border border-white/5 shadow-inner bg-[#061C1A] flex items-center justify-center">
+            <ProjectImage 
+              project={project}
+              className="w-full h-auto max-h-[75vh] object-contain object-top"
+              style={{ width: "100%", height: "auto", objectFit: "contain", objectPosition: "center top" }}
+            />
+            
+            <div className="absolute bottom-4 left-4 z-10">
+              <span className="font-mono text-[9px] tracking-widest uppercase text-[#B9D8CE] bg-[#123B35]/90 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/10 shadow">
+                {project.industry}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Content */}
         <div className="space-y-6">
           <div className="space-y-2">
-            <h3 className="font-serif text-2xl sm:text-3xl text-[#F4F5F1] leading-tight">
-              {project.client}
-            </h3>
+            {project.websiteUrl ? (
+              <a
+                href={project.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block group/title"
+                title={`Visit ${project.client} (${project.websiteUrl})`}
+              >
+                <h3 className="font-serif text-2xl sm:text-3xl text-[#F4F5F1] leading-tight group-hover/title:text-[#B9D8CE] transition-colors">
+                  {project.client}
+                </h3>
+              </a>
+            ) : (
+              <h3 className="font-serif text-2xl sm:text-3xl text-[#F4F5F1] leading-tight">
+                {project.client}
+              </h3>
+            )}
             <p className="font-sans text-sm text-[#B8C6C1] leading-relaxed">
               {project.title}
             </p>
@@ -94,7 +136,6 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {project.results.map((resultStr, idx) => {
-                // Try to extract metrics or bold components
                 return (
                   <div key={idx} className="border-l border-[#7CA99B]/30 pl-3 py-1">
                     <p className="text-[#F4F5F1] text-xs font-serif font-light leading-snug">
@@ -107,7 +148,22 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           </div>
 
           {/* Action Row */}
-          <div className="flex justify-end pt-4 border-t border-white/5">
+          <div className="flex items-center justify-between pt-4 border-t border-white/5">
+            {project.websiteUrl ? (
+              <a
+                href={project.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  inline-flex items-center space-x-2 px-5 py-2.5 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold
+                  bg-[#B9D8CE] text-[#061C1A] hover:bg-white transition-all cursor-pointer shadow-md
+                "
+              >
+                <span>Visit {project.websiteUrl.replace(/^https?:\/\//, '')}</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
+            ) : <div />}
+
             <button
               onClick={onClose}
               className="
@@ -117,7 +173,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               "
               id="project-modal-return-btn"
             >
-              Close Case Study
+              Close
             </button>
           </div>
         </div>

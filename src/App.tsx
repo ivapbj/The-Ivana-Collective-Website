@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import BookingModal from "./components/BookingModal";
@@ -11,11 +11,9 @@ import ServicesOverview from "./pages/ServicesOverview";
 import WebDesign from "./pages/WebDesign";
 import SeoService from "./pages/SeoService";
 import ContentGrowth from "./pages/ContentGrowth";
-import MethodPage from "./pages/MethodPage";
 import WorkPage from "./pages/WorkPage";
 import PricingPage from "./pages/PricingPage";
 import AboutPage from "./pages/AboutPage";
-import InsightsPage from "./pages/InsightsPage";
 import ContactPage from "./pages/ContactPage";
 
 // Navigation
@@ -25,38 +23,10 @@ import { Project, InsightArticle } from "./types";
 function AppContent() {
   const { currentPath, navigate } = useNavigation();
 
-  useEffect(() => {
-    let timers: number[] = [];
-
-    const scrollToPreview = () => {
-      timers.forEach(window.clearTimeout);
-      timers = [];
-
-      if (window.location.hash !== "#preview") return;
-
-      [0, 100, 250, 500, 750, 1000].forEach((delay) => {
-        timers.push(
-          window.setTimeout(() => {
-            document.getElementById("preview")?.scrollIntoView({
-              behavior: "auto",
-              block: "start"
-            });
-          }, delay)
-        );
-      });
-    };
-
-    scrollToPreview();
-    window.addEventListener("hashchange", scrollToPreview);
-
-    return () => {
-      timers.forEach(window.clearTimeout);
-      window.removeEventListener("hashchange", scrollToPreview);
-    };
-  }, []);
-
   // Modal states
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [bookingBusinessName, setBookingBusinessName] = useState("");
+  const [bookingWebsiteUrl, setBookingWebsiteUrl] = useState("");
 
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedArticle, setSelectedArticle] = useState<InsightArticle | null>(null);
@@ -105,19 +75,18 @@ function AppContent() {
         navigate("/services/content-growth");
         break;
       case "strategy":
-        navigate("/method");
-        break;
       case "build":
-        navigate("/method");
-        break;
       case "optimize":
-        navigate("/method");
+        navigate("/services");
+        break;
+      case "pricing":
+        navigate("/pricing");
         break;
       case "grow":
-        navigate("/services/content-growth");
+        navigate("/pricing");
         break;
       case "arrow-cta":
-        setIsBookingOpen(true);
+        window.open("https://calendar.app.google/KYrg1R1surXjfRbn7", "_blank");
         break;
       default:
         console.log(`Key ${target} clicked.`);
@@ -125,9 +94,14 @@ function AppContent() {
     }
   };
 
-  // Open the Google Calendar booking modal
+  // Open booking calendar in new tab or with prefilled data
+  const handleScheduleWithAuditData = (business: string, webUrl: string) => {
+    window.open("https://calendar.app.google/KYrg1R1surXjfRbn7", "_blank");
+  };
+
+  // Open Google booking calendar directly in a new tab
   const handleScheduleGeneral = () => {
-    setIsBookingOpen(true);
+    window.open("https://calendar.app.google/KYrg1R1surXjfRbn7", "_blank");
   };
 
   // Contact form handler
@@ -158,8 +132,12 @@ function AppContent() {
         throw new Error("Failed to dispatch email submission. Please check connection.");
       }
 
-      const data = await res.json();
-      setContactSuccess(data.message);
+      let data: any = {};
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      }
+      setContactSuccess(data.message || "Thank you! Your message has been received.");
       setContactName("");
       setContactEmail("");
       setContactBusiness("");
@@ -201,6 +179,7 @@ function AppContent() {
                   activeStageId={activeStageId}
                   setActiveStageId={setActiveStageId}
                   onScheduleCall={handleScheduleGeneral}
+                  onScheduleWithAuditData={handleScheduleWithAuditData}
                   onSelectProject={setSelectedProject}
                   onSelectArticle={setSelectedArticle}
                   newsletterEmail={newsletterEmail}
@@ -217,8 +196,6 @@ function AppContent() {
               return <SeoService onScheduleCall={handleScheduleGeneral} />;
             case "/services/content-growth":
               return <ContentGrowth onScheduleCall={handleScheduleGeneral} />;
-            case "/method":
-              return <MethodPage onScheduleCall={handleScheduleGeneral} />;
             case "/work":
               return (
                 <WorkPage
@@ -227,19 +204,12 @@ function AppContent() {
                 />
               );
             case "/pricing":
+            case "/method":
               return <PricingPage onScheduleCall={handleScheduleGeneral} />;
             case "/about":
               return <AboutPage onScheduleCall={handleScheduleGeneral} />;
             case "/insights":
-              return (
-                <InsightsPage
-                  onSelectArticle={setSelectedArticle}
-                  newsletterEmail={newsletterEmail}
-                  setNewsletterEmail={setNewsletterEmail}
-                  newsletterSuccess={newsletterSuccess}
-                  onNewsletterSubmit={handleNewsletterSubmit}
-                />
-              );
+              return <PricingPage onScheduleCall={handleScheduleGeneral} />;
             case "/contact":
               return (
                 <ContactPage
@@ -266,6 +236,7 @@ function AppContent() {
                   activeStageId={activeStageId}
                   setActiveStageId={setActiveStageId}
                   onScheduleCall={handleScheduleGeneral}
+                  onScheduleWithAuditData={handleScheduleWithAuditData}
                   onSelectProject={setSelectedProject}
                   onSelectArticle={setSelectedArticle}
                   newsletterEmail={newsletterEmail}
@@ -285,6 +256,8 @@ function AppContent() {
       <BookingModal 
         isOpen={isBookingOpen} 
         onClose={() => setIsBookingOpen(false)}
+        prefillBusinessName={bookingBusinessName}
+        prefillWebsiteUrl={bookingWebsiteUrl}
       />
 
       <ProjectModal 
@@ -302,8 +275,8 @@ function AppContent() {
         <div 
           id="cookie-consent-bar"
           className="
-            fixed bottom-2 left-2 right-2 w-auto max-w-[calc(100vw-1rem)] md:bottom-4 md:left-auto md:right-4 md:max-w-md z-[80]
-            bg-[#0D2623] border border-white/10 rounded-2xl p-3 sm:p-4 shadow-2xl flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 text-left
+            fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-[80] 
+            bg-[#0D2623] border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-col sm:flex-row items-center gap-4 text-left
             animate-in slide-in-from-bottom-8 duration-500
           "
         >
@@ -316,7 +289,7 @@ function AppContent() {
           <div className="flex gap-2 w-full sm:w-auto flex-shrink-0 justify-end">
             <button 
               onClick={() => setShowCookieConsent(false)}
-              className="min-h-11 w-full sm:w-auto px-4 py-2 rounded bg-[#F4F5F1] text-[#061C1A] hover:bg-[#B9D8CE] font-mono text-[9px] uppercase tracking-wider font-semibold cursor-pointer transition-colors"
+              className="px-4 py-2 rounded bg-[#F4F5F1] text-[#061C1A] hover:bg-[#B9D8CE] font-mono text-[9px] uppercase tracking-wider font-semibold cursor-pointer transition-colors"
             >
               Accept
             </button>

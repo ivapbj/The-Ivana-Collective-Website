@@ -3,7 +3,6 @@ import path from "path";
 import { GoogleGenAI, Type } from "@google/genai";
 import { createServer as createViteServer } from "vite";
 import dotenv from "dotenv";
-import { normalizeWebsiteUrl, WEBSITE_URL_ERROR } from "./shared/websiteUrl";
 
 // Load environment variables
 dotenv.config();
@@ -62,8 +61,9 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  // Body parsing middleware
-  app.use(express.json());
+  // Body parsing middleware with expanded limits for high-res logo uploads & previews
+  app.use(express.json({ limit: "50mb" }));
+  app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
   // --- API ROUTES FIRST ---
 
@@ -131,11 +131,6 @@ async function startServer() {
       return res.status(400).json({ error: "You must consent to being contacted by The Ivana Collective to save your preview." });
     }
 
-    const normalizedWebsiteUrl = normalizeWebsiteUrl(websiteUrl ?? "");
-    if (normalizedWebsiteUrl === null) {
-      return res.status(400).json({ error: WEBSITE_URL_ERROR });
-    }
-
     // 3. Prevent Duplicate Submissions (within 15 seconds)
     const now = new Date();
     const isDuplicate = previewsStore.some(
@@ -182,7 +177,7 @@ async function startServer() {
       industry: industry.trim(),
       email: email.trim(),
       phone: (phone || "").trim(),
-      websiteUrl: normalizedWebsiteUrl,
+      websiteUrl: (websiteUrl || "").trim(),
       theme: theme || "Luxury Editorial",
       palette: palette || "Collective Forest",
       notes: (notes || "").trim(),
@@ -287,12 +282,16 @@ A visitor has finalized their Website Style Preview parameters:
     const { name, email, businessName, websiteUrl, date, timeSlot, notes } = req.body;
 
     if (!name || !email || !date || !timeSlot) {
-      return res.status(400).json({ error: "Name, email, date, and time slot are required." });
+      return res.status(400).json({ error: "Name, email, date, and preferred time are required." });
     }
 
-    const normalizedWebsiteUrl = normalizeWebsiteUrl(websiteUrl ?? "");
-    if (normalizedWebsiteUrl === null) {
-      return res.status(400).json({ error: WEBSITE_URL_ERROR });
+    // Server-side day validation: Wednesday (3), Friday (5), Saturday (6)
+    const [year, month, day] = date.split("-").map(Number);
+    const dateObj = new Date(year, month - 1, day);
+    const dayOfWeek = dateObj.getDay();
+
+    if (dayOfWeek !== 3 && dayOfWeek !== 5 && dayOfWeek !== 6) {
+      return res.status(400).json({ error: "Friendly chats can only be scheduled on Wednesdays, Fridays, or Saturdays." });
     }
 
     const newBooking = {
@@ -300,7 +299,7 @@ A visitor has finalized their Website Style Preview parameters:
       name,
       email,
       businessName: businessName || "",
-      websiteUrl: normalizedWebsiteUrl,
+      websiteUrl: websiteUrl || "",
       date,
       timeSlot,
       notes: notes || "",
@@ -308,12 +307,58 @@ A visitor has finalized their Website Style Preview parameters:
     };
 
     bookingsStore.push(newBooking);
-    console.log(`[Booking] New call scheduled by ${name} on ${date} at ${timeSlot}`);
+    
+    // Log beautiful email dispatches
+    console.log(`
+================================================================================
+EMAIL DISPATCHED TO: info@theivanacollective.com
+SENDER: no-reply@theivanacollective.com
+SUBJECT: New Booking Scheduled — [${name} - ${businessName || "No Business Name"}]
+--------------------------------------------------------------------------------
+Dear Team,
+
+A new meeting has been booked through the website scheduling assistant!
+
+[CLIENT INFORMATION]
+- Name: ${name}
+- Email: ${email}
+- Business Name: ${businessName || "N/A"}
+- Website URL: ${websiteUrl || "N/A"}
+
+[SCHEDULED TIME]
+- Date: ${date} (Day of week: ${dayOfWeek === 3 ? "Wednesday" : dayOfWeek === 5 ? "Friday" : "Saturday"})
+- Time: ${timeSlot}
+
+[CLIENT CONVERSATION NOTES]
+"${notes || "No notes provided."}"
+
+================================================================================
+`);
+
+    console.log(`
+================================================================================
+EMAIL DISPATCHED TO: ${email}
+SENDER: info@theivanacollective.com
+SUBJECT: Your chat with The Ivana Collective is scheduled!
+--------------------------------------------------------------------------------
+Hi ${name},
+
+We are so excited to chat with you! This is to confirm that we've booked your free
+friendly chat for ${date} at ${timeSlot}.
+
+We will send a calendar link and a video call invitation to this email address shortly.
+If you have any questions or need to reschedule, simply reply to this email.
+
+Warmly,
+The Ivana Collective Team
+info@theivanacollective.com
+================================================================================
+`);
 
     res.json({
       success: true,
       bookingId: newBooking.id,
-      message: `Strategy call successfully scheduled for ${date} at ${timeSlot}. A calendar invite has been dispatched.`
+      message: `Your chat has been successfully booked for ${date} at ${timeSlot}! A calendar invitation has been sent to your email.`
     });
   });
 
@@ -325,11 +370,6 @@ A visitor has finalized their Website Style Preview parameters:
       return res.status(400).json({ error: "Business name, location, and services are required." });
     }
 
-    const normalizedWebsiteUrl = normalizeWebsiteUrl(websiteUrl ?? "");
-    if (normalizedWebsiteUrl === null) {
-      return res.status(400).json({ error: WEBSITE_URL_ERROR });
-    }
-
     try {
       const ai = getGeminiClient();
 
@@ -338,7 +378,7 @@ A visitor has finalized their Website Style Preview parameters:
         - Business Name: "${businessName}"
         - Location / Service Area: "${location}"
         - Services Provided: "${services}"
-        ${normalizedWebsiteUrl ? `- Existing Website URL: "${normalizedWebsiteUrl}"` : ""}
+        ${websiteUrl ? `- Existing Website URL: "${websiteUrl}"` : ""}
 
         Provide realistic, expert, highly actionable insights. Be professional, boutique-agency status, encouraging but highly strategic.
       `;
@@ -464,6 +504,18 @@ A visitor has finalized their Website Style Preview parameters:
         customTips: "Boutique Strategy: Implement localized service schemas on your subpages. This immediately tells search robots exactly who you are, what you offer, and the coordinates you serve."
       });
     }
+  });
+
+  // Global API Error Handler - ensures API errors always return structured JSON, not HTML error pages
+  app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (req.path.startsWith("/api")) {
+      console.error("[API Error Handler]", err);
+      const status = err.status || err.statusCode || 500;
+      return res.status(status).json({
+        error: err.message || "A server error occurred while processing your request."
+      });
+    }
+    next(err);
   });
 
   // --- VITE MIDDLEWARE / STATIC ASSETS ---

@@ -1,5 +1,5 @@
 import React from "react";
-import { Mail, MapPin, ArrowUp, Calendar, Instagram, Linkedin, FileText } from "lucide-react";
+import { Mail, MapPin, ArrowUp, Calendar, Instagram, Facebook, FileText } from "lucide-react";
 import { useNavigation } from "../context/NavigationContext";
 
 interface FooterProps {
@@ -27,7 +27,7 @@ export default function Footer({ onScheduleCall }: FooterProps) {
   return (
     <footer id="footer" className="relative bg-[#041211] border-t border-white/5 pt-20 pb-10 overflow-hidden">
       {/* Decorative ambient background glow */}
-      <div className="absolute bottom-0 right-0 aspect-square w-full max-w-[400px] rounded-full bg-gradient-to-t from-[#123B35]/15 to-transparent blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-gradient-to-t from-[#123B35]/15 to-transparent rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 pb-16 border-b border-white/5">
@@ -42,29 +42,36 @@ export default function Footer({ onScheduleCall }: FooterProps) {
             </p>
             <div className="flex space-x-4">
               <a 
-                href="https://instagram.com" 
+                href="https://www.instagram.com/theivanacollective/" 
                 target="_blank" 
-                rel="noreferrer" 
+                rel="noopener noreferrer" 
+                aria-label="Instagram"
                 className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-[#B8C6C1] hover:text-[#B9D8CE] hover:border-[#B9D8CE]/40 transition-colors"
                 id="social-link-instagram"
               >
                 <Instagram className="w-4 h-4" />
               </a>
               <a 
-                href="https://linkedin.com" 
+                href="https://www.facebook.com/profile.php?id=61571300805986" 
                 target="_blank" 
-                rel="noreferrer" 
+                rel="noopener noreferrer" 
+                aria-label="Facebook"
                 className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-[#B8C6C1] hover:text-[#B9D8CE] hover:border-[#B9D8CE]/40 transition-colors"
-                id="social-link-linkedin"
+                id="social-link-facebook"
               >
-                <Linkedin className="w-4 h-4" />
+                <Facebook className="w-4 h-4" />
               </a>
               <a 
-                href="mailto:info@theivanacollective.com" 
+                href="https://www.tiktok.com/@theivanacollective" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="TikTok"
                 className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-[#B8C6C1] hover:text-[#B9D8CE] hover:border-[#B9D8CE]/40 transition-colors"
-                id="social-link-email"
+                id="social-link-tiktok"
               >
-                <Mail className="w-4 h-4" />
+                <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.85.12V9.41a6.33 6.33 0 0 0-.85-.06A6.34 6.34 0 0 0 3 15.69a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V9.06a8.16 8.16 0 0 0 4.91 1.63V7.24a4.83 4.83 0 0 1-1-.55z" />
+                </svg>
               </a>
             </div>
           </div>
@@ -103,9 +110,9 @@ export default function Footer({ onScheduleCall }: FooterProps) {
               {[
                 { label: "Services Portfolio", id: "services", path: "/services" },
                 { label: "Selected Case Studies", id: "work", path: "/work" },
-                { label: "The Architectural Path", id: "method", path: "/method" },
+                { label: "Pricing & Growth Packages", id: "pricing", path: "/pricing" },
                 { label: "Boutique Philosophy", id: "about", path: "/about" },
-                { label: "Insights & Strategy", id: "insights", path: "/insights" }
+                { label: "Get in Touch", id: "contact", path: "/contact" }
               ].map((link, idx) => (
                 <li key={idx}>
                   <button
@@ -127,8 +134,8 @@ export default function Footer({ onScheduleCall }: FooterProps) {
             <div className="space-y-4 text-sm text-[#B8C6C1]">
               <div className="flex items-start space-x-3">
                 <Mail className="w-4 h-4 mt-0.5 text-[#7CA99B]" />
-                <a href="mailto:info@theivanacollective.com" className="hover:text-[#B9D8CE] transition-colors font-mono text-xs">
-                  info@theivanacollective.com
+                <a href="mailto:theivanacollective@gmail.com" className="hover:text-[#B9D8CE] transition-colors font-mono text-xs">
+                  theivanacollective@gmail.com
                 </a>
               </div>
               <div className="flex items-start space-x-3">

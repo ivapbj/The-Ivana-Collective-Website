@@ -16,7 +16,6 @@ import {
   ShieldAlert,
   Phone
 } from "lucide-react";
-import { normalizeWebsiteUrl, WEBSITE_URL_ERROR } from "../../shared/websiteUrl";
 
 // Types and Schemas
 interface Palette {
@@ -202,14 +201,11 @@ const INDUSTRIES = [
   "Other"
 ];
 
-const PREVIEW_BOOKING_URL = "https://calendar.app.google/fsvawrwZfkYNESyeA";
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function isValidEmail(value: string): boolean {
-  return EMAIL_PATTERN.test(value.trim());
+interface StylePreviewSectionProps {
+  onScheduleCall: () => void;
 }
 
-export default function StylePreviewSection() {
+export default function StylePreviewSection({ onScheduleCall }: StylePreviewSectionProps) {
   // 1. Core Configurator States
   const [businessName, setBusinessName] = useState("");
   const [tagline, setTagline] = useState("");
@@ -232,20 +228,11 @@ export default function StylePreviewSection() {
   // Responsive device simulator size
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [isPreviewMenuOpen, setIsPreviewMenuOpen] = useState(false);
-  const [isNarrowViewport, setIsNarrowViewport] = useState(false);
 
   // Close preview menu when simulator device is toggled
   useEffect(() => {
     setIsPreviewMenuOpen(false);
   }, [previewDevice]);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 767px)");
-    const updateViewport = () => setIsNarrowViewport(mediaQuery.matches);
-    updateViewport();
-    mediaQuery.addEventListener("change", updateViewport);
-    return () => mediaQuery.removeEventListener("change", updateViewport);
-  }, []);
 
   // Consent checkboxes
   const [contactConsent, setContactConsent] = useState(false);
@@ -255,7 +242,6 @@ export default function StylePreviewSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const hasValidEmail = isValidEmail(email);
 
   // File Upload Reference
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -285,13 +271,49 @@ export default function StylePreviewSection() {
       return;
     }
 
-    // Read and encode file as DataURL (Base64)
+    // Read and encode file with automatic client-side compression for bitmaps
     const reader = new FileReader();
     reader.onload = (event) => {
       const result = event.target?.result;
       if (typeof result === "string") {
-        setLogoUrl(result);
-        setLogoName(file.name);
+        if (file.type === "image/svg+xml") {
+          setLogoUrl(result);
+          setLogoName(file.name);
+        } else {
+          // Resize raster image on canvas to ensure compact payload
+          const img = new Image();
+          img.onload = () => {
+            const maxDim = 1000;
+            let width = img.width;
+            let height = img.height;
+            if (width > maxDim || height > maxDim) {
+              if (width > height) {
+                height = Math.round((height * maxDim) / width);
+                width = maxDim;
+              } else {
+                width = Math.round((width * maxDim) / height);
+                height = maxDim;
+              }
+            }
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            if (ctx) {
+              ctx.drawImage(img, 0, 0, width, height);
+              const compressedDataUrl = canvas.toDataURL(file.type === "image/png" ? "image/png" : "image/jpeg", 0.85);
+              setLogoUrl(compressedDataUrl);
+            } else {
+              setLogoUrl(result);
+            }
+            setLogoName(file.name);
+          };
+          img.onerror = () => {
+            setLogoUrl(result);
+            setLogoName(file.name);
+          };
+          img.src = result;
+        }
       }
     };
     reader.onerror = () => {
@@ -328,23 +350,17 @@ export default function StylePreviewSection() {
       setSubmitError("Please select a Business Industry.");
       return;
     }
-    const trimmedEmail = email.trim();
-    if (!trimmedEmail) {
+    if (!email.trim()) {
       setSubmitError("Please fill in the required field: Business Email.");
       return;
     }
-    if (!isValidEmail(trimmedEmail)) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       setSubmitError("Please enter a valid business email address.");
       return;
     }
     if (!contactConsent) {
       setSubmitError("You must agree to the Contact Consent clause to submit your request.");
-      return;
-    }
-
-    const normalizedWebsiteUrl = normalizeWebsiteUrl(websiteUrl);
-    if (normalizedWebsiteUrl === null) {
-      setSubmitError(WEBSITE_URL_ERROR);
       return;
     }
 
@@ -358,9 +374,9 @@ export default function StylePreviewSection() {
           businessName,
           tagline,
           industry,
-          email: trimmedEmail,
+          email,
           phone,
-          websiteUrl: normalizedWebsiteUrl,
+          websiteUrl,
           theme: selectedDirection.name,
           palette: selectedPalette.name,
           notes,
@@ -372,36 +388,23 @@ export default function StylePreviewSection() {
         })
       });
 
-      const responseText = await response.text();
-      let data: { success?: boolean; message?: string; error?: string } | null = null;
-
-      if (responseText) {
-        try {
-          data = JSON.parse(responseText);
-        } catch {
-          data = null;
-        }
+      let data: any = {};
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        data = { error: text || `Server error (${response.status})` };
       }
 
       if (!response.ok) {
-        throw new Error(
-          data?.error ||
-          "We could not submit your website direction right now. Please try again shortly."
-        );
-      }
-
-      if (!data || data.success !== true) {
-        throw new Error("We received an unexpected response. Please try submitting the form again.");
+        throw new Error(data.error || "Submission failed. Please check your inputs.");
       }
 
       setSubmitSuccess(data.message || "Your website direction has been submitted.");
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error("Submission Error:", err);
-      setSubmitError(
-        err instanceof Error
-          ? err.message
-          : "We could not submit your website direction. Please review your information and try again."
-      );
+      setSubmitError(err.message || "We could not submit your website direction. Please review your information and try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -409,8 +412,6 @@ export default function StylePreviewSection() {
 
   const isHypercolor = selectedDirection.id === "hypercolor-modern";
   const isGenZ = selectedDirection.id === "gen-z-brutalist";
-  const useCompactPreviewNavigation = previewDevice !== "desktop" || isNarrowViewport;
-  const useCompactPreviewLayout = previewDevice === "mobile" || isNarrowViewport;
 
   const getPrimaryButtonClass = () => {
     if (isGenZ) {
@@ -466,13 +467,13 @@ export default function StylePreviewSection() {
 
   return (
     <section 
-      id="preview" 
+      id="interactive-preview" 
       style={{ fontFamily: 'Inter, Arial, sans-serif' }}
       className="py-24 md:py-32 bg-[#061C1A] border-b border-white/5 relative overflow-hidden"
     >
       {/* Visual background atmospheric elements */}
-      <div className="absolute right-0 top-1/3 aspect-square w-full max-w-[500px] rounded-full bg-[#89B7A7]/5 blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-10 left-0 aspect-square w-full max-w-[300px] rounded-full bg-[#163C36]/20 blur-[80px] pointer-events-none sm:left-10" />
+      <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-[#89B7A7]/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-10 left-10 w-[300px] h-[300px] bg-[#163C36]/20 rounded-full blur-[80px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -610,10 +611,10 @@ export default function StylePreviewSection() {
                         <input
                           id="website-url"
                           type="text"
-                          placeholder="yourbusiness.com"
+                          placeholder="e.g. mybusiness.com"
                           value={websiteUrl}
                           onChange={(e) => setWebsiteUrl(e.target.value)}
-                          className="w-full bg-[#061C1A] border border-white/10 rounded-xl px-4 py-3 text-xs text-[#F4F5F1] focus:outline-none focus:border-[#B9D8CE]/50 transition-colors"
+                          className="w-full bg-[#061C1A] border border-white/10 rounded-xl px-4 py-3 text-xs text-[#F4F5F1] focus:outline-none focus:border-[#B9D8CE]/50 transition-colors placeholder:text-white/20"
                         />
                       </div>
                     </div>
@@ -890,9 +891,9 @@ export default function StylePreviewSection() {
                       <div className="flex items-start gap-2.5 text-[#B9D8CE]">
                         <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" />
                         <div>
-                          <h5 style={{ fontFamily: 'Georgia, "Times New Roman", serif' }} className="font-serif text-sm font-semibold text-[#F4F5F1]">Your Website Direction has been sent.</h5>
+                          <h5 style={{ fontFamily: 'Georgia, "Times New Roman", serif' }} className="font-serif text-sm font-semibold text-[#F4F5F1]">Your website direction has been submitted.</h5>
                           <p className="text-xs text-[#B8C6C1] font-light mt-1">
-                            {submitSuccess}
+                            The Ivana Collective will review your selections and contact you using the information you provided.
                           </p>
                         </div>
                       </div>
@@ -912,30 +913,27 @@ export default function StylePreviewSection() {
                         >
                           <RotateCcw className="w-3.5 h-3.5" /> Start New
                         </button>
-                        <a
-                          href={PREVIEW_BOOKING_URL}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <button
+                          type="button"
+                          onClick={onScheduleCall}
                           style={{ fontFamily: 'Inter, Arial, sans-serif' }}
                           className="px-4 py-2 rounded-lg bg-[#B9D8CE] text-[#061C1A] hover:bg-[#a3cbbf] text-xs uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 shadow-md"
                         >
                           Schedule a Strategy Call <ArrowRight className="w-3.5 h-3.5" />
-                        </a>
+                        </button>
                       </div>
                     </div>
                   ) : (
                     <button
                       type="submit"
-                      disabled={isSubmitting || !hasValidEmail}
+                      disabled={isSubmitting}
                       style={{ fontFamily: 'Inter, Arial, sans-serif' }}
-                      className={`
-                        w-full py-3.5 rounded-xl text-xs uppercase tracking-wider font-bold transition-all duration-300
-                        flex items-center justify-center gap-2
-                        ${hasValidEmail
-                          ? "bg-[#B9D8CE] text-[#061C1A] hover:bg-[#a3cbbf] shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                          : "bg-gray-600 text-gray-300 shadow-none hover:shadow-none hover:translate-y-0 cursor-not-allowed"
-                        }
-                      `}
+                      className="
+                        w-full py-3.5 rounded-xl bg-[#B9D8CE] text-[#061C1A] hover:bg-[#a3cbbf] 
+                        text-xs uppercase tracking-wider font-bold transition-all duration-300
+                        disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:-translate-y-0.5
+                        flex items-center justify-center gap-2 cursor-pointer
+                      "
                     >
                       {isSubmitting ? (
                         <>
@@ -961,18 +959,18 @@ export default function StylePreviewSection() {
           <div className="lg:col-span-7 space-y-4">
             
             {/* Device selector panel */}
-            <div style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="bg-[#0D2623] border border-[#123B35] rounded-xl px-3 sm:px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md min-w-0 max-w-full">
+            <div style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="bg-[#0D2623] border border-[#123B35] rounded-xl px-4 py-3 flex items-center justify-between shadow-md">
               <span style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="text-[9px] tracking-widest text-[#7CA99B] uppercase font-bold flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#B9D8CE] animate-pulse" /> LIVE WEBSITE PREVIEW
               </span>
 
               {/* Controls */}
-              <div className="grid w-full grid-cols-3 sm:w-auto sm:flex items-center bg-[#061C1A]/60 p-1 rounded-lg border border-white/5 min-w-0">
+              <div className="flex items-center bg-[#061C1A]/60 p-1 rounded-lg border border-white/5">
                 <button
                   type="button"
                   onClick={() => setPreviewDevice("desktop")}
                   style={{ fontFamily: 'Inter, Arial, sans-serif' }}
-                  className={`min-w-0 justify-center px-1.5 sm:px-3 py-2 rounded-md text-[8px] sm:text-[9px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-all focus:outline-none ${previewDevice === "desktop" ? "bg-[#123B35] text-[#B9D8CE]" : "text-[#B8C6C1] hover:text-[#F4F5F1]"}`}
+                  className={`px-3 py-1.5 rounded-md text-[9px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-all focus:outline-none ${previewDevice === "desktop" ? "bg-[#123B35] text-[#B9D8CE]" : "text-[#B8C6C1] hover:text-[#F4F5F1]"}`}
                   title="Simulate Desktop Layout"
                 >
                   <Laptop className="w-3 h-3" /> Desktop
@@ -981,7 +979,7 @@ export default function StylePreviewSection() {
                   type="button"
                   onClick={() => setPreviewDevice("tablet")}
                   style={{ fontFamily: 'Inter, Arial, sans-serif' }}
-                  className={`min-w-0 justify-center px-1.5 sm:px-3 py-2 rounded-md text-[8px] sm:text-[9px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-all focus:outline-none ${previewDevice === "tablet" ? "bg-[#123B35] text-[#B9D8CE]" : "text-[#B8C6C1] hover:text-[#F4F5F1]"}`}
+                  className={`px-3 py-1.5 rounded-md text-[9px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-all focus:outline-none ${previewDevice === "tablet" ? "bg-[#123B35] text-[#B9D8CE]" : "text-[#B8C6C1] hover:text-[#F4F5F1]"}`}
                   title="Simulate Tablet Layout (768px)"
                 >
                   <TabletIcon className="w-3 h-3" /> Tablet
@@ -990,7 +988,7 @@ export default function StylePreviewSection() {
                   type="button"
                   onClick={() => setPreviewDevice("mobile")}
                   style={{ fontFamily: 'Inter, Arial, sans-serif' }}
-                  className={`min-w-0 justify-center px-1.5 sm:px-3 py-2 rounded-md text-[8px] sm:text-[9px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-all focus:outline-none ${previewDevice === "mobile" ? "bg-[#123B35] text-[#B9D8CE]" : "text-[#B8C6C1] hover:text-[#F4F5F1]"}`}
+                  className={`px-3 py-1.5 rounded-md text-[9px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-all focus:outline-none ${previewDevice === "mobile" ? "bg-[#123B35] text-[#B9D8CE]" : "text-[#B8C6C1] hover:text-[#F4F5F1]"}`}
                   title="Simulate Mobile Layout (390px)"
                 >
                   <Smartphone className="w-3 h-3" /> Mobile
@@ -999,10 +997,10 @@ export default function StylePreviewSection() {
             </div>
 
             {/* Interactive Browser Frame */}
-            <div className="w-full min-w-0 max-w-full bg-[#0B211E] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col items-center">
+            <div className="bg-[#0B211E] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col items-center">
               
               {/* Browser Header Bar */}
-              <div className="w-full min-w-0 bg-[#0D2623] px-2 sm:px-4 py-3 border-b border-white/10 flex items-center gap-2 sm:gap-3">
+              <div className="w-full bg-[#0D2623] px-4 py-3 border-b border-white/10 flex items-center gap-3">
                 <div className="flex gap-1.5 flex-shrink-0">
                   <span className="w-2.5 h-2.5 rounded-full bg-red-500/20" />
                   <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/20" />
@@ -1015,37 +1013,37 @@ export default function StylePreviewSection() {
               </div>
 
               {/* Dynamic Responsive Workspace Wrapper */}
-              <div className="w-full min-w-0 max-w-full p-2 sm:p-4 overflow-hidden flex justify-center bg-[#071D1A]/80 min-h-[600px] md:min-h-[720px]">
+              <div className="w-full p-4 overflow-x-auto flex justify-center bg-[#071D1A]/80 min-h-[600px] md:min-h-[720px]">
                 
                 {/* Simulated Webpage inside frame */}
                 <div 
                   id="rendered-preview-canvas"
                   style={previewCustomStyles}
                   className={`
-                    min-w-0 max-w-full overflow-hidden bg-[var(--preview-background)] text-[var(--preview-text)] transition-all duration-500 border border-black/10 shadow-2xl flex flex-col
+                    bg-[var(--preview-background)] text-[var(--preview-text)] transition-all duration-500 border border-black/10 shadow-2xl flex flex-col
                     ${getDeviceWidthClass()}
                   `}
                 >
                   
                   {/* Web Nav Bar */}
                   <header 
-                    className={`${useCompactPreviewNavigation ? "px-3 py-3 grid-cols-[minmax(0,1fr)_auto] gap-2" : "px-6 py-4 grid-cols-3"} border-b ${isGenZ ? "border-b-4 border-black bg-[var(--preview-surface)]" : isHypercolor ? "border-b-[3px] border-black bg-[var(--preview-surface)]" : "border-b border-[var(--preview-border)]"} grid items-center relative min-w-0 max-w-full`}
+                    className={`px-6 py-4 border-b ${isGenZ ? "border-b-4 border-black bg-[var(--preview-surface)]" : isHypercolor ? "border-b-[3px] border-black bg-[var(--preview-surface)]" : "border-b border-[var(--preview-border)]"} grid grid-cols-3 items-center relative`}
                     style={{ 
                       borderRadius: selectedDirection.layoutStyle === "organic" ? "0 0 1rem 1rem" : "0"
                     }}
                   >
                     {/* Left Column: Logo Area */}
-                    <div className="flex min-w-0 max-w-full items-center gap-2 justify-self-start overflow-hidden">
+                    <div className="flex items-center gap-2 justify-self-start">
                       {logoUrl ? (
                         <img 
                           src={logoUrl} 
                           alt={businessName || "Business Logo"} 
-                          className="max-h-8 max-w-full object-contain"
+                          className="max-h-8 object-contain"
                         />
                       ) : (
                         <span 
                           style={{ fontFamily: selectedDirection.fontHeading }}
-                          className={`block max-w-full truncate text-xs sm:text-sm font-semibold tracking-wider text-[var(--preview-primary)] uppercase ${isGenZ || isHypercolor ? "font-black" : ""}`}
+                          className={`text-sm font-semibold tracking-wider text-[var(--preview-primary)] uppercase ${isGenZ || isHypercolor ? "font-black" : ""}`}
                         >
                           {businessName.trim() || "Elite Brand"}
                         </span>
@@ -1053,29 +1051,45 @@ export default function StylePreviewSection() {
                     </div>
 
                     {/* Middle Column: Nav Links (Desktop) OR Call Button (Tablet/Mobile) */}
-                    {!useCompactPreviewNavigation && <div className="justify-self-center flex min-w-0 items-center justify-center">
-                      {previewDevice === "desktop" && (
+                    <div className="justify-self-center flex items-center justify-center">
+                      {previewDevice === "desktop" ? (
                         <nav style={{ fontFamily: selectedDirection.fontBody }} className="flex items-center gap-5 text-[11px] font-medium tracking-wide whitespace-nowrap">
                           <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">Home</span>
                           <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">Services</span>
                           <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">About</span>
                           <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">Contact</span>
                         </nav>
+                      ) : (
+                        /* CALL Button visible in the middle of the header on mobile and tablet */
+                        <a
+                          href={phone.trim() ? `tel:${phone.trim()}` : "tel:555-019-2834"}
+                          style={{ fontFamily: selectedDirection.fontBody }}
+                          className={`
+                            flex items-center gap-1.5 px-3 py-1.5 font-semibold text-[9px] uppercase tracking-wider transition-all shadow-sm
+                            ${isGenZ
+                              ? "bg-[var(--preview-accent)] text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-[var(--preview-accent)]/95 rounded-none"
+                              : isHypercolor 
+                                ? "bg-[var(--preview-accent)] text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-[var(--preview-accent)]/95 rounded-full" 
+                                : "bg-[var(--preview-primary)] text-[var(--preview-surface)] hover:opacity-90 rounded-full"}
+                          `}
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          <Phone className="w-2.5 h-2.5" />
+                          <span>{phone.trim() || "CALL NOW"}</span>
+                        </a>
                       )}
-                    </div>}
+                    </div>
 
                     {/* Right Column: CTA button (Desktop) OR Hamburger Menu (Tablet/Mobile) */}
-                    <div className="justify-self-end flex min-w-0 items-center">
-                      {!useCompactPreviewNavigation ? (
-                        <a
-                          href={PREVIEW_BOOKING_URL}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                    <div className="justify-self-end flex items-center">
+                      {previewDevice === "desktop" ? (
+                        <button 
+                          type="button"
                           style={{ fontFamily: selectedDirection.fontBody }}
                           className={`px-4 py-1.5 text-[9px] font-semibold ${getPrimaryButtonClass()} transition-all whitespace-nowrap`}
                         >
                           Get Started
-                        </a>
+                        </button>
                       ) : (
                         /* Hamburger Menu in Mobile and Tablet */
                         <button
@@ -1105,7 +1119,7 @@ export default function StylePreviewSection() {
                     </div>
 
                     {/* Mobile/Tablet Collapsible Menu Overlay */}
-                    {isPreviewMenuOpen && useCompactPreviewNavigation && (
+                    {isPreviewMenuOpen && (previewDevice === "mobile" || previewDevice === "tablet") && (
                       <div 
                         className={`
                           absolute top-full left-0 right-0 p-4 z-50 transition-all duration-300 origin-top
@@ -1122,14 +1136,12 @@ export default function StylePreviewSection() {
                           <span className="py-2 opacity-75 hover:text-[var(--preview-accent)] cursor-pointer transition-colors border-b border-[var(--preview-border)]/20 pb-2">Services</span>
                           <span className="py-2 opacity-75 hover:text-[var(--preview-accent)] cursor-pointer transition-colors border-b border-[var(--preview-border)]/20 pb-2">About</span>
                           <span className="py-2 opacity-75 hover:text-[var(--preview-accent)] cursor-pointer transition-colors border-b border-[var(--preview-border)]/20 pb-2">Contact</span>
-                          <a
-                            href={PREVIEW_BOOKING_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <button 
+                            type="button"
                             className={`mt-2 w-full py-2 text-[10px] font-semibold ${getPrimaryButtonClass()} transition-all`}
                           >
                             Get Started
-                          </a>
+                          </button>
                         </nav>
                       </div>
                     )}
@@ -1139,12 +1151,12 @@ export default function StylePreviewSection() {
                   <section 
                     className={`
                       flex flex-col text-left justify-center
-                      ${useCompactPreviewLayout ? "py-10 px-4 gap-6" : "py-16 md:py-20 px-8 md:px-12 gap-8"}
+                      ${previewDevice === "mobile" ? "py-10 px-4 gap-6" : "py-16 md:py-20 px-8 md:px-12 gap-8"}
                     `}
                   >
-                    <div className={`grid min-w-0 grid-cols-1 ${!useCompactPreviewLayout ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
+                    <div className={`grid grid-cols-1 ${previewDevice !== "mobile" ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
                       
-                      <div className={`${!useCompactPreviewLayout ? "col-span-7" : ""} min-w-0 space-y-4`}>
+                      <div className={`${previewDevice !== "mobile" ? "col-span-7" : ""} space-y-4`}>
                         <div 
                           style={{ fontFamily: selectedDirection.fontBody }} 
                           className={`
@@ -1163,7 +1175,7 @@ export default function StylePreviewSection() {
                           style={{ fontFamily: selectedDirection.fontHeading }}
                           className={`
                             text-[var(--preview-primary)] leading-tight tracking-tight
-                            ${useCompactPreviewLayout ? "text-[clamp(1.5rem,8vw,2rem)]" : "text-3xl md:text-4xl"}
+                            ${previewDevice === "mobile" ? "text-2xl" : "text-3xl md:text-4xl"}
                             ${selectedDirection.headingClass}
                           `}
                         >
@@ -1177,16 +1189,14 @@ export default function StylePreviewSection() {
                           {tagline.trim() ? `${tagline.trim()}. ` : ""}A polished, strategic website designed to help the right customers understand your value and confidently take the next step with {businessName.trim() || "our elite team"}.
                         </p>
 
-                        <div className="flex max-w-full flex-wrap gap-3 pt-2">
-                          <a
-                            href={PREVIEW_BOOKING_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <div className="flex flex-wrap gap-3 pt-2">
+                          <button 
+                            type="button"
                             style={{ fontFamily: selectedDirection.id === "luxury-editorial" ? selectedDirection.fontHeading : selectedDirection.fontBody }}
                             className={`px-5 py-2.5 text-[10px] font-semibold ${getPrimaryButtonClass()} transition-all`}
                           >
                             Get Started
-                          </a>
+                          </button>
                           <button 
                             type="button"
                             style={{ fontFamily: selectedDirection.id === "luxury-editorial" ? selectedDirection.fontHeading : selectedDirection.fontBody }}
@@ -1198,7 +1208,7 @@ export default function StylePreviewSection() {
                       </div>
 
                       {/* Featured Image placeholder */}
-                      <div className={`${!useCompactPreviewLayout ? "col-span-5" : ""} relative min-w-0 max-w-full`}>
+                      <div className={`${previewDevice !== "mobile" ? "col-span-5" : ""} relative`}>
                         <div 
                           className={`
                             w-full aspect-[4/3] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden
@@ -1234,7 +1244,7 @@ export default function StylePreviewSection() {
                       borderRadius: selectedDirection.layoutStyle === "organic" ? "1.5rem" : "0"
                     }}
                   >
-                    <div className={`min-w-0 text-left ${useCompactPreviewLayout ? "p-4 space-y-6" : "p-8 md:p-12 space-y-8"}`}>
+                    <div className={`text-left ${previewDevice === "mobile" ? "p-4 space-y-6" : "p-8 md:p-12 space-y-8"}`}>
                       
                       <div className="space-y-1">
                         <span style={{ fontFamily: selectedDirection.fontBody }} className="text-[9px] tracking-widest text-[var(--preview-accent)] font-bold uppercase">
@@ -1249,7 +1259,7 @@ export default function StylePreviewSection() {
                       </div>
 
                       {/* Cards Grid */}
-                      <div className={`grid min-w-0 grid-cols-1 ${!useCompactPreviewLayout ? "grid-cols-3 gap-6" : "gap-4"}`}>
+                      <div className={`grid grid-cols-1 ${previewDevice !== "mobile" ? "grid-cols-3 gap-6" : "gap-4"}`}>
                         
                         {[
                           { title: "Bespoke Consulting", desc: "Tailored strategic architectural blueprints engineered exclusively to scale client-base volume." },
@@ -1296,15 +1306,15 @@ export default function StylePreviewSection() {
 
                   {/* About Preview */}
                   <section className={`bg-[var(--preview-surface)] border-t border-b ${isGenZ ? "border-t-4 border-b-4 border-black" : isHypercolor ? "border-t-[3px] border-b-[3px] border-black" : "border-t border-b border-[var(--preview-border)]"} py-12 px-6 text-left`}>
-                    <div className={`grid min-w-0 grid-cols-1 ${!useCompactPreviewLayout ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
-                      <div className={`${!useCompactPreviewLayout ? "col-span-5" : ""} min-w-0 max-w-full`}>
+                    <div className={`grid grid-cols-1 ${previewDevice !== "mobile" ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
+                      <div className={previewDevice !== "mobile" ? "col-span-5" : ""}>
                         <div className={`aspect-[4/3] bg-[var(--preview-background)] flex items-center justify-center p-4 border ${isGenZ ? "border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none" : isHypercolor ? "border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-none" : "border-[var(--preview-border)] rounded-lg"}`}>
                           <span style={{ fontFamily: selectedDirection.fontHeading }} className={`text-xs uppercase tracking-widest text-[var(--preview-primary)] text-center opacity-60 ${isGenZ || isHypercolor ? "font-black" : ""}`}>
                             Studio Environment
                           </span>
                         </div>
                       </div>
-                      <div className={`${!useCompactPreviewLayout ? "col-span-7" : ""} min-w-0 space-y-3`}>
+                      <div className={`${previewDevice !== "mobile" ? "col-span-7" : ""} space-y-3`}>
                         <span style={{ fontFamily: selectedDirection.fontBody }} className="text-[9px] tracking-widest text-[var(--preview-accent)] font-bold uppercase">
                           BOUTIQUE PHILOSOPHY
                         </span>
@@ -1355,15 +1365,13 @@ export default function StylePreviewSection() {
                       >
                         Schedule a signature digital consultation with {businessName.trim() || "our studio"} to secure your territory and establish search dominance today.
                       </p>
-                      <a
-                        href={PREVIEW_BOOKING_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button 
+                        type="button"
                         style={{ fontFamily: selectedDirection.id === "luxury-editorial" ? selectedDirection.fontHeading : selectedDirection.fontBody }}
                         className={`px-6 py-3 text-[10px] font-semibold ${getPrimaryButtonClass()} transition-all inline-block`}
                       >
                         Book Your Consultation
-                      </a>
+                      </button>
                     </div>
                   </section>
 

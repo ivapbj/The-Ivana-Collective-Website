@@ -1,5 +1,6 @@
 import React from "react";
 import SeoMeta from "../components/SeoMeta";
+import { ProjectImage } from "../components/ProjectImage";
 import { PROJECTS_DATA } from "../data";
 import { Project } from "../types";
 import { ArrowUpRight, Check, Award, Compass, Sparkles } from "lucide-react";
@@ -55,30 +56,54 @@ export default function WorkPage({ onSelectProject, onScheduleCall }: WorkPagePr
         {PROJECTS_DATA.map((project) => (
           <div 
             key={project.id}
-            className="group cursor-pointer bg-[#0D2623] border border-white/5 hover:border-[#B9D8CE]/20 rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between"
-            onClick={() => onSelectProject(project)}
+            className="group bg-[#0D2623] border border-white/5 hover:border-[#B9D8CE]/20 rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between"
           >
             <div>
-              {/* Fake Browser window top-bar */}
-              <div className="bg-[#0A2C28] px-4 py-3 border-b border-white/5 flex items-center space-x-1.5">
-                <div className="w-2 h-2 rounded-full bg-white/10" />
-                <div className="w-2 h-2 rounded-full bg-white/10" />
-                <div className="w-2 h-2 rounded-full bg-white/10" />
-                <div className="ml-3 bg-[#061C1A] text-[8px] font-mono text-[#7CA99B] px-2 py-0.5 rounded border border-white/5 truncate max-w-[150px]">
-                  {project.client.toLowerCase().replace(/\s+/g, "")}.com
+              {/* Browser window top-bar */}
+              <div className="bg-[#0A2C28] px-4 py-3 border-b border-white/5 flex items-center justify-between">
+                <div className="flex items-center space-x-1.5">
+                  <div className="w-2 h-2 rounded-full bg-white/10" />
+                  <div className="w-2 h-2 rounded-full bg-white/10" />
+                  <div className="w-2 h-2 rounded-full bg-white/10" />
+                  <div className="ml-3 bg-[#061C1A] text-[8px] font-mono text-[#7CA99B] px-2 py-0.5 rounded border border-white/5 truncate max-w-[150px]">
+                    {project.websiteUrl ? project.websiteUrl.replace(/^https?:\/\//, '') : `${project.client.toLowerCase().replace(/\s+/g, "")}.com`}
+                  </div>
                 </div>
+                {project.websiteUrl && (
+                  <span className="text-[8px] font-mono text-[#B9D8CE] uppercase tracking-wider">Live Site</span>
+                )}
               </div>
 
-              {/* Image with overlay gradient */}
-              <div className="relative aspect-[16/10] overflow-hidden">
-                <img 
-                  src={project.imageUrl} 
-                  alt={project.client} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.8] group-hover:brightness-[0.95]"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-              </div>
+              {/* Image with uniform card dimension and zero cropping */}
+              {project.websiteUrl ? (
+                <a
+                  href={project.websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative aspect-[16/10] overflow-hidden bg-[#061C1A] flex items-center justify-center block group/img"
+                  title={`Open ${project.client} in new tab`}
+                >
+                  <ProjectImage 
+                    project={project}
+                    className="w-full h-full object-contain object-center transition-transform duration-700 group-hover/img:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute top-3 right-3 bg-[#061C1A]/90 backdrop-blur-sm border border-white/10 text-[#B9D8CE] p-1.5 rounded-lg opacity-0 group-hover/img:opacity-100 transition-opacity">
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </div>
+                </a>
+              ) : (
+                <div 
+                  className="relative aspect-[16/10] overflow-hidden bg-[#061C1A] flex items-center justify-center cursor-pointer"
+                  onClick={() => onSelectProject(project)}
+                >
+                  <ProjectImage 
+                    project={project}
+                    className="w-full h-full object-contain object-center transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+                </div>
+              )}
 
               {/* Text metadata and specs */}
               <div className="p-6 space-y-4">
@@ -86,9 +111,26 @@ export default function WorkPage({ onSelectProject, onScheduleCall }: WorkPagePr
                   <span className="font-mono text-[8px] tracking-widest text-[#7CA99B] uppercase">
                     {project.industry}
                   </span>
-                  <h3 className="font-serif text-2xl text-[#F4F5F1] leading-tight font-light group-hover:text-[#B9D8CE] transition-colors">
-                    {project.client}
-                  </h3>
+                  {project.websiteUrl ? (
+                    <a
+                      href={project.websiteUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block group/link"
+                      title={`Visit ${project.client} (${project.websiteUrl})`}
+                    >
+                      <h3 className="font-serif text-2xl text-[#F4F5F1] leading-tight font-light group-hover/link:text-[#B9D8CE] transition-colors">
+                        {project.client}
+                      </h3>
+                    </a>
+                  ) : (
+                    <h3 
+                      className="font-serif text-2xl text-[#F4F5F1] leading-tight font-light group-hover:text-[#B9D8CE] transition-colors cursor-pointer"
+                      onClick={() => onSelectProject(project)}
+                    >
+                      {project.client}
+                    </h3>
+                  )}
                 </div>
 
                 <p className="text-xs text-[#B8C6C1] leading-relaxed font-light line-clamp-3">
@@ -110,10 +152,26 @@ export default function WorkPage({ onSelectProject, onScheduleCall }: WorkPagePr
             <div className="p-6 border-t border-white/5 flex items-center justify-between">
               <div className="space-y-0.5">
                 <p className="text-[8px] font-mono text-[#7CA99B] uppercase tracking-wider">PRIMARY OUTCOME</p>
-                <p className="font-serif text-xs italic text-[#F4F5F1]">{project.results[2]}</p>
+                <p className="font-serif text-xs italic text-[#F4F5F1]">{project.results[0]}</p>
               </div>
-              <div className="p-2.5 bg-[#061C1A] text-[#B9D8CE] border border-white/5 rounded-xl group-hover:bg-[#123B35] transition-colors flex-shrink-0">
-                <ArrowUpRight className="w-4 h-4" />
+              <div className="flex items-center space-x-2">
+                {project.websiteUrl && (
+                  <a
+                    href={project.websiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 bg-[#B9D8CE] text-[#061C1A] rounded-xl hover:bg-white transition-colors flex-shrink-0"
+                    title={`Open ${project.websiteUrl}`}
+                  >
+                    <ArrowUpRight className="w-4 h-4" />
+                  </a>
+                )}
+                <button
+                  onClick={() => onSelectProject(project)}
+                  className="px-3 py-2 bg-[#061C1A] text-[#B8C6C1] hover:text-[#F4F5F1] border border-white/5 rounded-xl hover:bg-[#123B35] transition-colors text-[9px] font-mono uppercase tracking-wider cursor-pointer"
+                >
+                  Specs
+                </button>
               </div>
             </div>
           </div>

@@ -7,55 +7,16 @@
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
-body,
-#root {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  overflow-x: clip;
-}
-
 html {
   scroll-behavior: smooth;
   background-color: #061C1A;
   color: #F4F5F1;
 }
 
-#preview {
-  scroll-margin-top: 100px;
-}
-
 body {
-  margin: 0;
-  min-width: 0;
   font-family: var(--font-sans);
   background-color: #061C1A;
-}
-
-img,
-picture,
-video,
-canvas,
-svg {
-  max-width: 100%;
-}
-
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-a {
-  overflow-wrap: anywhere;
+  overflow-x: hidden;
 }
 
 ::selection {
@@ -91,3 +52,4 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: #1e5a51;
 }
+

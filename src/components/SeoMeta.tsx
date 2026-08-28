@@ -81,7 +81,9 @@ export default function SeoMeta({ title, description, canonicalPath, schema, bre
         "closes": "18:00"
       },
       "sameAs": [
-        "https://linkedin.com/company/theivanacollective"
+        "https://www.instagram.com/theivanacollective/",
+        "https://www.facebook.com/profile.php?id=61571300805986",
+        "https://www.tiktok.com/@theivanacollective"
       ]
     };
     schemasToInject.push(localBusinessSchema);

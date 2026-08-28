@@ -4,6 +4,7 @@ import SeoMeta from "../components/SeoMeta";
 import KeycapComposition from "../components/KeycapComposition";
 import AuditTool from "../components/AuditTool";
 import StylePreviewSection from "../components/StylePreviewSection";
+import { ProjectImage } from "../components/ProjectImage";
 import { 
   SERVICES_DATA, 
   PROJECTS_DATA, 
@@ -38,6 +39,7 @@ interface HomeProps {
   activeStageId: string;
   setActiveStageId: (stageId: string) => void;
   onScheduleCall: () => void;
+  onScheduleWithAuditData: (biz: string, web: string) => void;
   onSelectProject: (p: Project) => void;
   onSelectArticle: (a: InsightArticle) => void;
   newsletterEmail: string;
@@ -53,6 +55,7 @@ export default function Home({
   activeStageId,
   setActiveStageId,
   onScheduleCall,
+  onScheduleWithAuditData,
   onSelectProject,
   onSelectArticle,
   newsletterEmail,
@@ -84,7 +87,7 @@ export default function Home({
         id="hero" 
         className="relative pt-24 min-h-screen flex flex-col justify-center overflow-hidden px-4 sm:px-6 lg:px-8 border-b border-white/5 bg-[#061C1A]"
       >
-        <div className="absolute left-1/2 top-1/4 aspect-square w-full max-w-[600px] -translate-x-1/2 rounded-full bg-gradient-to-r from-[#123B35]/20 to-[#7CA99B]/5 blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#123B35]/20 to-[#7CA99B]/5 rounded-full blur-[120px] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto w-full flex flex-col items-center justify-center py-12 z-10">
           <KeycapComposition onKeyClick={onKeyClick} activeKey={activeKey} />
@@ -108,7 +111,7 @@ export default function Home({
       </section>
 
       {/* Interactive Website Style Preview Section */}
-      <StylePreviewSection />
+      <StylePreviewSection onScheduleCall={onScheduleCall} />
 
       {/* 3. Services preview */}
       <section id="services" className="py-24 md:py-32 bg-[#061C1A] border-b border-white/5 relative">
@@ -342,9 +345,9 @@ export default function Home({
             </h2>
           </div>
 
-          {/* Case Studies Alternating Grid list (showing first 2 for preview) */}
+          {/* Case Studies Alternating Grid list */}
           <div className="space-y-24 md:space-y-36">
-            {PROJECTS_DATA.slice(0, 2).map((project, idx) => {
+            {PROJECTS_DATA.map((project, idx) => {
               const isEven = idx % 2 === 0;
 
               return (
@@ -356,31 +359,65 @@ export default function Home({
                   `}
                 >
                   {/* Project Image Panel */}
-                  <div className={`
-                    lg:col-span-7 relative group cursor-pointer overflow-hidden rounded-2xl border border-white/5 shadow-2xl
-                    ${isEven ? "lg:order-1" : "lg:order-2"}
-                  `}
-                    onClick={() => onSelectProject(project)}
-                  >
-                    <div className="bg-[#0D2623] px-4 py-3 border-b border-white/5 flex items-center space-x-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
-                      <div className="ml-4 bg-[#061C1A] text-[9px] font-mono text-[#7CA99B] px-3 py-0.5 rounded border border-white/5 truncate max-w-[200px]">
-                        {project.client.toLowerCase().replace(/\s+/g, "")}.com
+                  {project.websiteUrl ? (
+                    <a
+                      href={project.websiteUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`
+                        lg:col-span-7 relative group cursor-pointer overflow-hidden rounded-2xl border border-white/5 shadow-2xl block
+                        ${isEven ? "lg:order-1" : "lg:order-2"}
+                      `}
+                      title={`Visit ${project.client} at ${project.websiteUrl}`}
+                    >
+                      <div className="bg-[#0D2623] px-4 py-3 border-b border-white/5 flex items-center justify-between">
+                        <div className="flex items-center space-x-1.5">
+                          <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                          <div className="ml-4 bg-[#061C1A] text-[9px] font-mono text-[#7CA99B] px-3 py-0.5 rounded border border-white/5 truncate max-w-[200px]">
+                            {project.websiteUrl.replace(/^https?:\/\//, '')}
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-1 text-[9px] font-mono text-[#B9D8CE] opacity-80 group-hover:opacity-100 transition-opacity">
+                          <span>Live Site</span>
+                          <ArrowUpRight className="w-3 h-3" />
+                        </div>
+                      </div>
+                      
+                      <div className="relative aspect-[16/10] overflow-hidden bg-[#061C1A] flex items-center justify-center">
+                        <ProjectImage 
+                          project={project}
+                          className="w-full h-full object-contain object-center transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+                      </div>
+                    </a>
+                  ) : (
+                    <div className={`
+                      lg:col-span-7 relative group cursor-pointer overflow-hidden rounded-2xl border border-white/5 shadow-2xl
+                      ${isEven ? "lg:order-1" : "lg:order-2"}
+                    `}
+                      onClick={() => onSelectProject(project)}
+                    >
+                      <div className="bg-[#0D2623] px-4 py-3 border-b border-white/5 flex items-center space-x-1.5">
+                        <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                        <div className="ml-4 bg-[#061C1A] text-[9px] font-mono text-[#7CA99B] px-3 py-0.5 rounded border border-white/5 truncate max-w-[200px]">
+                          {project.client.toLowerCase().replace(/\s+/g, "")}.com
+                        </div>
+                      </div>
+                      
+                      <div className="relative aspect-[16/10] overflow-hidden bg-[#061C1A] flex items-center justify-center">
+                        <ProjectImage 
+                          project={project}
+                          className="w-full h-full object-contain object-center transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
                       </div>
                     </div>
-                    
-                    <div className="relative aspect-[16/10] overflow-hidden">
-                      <img 
-                        src={project.imageUrl} 
-                        alt={project.client}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.85] group-hover:brightness-[0.95]"
-                        referrerPolicy="no-referrer"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-                    </div>
-                  </div>
+                  )}
 
                   {/* Project Copy Panel */}
                   <div className={`
@@ -391,9 +428,23 @@ export default function Home({
                       <span className="font-mono text-[9px] tracking-widest text-[#7CA99B] uppercase">
                         {project.industry}
                       </span>
-                      <h3 className="font-serif text-3xl text-[#F4F5F1] leading-tight font-light">
-                        {project.client}
-                      </h3>
+                      {project.websiteUrl ? (
+                        <a 
+                          href={project.websiteUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block group/title"
+                          title={`Visit ${project.client} (${project.websiteUrl})`}
+                        >
+                          <h3 className="font-serif text-3xl text-[#F4F5F1] leading-tight font-light group-hover/title:text-[#B9D8CE] transition-colors">
+                            {project.client}
+                          </h3>
+                        </a>
+                      ) : (
+                        <h3 className="font-serif text-3xl text-[#F4F5F1] leading-tight font-light">
+                          {project.client}
+                        </h3>
+                      )}
                     </div>
 
                     <p className="text-sm text-[#B8C6C1] leading-relaxed font-light">
@@ -409,7 +460,21 @@ export default function Home({
                       ))}
                     </div>
 
-                    <div className="flex items-center space-x-4">
+                    <div className="flex flex-wrap items-center gap-3">
+                      {project.websiteUrl && (
+                        <a
+                          href={project.websiteUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="
+                            flex items-center space-x-2 px-5 py-3 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold
+                            bg-[#B9D8CE] text-[#061C1A] hover:bg-white transition-all cursor-pointer shadow-md
+                          "
+                        >
+                          <span>Visit Website ({project.websiteUrl.replace(/^https?:\/\//, '')})</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </a>
+                      )}
                       <button
                         onClick={() => onSelectProject(project)}
                         className="
@@ -504,10 +569,10 @@ export default function Home({
 
           <div className="mt-16 text-center">
             <Link 
-              href="/method" 
+              href="/services" 
               className="inline-flex items-center space-x-2 font-mono text-[10px] uppercase tracking-wider text-[#B9D8CE] hover:text-[#F4F5F1] transition-colors"
             >
-              <span>See the Complete Methodology</span>
+              <span>Explore All Services</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -562,17 +627,20 @@ export default function Home({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16 items-center">
             
             <div className="lg:col-span-5 relative">
-              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-white/5 shadow-2xl max-w-sm mx-auto">
+              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-[#B9D8CE]/20 shadow-2xl max-w-sm mx-auto group">
                 <img 
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1000" 
-                  alt="Ivana Collective Workspace" 
-                  className="w-full h-full object-cover filter grayscale contrast-125 brightness-[0.7] hover:scale-105 transition-transform duration-500"
+                  src="/images/founder.jpg" 
+                  alt="Ivana, Full-Stack Web Developer & Founder" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#041211] via-transparent to-transparent pointer-events-none" />
-                <div className="absolute bottom-4 left-4 bg-[#123B35]/80 border border-white/10 px-4 py-2 rounded-xl backdrop-blur">
-                  <p className="font-mono text-[9px] tracking-widest uppercase text-[#B9D8CE]">
-                    ESTABLISHED · 2024
+                <div className="absolute inset-0 bg-gradient-to-t from-[#041211]/90 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-4 left-4 right-4 bg-[#061C1A]/85 border border-[#B9D8CE]/20 p-3 rounded-2xl backdrop-blur-md text-left">
+                  <p className="font-mono text-[9px] tracking-wider uppercase text-[#B9D8CE] font-semibold">
+                    Ivana · Full-Stack Developer
+                  </p>
+                  <p className="text-[11px] text-[#B8C6C1] font-light">
+                    Founder, The Ivana Collective
                   </p>
                 </div>
               </div>
@@ -580,27 +648,31 @@ export default function Home({
 
             <div className="lg:col-span-7 space-y-6 text-left">
               <span className="font-mono text-[10px] tracking-widest uppercase text-[#7CA99B]">
-                THE BOUTIQUE APPROACH
+                MEET THE DEVELOPER
               </span>
               
               <h2 className="font-serif text-[clamp(2rem,4vw,3.5rem)] leading-[1.05] text-[#F4F5F1]">
-                Strategy, design, and development—without the agency layers.
+                Full-Stack Web Developer & AI Specialist for Small Businesses.
               </h2>
               
               <p className="text-sm text-[#B8C6C1] leading-relaxed font-light">
-                Large agencies often have high overhead costs, meaning you pay premium prices but get passed down to junior account managers. At The Ivana Collective, you collaborate directly with an experienced, boutique digital professional who understands brand strategy, visual editorial design, modern software development, and advanced SEO analysis.
+                In my mid-30s during the pandemic, I went back to school for software engineering. As the AI boom unfolded, I focused on learning how small businesses can benefit from modern web technologies and artificial intelligence.
               </p>
 
-              <div className="flex flex-wrap gap-4 pt-4">
+              <p className="text-sm text-[#B8C6C1] leading-relaxed font-light">
+                I build websites that are not just digital business cards, but functioning business tools: helping you get found online, creating effortless experiences for your clients, and keeping your genuine voice at the center of your brand.
+              </p>
+
+              <div className="flex flex-wrap gap-4 pt-2">
                 <Link
                   href="/about"
                   className="
-                    inline-flex items-center space-x-2 px-6 py-3 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold
+                    inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl font-mono text-[10px] uppercase tracking-wider font-semibold
                     bg-[#123B35] text-[#F4F5F1] hover:bg-[#B9D8CE] hover:text-[#061C1A]
                     border border-[#B9D8CE]/20 transition-all cursor-pointer shadow-md
                   "
                 >
-                  <span>Learn More About Us</span>
+                  <span>Read My Story & Philosophy</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -752,67 +824,11 @@ export default function Home({
         </div>
       </section>
 
-      {/* 11. Insights Preview Section (CMS) */}
-      <section id="insights" className="py-24 md:py-32 bg-[#061C1A] border-b border-white/5 relative">
+      {/* 11. Strategic Growth Assurance & Briefing */}
+      <section id="briefing" className="py-20 md:py-28 bg-[#061C1A] border-b border-white/5 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="max-w-3xl mb-16 space-y-4 text-left">
-            <span className="font-mono text-[10px] tracking-widest uppercase text-[#7CA99B]">
-              LATEST INSIGHTS
-            </span>
-            <h2 className="font-serif text-[clamp(2.2rem,4.5vw,4.2rem)] leading-none text-[#F4F5F1]">
-              Strategy for businesses ready to grow online.
-            </h2>
-          </div>
-
-          {/* Blog cards grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-            {INSIGHTS_DATA.slice(0, 3).map((article) => (
-              <div 
-                key={article.id}
-                className="group cursor-pointer bg-[#0D2623] border border-white/5 hover:border-[#B9D8CE]/20 rounded-2xl p-6 md:p-8 flex flex-col justify-between space-y-6 transition-all duration-300"
-                onClick={() => onSelectArticle(article)}
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between text-[10px] font-mono text-[#7CA99B]">
-                    <span className="bg-[#061C1A] px-2 py-0.5 rounded border border-white/5 uppercase tracking-wide">
-                      {article.category}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      <span>{article.readTime}</span>
-                    </span>
-                  </div>
-
-                  <h3 className="font-serif text-xl text-[#F4F5F1] leading-snug group-hover:text-[#B9D8CE] transition-colors">
-                    {article.title}
-                  </h3>
-
-                  <p className="text-xs text-[#B8C6C1] leading-relaxed font-light line-clamp-3">
-                    {article.summary}
-                  </p>
-                </div>
-
-                <div className="flex items-center space-x-1 font-mono text-[10px] text-[#B9D8CE] group-hover:text-[#F4F5F1] transition-colors">
-                  <span>Read full insights</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-16 text-center">
-            <Link 
-              href="/insights" 
-              className="inline-flex items-center space-x-2 font-mono text-[10px] uppercase tracking-wider text-[#B9D8CE] hover:text-[#F4F5F1] transition-colors"
-            >
-              <span>See All Strategy Insights</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
           {/* Newsletter Box */}
-          <div className="bg-[#0D2623] border border-[#B9D8CE]/20 rounded-3xl p-8 md:p-12 mt-16 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 text-left relative overflow-hidden">
+          <div className="bg-[#0D2623] border border-[#B9D8CE]/20 rounded-3xl p-8 md:p-12 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 text-left relative overflow-hidden">
             <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-[#123B35] to-transparent opacity-20 blur-2xl pointer-events-none" />
             
             <div className="space-y-2 max-w-md">
@@ -846,7 +862,6 @@ export default function Home({
               </form>
             )}
           </div>
-
         </div>
       </section>
 
@@ -866,7 +881,7 @@ export default function Home({
           </div>
 
           {/* Audit Tool master component */}
-          <AuditTool onScheduleCall={onScheduleCall} />
+          <AuditTool onScheduleCallWithData={onScheduleWithAuditData} />
         </div>
       </section>
 
@@ -910,7 +925,7 @@ export default function Home({
 
       {/* 12. Final CTA */}
       <section id="final-cta" className="relative py-32 overflow-hidden bg-gradient-to-b from-[#061C1A] to-[#041211] border-b border-white/5 text-center">
-        <div className="absolute left-1/2 top-1/2 aspect-square w-full max-w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#123B35]/25 blur-[140px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#123B35]/25 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.015)_1.5px,transparent_1.5px)] bg-[size:24px_24px] pointer-events-none opacity-40" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-8">

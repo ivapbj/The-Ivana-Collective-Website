@@ -12,13 +12,12 @@ import {
   AlertCircle 
 } from "lucide-react";
 import { AuditResponse } from "../types";
-import { normalizeWebsiteUrl, WEBSITE_URL_ERROR } from "../../shared/websiteUrl";
 
 interface AuditToolProps {
-  onScheduleCall: () => void;
+  onScheduleCallWithData: (businessName: string, websiteUrl: string) => void;
 }
 
-export default function AuditTool({ onScheduleCall }: AuditToolProps) {
+export default function AuditTool({ onScheduleCallWithData }: AuditToolProps) {
   const [businessName, setBusinessName] = useState("");
   const [location, setLocation] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
@@ -55,12 +54,6 @@ export default function AuditTool({ onScheduleCall }: AuditToolProps) {
       return;
     }
 
-    const normalizedWebsiteUrl = normalizeWebsiteUrl(websiteUrl);
-    if (normalizedWebsiteUrl === null) {
-      setError(WEBSITE_URL_ERROR);
-      return;
-    }
-
     setIsLoading(true);
     setError(null);
     setResult(null);
@@ -72,7 +65,7 @@ export default function AuditTool({ onScheduleCall }: AuditToolProps) {
         body: JSON.stringify({
           businessName,
           location,
-          websiteUrl: normalizedWebsiteUrl,
+          websiteUrl,
           services
         })
       });
@@ -81,7 +74,13 @@ export default function AuditTool({ onScheduleCall }: AuditToolProps) {
         throw new Error("Failed to process your strategy audit. Please check your connection.");
       }
 
-      const data = await response.json();
+      let data;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        throw new Error("Invalid response format received from audit server.");
+      }
       setResult(data);
     } catch (err: any) {
       setError(err.message || "An error occurred while compiling your strategy audit.");
@@ -139,7 +138,7 @@ export default function AuditTool({ onScheduleCall }: AuditToolProps) {
                   required
                   value={businessName}
                   onChange={(e) => setBusinessName(e.target.value)}
-                  placeholder="e.g., Elite Pilates Collective"
+                  placeholder="e.g., Legacy Economic Development"
                   className="w-full bg-[#061C1A] border border-white/10 rounded-lg px-4 py-3 text-sm text-[#F4F5F1] focus:outline-none focus:border-[#B9D8CE] focus:ring-1 focus:ring-[#B9D8CE]/20 transition-all placeholder:text-white/20"
                 />
               </div>
@@ -154,7 +153,7 @@ export default function AuditTool({ onScheduleCall }: AuditToolProps) {
                   required
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  placeholder="e.g., Boston, MA (South End)"
+                  placeholder="e.g., Springfield, MA (Western MA)"
                   className="w-full bg-[#061C1A] border border-white/10 rounded-lg px-4 py-3 text-sm text-[#F4F5F1] focus:outline-none focus:border-[#B9D8CE] focus:ring-1 focus:ring-[#B9D8CE]/20 transition-all placeholder:text-white/20"
                 />
               </div>
@@ -168,7 +167,7 @@ export default function AuditTool({ onScheduleCall }: AuditToolProps) {
                   type="text"
                   value={websiteUrl}
                   onChange={(e) => setWebsiteUrl(e.target.value)}
-                  placeholder="yourbusiness.com"
+                  placeholder="e.g., mybusiness.org (no https:// needed)"
                   className="w-full bg-[#061C1A] border border-white/10 rounded-lg px-4 py-3 text-sm text-[#F4F5F1] focus:outline-none focus:border-[#B9D8CE] focus:ring-1 focus:ring-[#B9D8CE]/20 transition-all placeholder:text-white/20"
                 />
               </div>
@@ -183,7 +182,7 @@ export default function AuditTool({ onScheduleCall }: AuditToolProps) {
                   required
                   value={services}
                   onChange={(e) => setServices(e.target.value)}
-                  placeholder="e.g., reformer pilates, private yoga, breathwork"
+                  placeholder="e.g., micro-business grants, business coaching, workshops"
                   className="w-full bg-[#061C1A] border border-white/10 rounded-lg px-4 py-3 text-sm text-[#F4F5F1] focus:outline-none focus:border-[#B9D8CE] focus:ring-1 focus:ring-[#B9D8CE]/20 transition-all placeholder:text-white/20"
                 />
               </div>
@@ -410,7 +409,7 @@ export default function AuditTool({ onScheduleCall }: AuditToolProps) {
                 Reset Audit
               </button>
               <button
-                onClick={onScheduleCall}
+                onClick={() => onScheduleCallWithData(businessName, websiteUrl)}
                 className="
                   flex items-center space-x-2 px-6 py-3 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold
                   bg-[#B9D8CE] text-[#061C1A] hover:bg-[#F4F5F1] transition-all cursor-pointer shadow-md

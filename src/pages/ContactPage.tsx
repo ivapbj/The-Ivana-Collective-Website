@@ -169,7 +169,7 @@ export default function ContactPage({
                       required
                       value={contactEmail}
                       onChange={(e) => setContactEmail(e.target.value)}
-                      placeholder="e.g., laura@elitepilates.com"
+                      placeholder="e.g., laura@mybusiness.com"
                       className="w-full bg-[#061C1A] border border-white/10 rounded-lg pl-9 pr-4 py-2.5 text-xs text-[#F4F5F1] focus:outline-none focus:border-[#B9D8CE] placeholder:text-white/10"
                     />
                   </div>
@@ -187,7 +187,7 @@ export default function ContactPage({
                     type="text"
                     value={contactBusiness}
                     onChange={(e) => setContactBusiness(e.target.value)}
-                    placeholder="e.g., Elite Pilates (elitepilates.com)"
+                    placeholder="e.g., Legacy Economic Development (legacyedc.org)"
                     className="w-full bg-[#061C1A] border border-white/10 rounded-lg pl-9 pr-4 py-2.5 text-xs text-[#F4F5F1] focus:outline-none focus:border-[#B9D8CE] placeholder:text-white/10"
                   />
                 </div>

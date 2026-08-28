@@ -77,7 +77,7 @@ export default function KeycapComposition({ onKeyClick, activeKey }: KeycapCompo
       id="hero-key-composition"
     >
       {/* Background radial ambient glow under the keyboard */}
-      <div className="absolute left-1/2 top-1/2 aspect-square w-full max-w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-[#123B35]/35 to-[#7CA99B]/5 blur-[120px] pointer-events-none md:max-w-[700px]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-gradient-to-r from-[#123B35]/35 to-[#7CA99B]/5 rounded-full blur-[120px] pointer-events-none" />
 
       {isMobile ? (
         /* MOBILE / TABLET COMPACT DECK with Preview Image */

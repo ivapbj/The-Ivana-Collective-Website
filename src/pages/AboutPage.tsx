@@ -1,131 +1,194 @@
 import React from "react";
 import SeoMeta from "../components/SeoMeta";
-import { ArrowRight, Compass, Sparkles, Award, ShieldCheck } from "lucide-react";
+import { ArrowRight, Sparkles, Award, ShieldCheck, Cpu, Code2, HeartHandshake, CheckCircle2, ArrowUpRight } from "lucide-react";
+import { BOOKING_CALENDAR_URL } from "../data";
 
 interface AboutPageProps {
-  onScheduleCall: () => void;
+  onScheduleCall?: () => void;
 }
 
 export default function AboutPage({ onScheduleCall }: AboutPageProps) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    "name": "About The Ivana Collective",
-    "description": "Learn about our boutique approach to custom editorial web design, search engine proximity optimization, and direct professional collaboration."
+    "name": "About Ivana | The Ivana Collective",
+    "description": "Full-stack web developer and AI specialist building authentic, high-converting digital business tools for small businesses."
   };
 
   const breadcrumbs = [
     { name: "Home", item: "/" },
-    { name: "About Us", item: "/about" }
+    { name: "About", item: "/about" }
   ];
 
   return (
     <div className="py-24 md:py-32 relative z-10 animate-in fade-in duration-500 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <SeoMeta
-        title="Boutique Digital Architects & SEO Strategists"
-        description="Learn how we pair luxury editorial style with custom-coded performance. Direct collaboration, zero middle-men, and total system integration."
+        title="About Ivana | Full-Stack Web Developer & AI Specialist"
+        description="I am a full stack web developer who went back to school in my mid-30s during the AI boom to help small businesses turn their websites into working business tools."
         canonicalPath="/about"
         schema={schema}
         breadcrumbs={breadcrumbs}
       />
 
       {/* Header section */}
-      <div className="max-w-4xl text-left space-y-4 mb-20">
-        <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#7CA99B]">
-          THE COLLECTIVE MANIFESTO
+      <div className="max-w-4xl text-left space-y-4 mb-16">
+        <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#7CA99B] flex items-center gap-2">
+          <Sparkles className="w-3.5 h-3.5 text-[#B9D8CE]" />
+          ABOUT THE FOUNDER & DEVELOPER
         </span>
         <h1 className="font-serif text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.05] text-[#F4F5F1] font-normal tracking-tight">
-          Strategy, design, and coding— <br />
-          <span className="text-[#B9D8CE]">without the corporate agency layers.</span>
+          Hi, I&apos;m Ivana. <br />
+          <span className="text-[#B9D8CE]">Full-Stack Web Developer & AI Specialist.</span>
         </h1>
         <p className="text-sm md:text-base text-[#B8C6C1] leading-relaxed font-light max-w-3xl">
-          We established The Ivana Collective to solve a major structural problem: standard agencies charge premium retainer rates, only to hand your account over to entry-level managers. We connect high-intent clients directly with an elite technical and visual craftsman.
+          Crafting custom digital tools that keep your voice authentic while turning your website into an active helper in your business.
         </p>
       </div>
 
-      {/* Intro block with side image */}
+      {/* Main Founder Story Section with Photo */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16 items-center mb-24 text-left">
         <div className="lg:col-span-5 relative">
-          <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/5 shadow-2xl max-w-sm mx-auto">
+          <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-[#B9D8CE]/20 shadow-2xl max-w-md mx-auto group">
             <img 
-              src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1000" 
-              alt="Ivana Collective principal workspace" 
-              className="w-full h-full object-cover filter grayscale contrast-125 brightness-[0.7] hover:scale-105 transition-transform duration-500"
+              src="/images/founder.jpg" 
+              alt="Ivana, Full-Stack Web Developer and founder of The Ivana Collective" 
+              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#041211] via-transparent to-transparent pointer-events-none" />
-            <div className="absolute bottom-4 left-4 bg-[#123B35]/80 border border-white/10 px-4 py-2 rounded-xl backdrop-blur">
-              <p className="font-mono text-[9px] tracking-widest uppercase text-[#B9D8CE]">
-                ESTABLISHED · 2024
+            <div className="absolute inset-0 bg-gradient-to-t from-[#041211]/90 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute bottom-4 left-4 right-4 bg-[#061C1A]/85 border border-[#B9D8CE]/20 p-3 rounded-2xl backdrop-blur-md">
+              <p className="font-mono text-[10px] tracking-wider uppercase text-[#B9D8CE] font-semibold">
+                Ivana · Full-Stack Developer
+              </p>
+              <p className="text-[11px] text-[#B8C6C1] font-light">
+                Founder, The Ivana Collective
               </p>
             </div>
           </div>
         </div>
+
         <div className="lg:col-span-7 space-y-6">
-          <h2 className="font-serif text-3xl text-[#F4F5F1] tracking-tight">Boutique representation. Massive digital authority.</h2>
-          <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-            We partner with wellness clinics, financial firms, boutique retailers, and specialized organizations that expect aesthetic quality. We understand that your digital presence is the ultimate parameter of your real-world reputation.
-          </p>
-          <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-            By avoiding bloated content management templates and building custom-coded systems from scratch, we deliver load speeds that are 4-6 times faster than standard builds. This means your visitors stay engaged, and search crawlers immediately rank your content higher.
-          </p>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#123B35] border border-[#B9D8CE]/30 text-[#B9D8CE] font-mono text-[10px] uppercase tracking-wider">
+            <Code2 className="w-3.5 h-3.5" />
+            <span>My Journey & Philosophy</span>
+          </div>
+
+          <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl text-[#F4F5F1] tracking-tight leading-snug">
+            Turning your website from a static business card into a functioning business engine.
+          </h2>
+
+          <div className="space-y-4 text-xs md:text-sm text-[#B8C6C1] font-light leading-relaxed">
+            <p>
+              Like most of us during the pandemic, I realized I needed a change. In my mid-30s, I made the bold decision to go back to school for software engineering.
+            </p>
+            <p>
+              This was also the dawn of the AI boom. I quickly learned that AI could be incredibly beneficial to small businesses if harnessed thoughtfully. I have taken the time to study modern artificial intelligence and learned how to apply it practically to websites—ensuring your site is not just a digital business card, but a functioning business tool.
+            </p>
+            <p>
+              A great website should do three things effortlessly: <strong className="text-[#F4F5F1] font-medium">help you get found online</strong>, make it seamless for your clients to enjoy their experience while browsing, buying, or soliciting your services, and <strong className="text-[#B9D8CE] font-medium">keep your voice authentic</strong> while creating a true helper for your everyday business and brand visibility.
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-white/5 pt-6 mt-4">
-            <div className="space-y-1">
+            <div className="space-y-1.5 p-4 rounded-xl bg-[#061C1A]/60 border border-white/5">
               <h4 className="font-serif text-base text-[#F4F5F1] flex items-center gap-2">
-                <Award className="w-4 h-4 text-[#B9D8CE]" />
-                <span>Zero Intermediaries</span>
+                <Cpu className="w-4 h-4 text-[#B9D8CE]" />
+                <span>AI-Powered Functionality</span>
               </h4>
-              <p className="text-xs text-[#B8C6C1] font-light">Collaborate directly with our senior strategist. Clear, immediate, and high-fidelity output.</p>
+              <p className="text-xs text-[#B8C6C1] font-light leading-relaxed">
+                Applied AI tools, smart search discovery, and automated workflows tailored specifically for small business owners.
+              </p>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1.5 p-4 rounded-xl bg-[#061C1A]/60 border border-white/5">
               <h4 className="font-serif text-base text-[#F4F5F1] flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-[#B9D8CE]" />
-                <span>Engine Integrations</span>
+                <HeartHandshake className="w-4 h-4 text-[#B9D8CE]" />
+                <span>Authentic Brand Voice</span>
               </h4>
-              <p className="text-xs text-[#B8C6C1] font-light">We cleanly sync search maps, automated calendars, contact channels, and analytics databases.</p>
+              <p className="text-xs text-[#B8C6C1] font-light leading-relaxed">
+                Tech that amplifies your genuine human voice, never replacing it with generic, sterile templates.
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Core Philosophy Blocks */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left mb-24">
-        <div className="p-8 bg-[#0D2623]/40 border border-white/5 rounded-2xl space-y-4">
-          <span className="font-mono text-xs text-[#7CA99B] block font-bold">AESTHETICS</span>
-          <h3 className="font-serif text-xl text-[#F4F5F1]">Tactile Balance</h3>
-          <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-            We design asymmetric visual compositions balanced by meticulous modern typography. We reject loud, generic, flashing layout paradigms to focus entirely on calm, immersive editorial experiences.
-          </p>
+      {/* How I Help Your Business */}
+      <div className="mb-24 text-left">
+        <div className="max-w-2xl mb-12 space-y-3">
+          <span className="font-mono text-[10px] tracking-widest uppercase text-[#7CA99B]">
+            WHAT WE ACCOMPLISH TOGETHER
+          </span>
+          <h2 className="font-serif text-3xl md:text-4xl text-[#F4F5F1]">
+            More than code. An active partner in your growth.
+          </h2>
         </div>
-        <div className="p-8 bg-[#0D2623]/40 border border-white/5 rounded-2xl space-y-4">
-          <span className="font-mono text-xs text-[#7CA99B] block font-bold">PERFORMANCE</span>
-          <h3 className="font-serif text-xl text-[#F4F5F1]">Pristine Source Code</h3>
-          <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-            We believe elegant code is a prerequisite for successful search engine ranking. We compile clean, accessible HTML5 structures and Tailwind CSS components with zero third-party visual builder bloat.
-          </p>
-        </div>
-        <div className="p-8 bg-[#0D2623]/40 border border-white/5 rounded-2xl space-y-4">
-          <span className="font-mono text-xs text-[#7CA99B] block font-bold">RESULTS</span>
-          <h3 className="font-serif text-xl text-[#F4F5F1]">Crawlable Dominance</h3>
-          <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-            We align your metadata, local geocoordinates, maps packs, and conversational LLM query structures to establish immediate and persistent search authority for your primary business.
-          </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="p-8 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-4 transition-all duration-300">
+            <div className="w-10 h-10 rounded-xl bg-[#123B35] flex items-center justify-center text-[#B9D8CE] font-mono text-sm font-bold">
+              01
+            </div>
+            <h3 className="font-serif text-xl text-[#F4F5F1]">Get Found Online</h3>
+            <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
+              From hyper-local SEO and structured schema markup to Google Business Profile optimization and AI search crawling, we ensure potential clients discover your services when they are searching.
+            </p>
+          </div>
+
+          <div className="p-8 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-4 transition-all duration-300">
+            <div className="w-10 h-10 rounded-xl bg-[#123B35] flex items-center justify-center text-[#B9D8CE] font-mono text-sm font-bold">
+              02
+            </div>
+            <h3 className="font-serif text-xl text-[#F4F5F1]">Delightful Client Experience</h3>
+            <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
+              Frictionless browsing, fast-loading mobile experiences, intuitive appointment booking, and easy e-commerce checkout so your visitors love interacting with your brand.
+            </p>
+          </div>
+
+          <div className="p-8 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-4 transition-all duration-300">
+            <div className="w-10 h-10 rounded-xl bg-[#123B35] flex items-center justify-center text-[#B9D8CE] font-mono text-sm font-bold">
+              03
+            </div>
+            <h3 className="font-serif text-xl text-[#F4F5F1]">Your 24/7 Digital Helper</h3>
+            <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
+              Your website works around the clock answering questions, collecting inquiries, processing orders, and building trust while you focus on doing what you love most.
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Action / CTA */}
-      <div className="text-center space-y-6 border border-white/5 bg-[#0A2C28]/40 rounded-3xl p-12 max-w-4xl mx-auto">
-        <h2 className="font-serif text-2xl md:text-3xl text-[#F4F5F1]">Ready to align your brand narrative?</h2>
-        <p className="text-xs text-[#B8C6C1] max-w-xl mx-auto leading-relaxed font-light">
-          Let&apos;s map your visual identity and technical structure. Direct direct collaboration with our principal engineer ensures flawless aesthetic and functional consistency.
-        </p>
-        <button
-          onClick={onScheduleCall}
-          className="inline-flex items-center justify-center space-x-2 px-8 py-3.5 rounded-lg font-mono text-xs uppercase tracking-wider font-semibold bg-[#F4F5F1] text-[#061C1A] hover:bg-[#B9D8CE] transition-all cursor-pointer"
-        >
-          <span>Schedule an Introductory Call</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
+      <div className="text-left bg-[#0D2623] border border-[#B9D8CE]/20 rounded-3xl p-8 md:p-12 max-w-4xl mx-auto relative overflow-hidden shadow-2xl">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-[#123B35]/40 via-transparent to-transparent pointer-events-none rounded-full blur-3xl" />
+        
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-8 space-y-4">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-[#7CA99B]">
+              DIRECT COLLABORATION
+            </span>
+            <h2 className="font-serif text-2xl md:text-3xl text-[#F4F5F1] font-normal">
+              Ready to create a functioning business tool for your brand?
+            </h2>
+            <p className="text-xs md:text-sm text-[#B8C6C1] leading-relaxed font-light">
+              Book a free consultation call. We&apos;ll discuss your vision, audit your current visibility, and map out the exact digital tools to help your business grow.
+            </p>
+          </div>
+
+          <div className="lg:col-span-4 flex flex-col items-start lg:items-end justify-center">
+            <a
+              href={BOOKING_CALENDAR_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                w-full sm:w-auto inline-flex items-center justify-center space-x-2.5 px-8 py-4 rounded-xl font-mono text-xs uppercase tracking-wider font-semibold
+                bg-[#B9D8CE] text-[#061C1A] hover:bg-[#F4F5F1] hover:shadow-lg hover:shadow-[#B9D8CE]/10
+                transition-all duration-200 cursor-pointer shadow-md group
+              "
+            >
+              <span>Book A Strategy Call</span>
+              <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );

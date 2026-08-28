@@ -66,18 +66,20 @@ export default function Home({
 
   const schema = {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "The Ivana Collective",
-    "description": "Bespoke digital architecture studio fusing premium editorial design, custom programming, and advanced organic search engine optimization.",
-    "url": "https://theivanacollective.com",
-    "telephone": "+1-555-0199"
+    "@type": "WebPage",
+    "@id": "https://theivanacollective.com/#home",
+    "name": "Web Design & Social Media Management | The Ivana Collective",
+    "description": "Strategic web design, search engine optimization, and social media management for small businesses in Western Massachusetts, Connecticut, and beyond.",
+    "url": "https://theivanacollective.com/",
+    "isPartOf": { "@id": "https://theivanacollective.com/#website" },
+    "about": { "@id": "https://theivanacollective.com/#organization" }
   };
 
   return (
     <div className="animate-in fade-in duration-500">
       <SeoMeta
-        title="Bespoke Editorial Web Design & Technical SEO Agency"
-        description="We craft premium custom-coded digital flagships paired with map Pack SEO position networks and AI search indexing. Build your custom system."
+        title="Web Design & Social Media Management"
+        description="The Ivana Collective provides strategic web design, SEO and social media management for small businesses in Western Massachusetts, Connecticut and beyond."
         canonicalPath="/"
         schema={schema}
       />

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">The Ivana Collective</title>
+  <rect width="512" height="512" rx="112" fill="#061C1A"/>
+  <rect x="26" y="26" width="460" height="460" rx="90" fill="none" stroke="#B9D8CE" stroke-width="12"/>
+  <text x="256" y="310" fill="#F4F5F1" font-family="Georgia, 'Times New Roman', serif" font-size="172" text-anchor="middle" letter-spacing="-10">IC</text>
+</svg>

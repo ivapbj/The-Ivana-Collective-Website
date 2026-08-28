@@ -13,23 +13,31 @@ interface SeoMetaProps {
   breadcrumbs?: BreadcrumbItem[];
 }
 
+const SITE_URL = "https://theivanacollective.com";
+const SOCIAL_IMAGE = `${SITE_URL}/images/ivana-collective-social-preview.jpg`;
+const SOCIAL_IMAGE_ALT = "The Ivana Collective web design, SEO and social media management studio";
+
+function upsertMeta(attribute: "name" | "property", key: string, content: string) {
+  let meta = document.querySelector(`meta[${attribute}="${key}"]`);
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.setAttribute(attribute, key);
+    document.head.appendChild(meta);
+  }
+  meta.setAttribute("content", content);
+}
+
 export default function SeoMeta({ title, description, canonicalPath, schema, breadcrumbs }: SeoMetaProps) {
   useEffect(() => {
-    // 1. Update Document Title
-    document.title = `${title} | The Ivana Collective`;
+    const fullTitle = title.includes("The Ivana Collective")
+      ? title
+      : `${title} | The Ivana Collective`;
+    const canonicalUrl = `${SITE_URL}${canonicalPath === "/" ? "/" : canonicalPath}`;
 
-    // 2. Update Meta Description
-    let descMeta = document.querySelector('meta[name="description"]');
-    if (!descMeta) {
-      descMeta = document.createElement("meta");
-      descMeta.setAttribute("name", "description");
-      document.head.appendChild(descMeta);
-    }
-    descMeta.setAttribute("content", description);
+    document.title = fullTitle;
+    upsertMeta("name", "description", description);
+    upsertMeta("name", "robots", "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1");
 
-    // 3. Update Canonical Link
-    const siteUrl = "https://theivanacollective.com";
-    const canonicalUrl = `${siteUrl}${canonicalPath}`;
     let canonicalLink = document.querySelector('link[rel="canonical"]');
     if (!canonicalLink) {
       canonicalLink = document.createElement("link");
@@ -38,89 +46,123 @@ export default function SeoMeta({ title, description, canonicalPath, schema, bre
     }
     canonicalLink.setAttribute("href", canonicalUrl);
 
-    // 4. Inject Schema.org Structured Data
-    const oldSchemaScript = document.getElementById("structured-data-schema");
-    if (oldSchemaScript) {
-      oldSchemaScript.remove();
-    }
+    upsertMeta("property", "og:type", "website");
+    upsertMeta("property", "og:locale", "en_US");
+    upsertMeta("property", "og:site_name", "The Ivana Collective");
+    upsertMeta("property", "og:title", fullTitle);
+    upsertMeta("property", "og:description", description);
+    upsertMeta("property", "og:url", canonicalUrl);
+    upsertMeta("property", "og:image", SOCIAL_IMAGE);
+    upsertMeta("property", "og:image:width", "1200");
+    upsertMeta("property", "og:image:height", "630");
+    upsertMeta("property", "og:image:alt", SOCIAL_IMAGE_ALT);
 
-    const schemasToInject: any[] = [];
+    upsertMeta("name", "twitter:card", "summary_large_image");
+    upsertMeta("name", "twitter:title", fullTitle);
+    upsertMeta("name", "twitter:description", description);
+    upsertMeta("name", "twitter:image", SOCIAL_IMAGE);
+    upsertMeta("name", "twitter:image:alt", SOCIAL_IMAGE_ALT);
 
-    // LocalBusiness Schema by default on all pages or customized
-    const localBusinessSchema = {
-      "@context": "https://schema.org",
+    const organizationSchema = {
       "@type": "ProfessionalService",
-      "name": "The Ivana Collective",
-      "image": "https://theivanacollective.com/images/premium-keyboard-hero.jpg",
-      "@id": "https://theivanacollective.com/#organization",
-      "url": "https://theivanacollective.com",
-      "telephone": "+1-555-0199",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Luxury Design Row, 100",
-        "addressLocality": "Los Angeles",
-        "addressRegion": "CA",
-        "postalCode": "90015",
-        "addressCountry": "US"
+      "@id": `${SITE_URL}/#organization`,
+      name: "The Ivana Collective",
+      alternateName: "Ivana Collective",
+      url: `${SITE_URL}/`,
+      logo: `${SITE_URL}/apple-touch-icon.png`,
+      image: SOCIAL_IMAGE,
+      description: "Web design, search engine optimization, and social media management for small businesses.",
+      founder: {
+        "@type": "Person",
+        name: "Ivana Carrillo",
+        jobTitle: "Full-Stack Web Developer and Founder"
       },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 34.0407,
-        "longitude": -118.2468
-      },
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday"
-        ],
-        "opens": "09:00",
-        "closes": "18:00"
-      },
-      "sameAs": [
+      areaServed: [
+        { "@type": "AdministrativeArea", name: "Western Massachusetts" },
+        { "@type": "State", name: "Massachusetts" },
+        { "@type": "State", name: "Connecticut" },
+        { "@type": "Country", name: "United States" }
+      ],
+      sameAs: [
         "https://www.instagram.com/theivanacollective/",
         "https://www.facebook.com/profile.php?id=61571300805986",
-        "https://www.tiktok.com/@theivanacollective"
-      ]
+        "https://www.tiktok.com/@theivanacollective",
+        "https://github.com/ivapbj"
+      ],
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Digital Growth Services",
+        itemListElement: [
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Small Business Web Design and Development",
+              serviceType: "Web Design"
+            }
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Search Engine Optimization",
+              serviceType: "SEO"
+            }
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Social Media Management and Content Strategy",
+              serviceType: "Social Media Management"
+            }
+          }
+        ]
+      }
     };
-    schemasToInject.push(localBusinessSchema);
 
-    // Dynamic breadcrumb schema if specified
+    const websiteSchema = {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: `${SITE_URL}/`,
+      name: "The Ivana Collective",
+      alternateName: "Ivana Collective",
+      inLanguage: "en-US",
+      publisher: { "@id": `${SITE_URL}/#organization` }
+    };
+
+    const graph: Record<string, any>[] = [organizationSchema, websiteSchema];
+
     if (breadcrumbs && breadcrumbs.length > 0) {
-      const breadcrumbSchema = {
-        "@context": "https://schema.org",
+      graph.push({
         "@type": "BreadcrumbList",
-        "itemListElement": breadcrumbs.map((crumb, idx) => ({
+        "@id": `${canonicalUrl}#breadcrumb`,
+        itemListElement: breadcrumbs.map((crumb, index) => ({
           "@type": "ListItem",
-          "position": idx + 1,
-          "name": crumb.name,
-          "item": `${siteUrl}${crumb.item}`
+          position: index + 1,
+          name: crumb.name,
+          item: `${SITE_URL}${crumb.item}`
         }))
-      };
-      schemasToInject.push(breadcrumbSchema);
+      });
     }
 
     if (schema) {
-      schemasToInject.push(schema);
+      const { "@context": _context, ...pageSchema } = schema;
+      graph.push(pageSchema);
     }
+
+    document.getElementById("structured-data-schema")?.remove();
 
     const script = document.createElement("script");
     script.id = "structured-data-schema";
     script.type = "application/ld+json";
-    script.innerHTML = JSON.stringify(schemasToInject);
+    script.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": graph });
     document.head.appendChild(script);
 
-    // Cleanup on unmount
     return () => {
-      const schemaScript = document.getElementById("structured-data-schema");
-      if (schemaScript) {
-        schemaScript.remove();
-      }
+      document.getElementById("structured-data-schema")?.remove();
     };
   }, [title, description, canonicalPath, schema, breadcrumbs]);
 
-  return null; // Side-effect only component
+  return null;
 }

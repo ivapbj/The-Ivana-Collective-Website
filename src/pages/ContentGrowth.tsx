@@ -30,8 +30,8 @@ export default function ContentGrowth({ onScheduleCall }: ContentGrowthProps) {
   return (
     <div className="py-24 md:py-32 relative z-10 animate-in fade-in duration-500 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <SeoMeta
-        title="Social Media, Editorial Content & Brand Growth"
-        description="Establish supreme narrative authority on social networks and newsletters. Custom social media syndication, monthly briefings, and growth strategy."
+        title="Social Media Management & Content Strategy"
+        description="Strategic social media management, content creation and brand growth for small businesses. Build visibility with consistent, search-informed content."
         canonicalPath="/services/content-growth"
         schema={schema}
         breadcrumbs={breadcrumbs}

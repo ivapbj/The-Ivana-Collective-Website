@@ -1,0 +1,36 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { validate, token, authorized, handlePreview } from './preview';
+const valid={fullName:'Test Visitor',email:'visitor@example.com',businessName:'Acme',industry:'Design',description:'Personal design',services:'Planning\nConsulting',template:'Portfolio',colors:['#163c36','#f4efe5','#17231f'],contactConsent:true,marketingConsent:false};
+process.env.PREVIEW_SIGNING_SECRET='test-secret-with-at-least-thirty-two-characters';
+test('validates consent, email, template, colors and unsafe images',()=>{
+ assert.equal(validate(valid).marketingConsent,false);
+ for(const change of [{email:'invalid'},{contactConsent:false},{marketingConsent:'yes'},{template:'unknown'},{logo:'data:image/svg+xml;base64,AAAA'},{colors:['red']},{fullName:''}])assert.throws(()=>validate({...valid,...change}));
+});
+test('signed access rejects tampering, expired links and another submission',()=>{
+ const signed=token('record','owner',60);
+ assert.equal(authorized(signed,'record'),true);
+ assert.equal(authorized(signed,'another'),false);
+ assert.equal(authorized(signed+'x','record'),false);
+ assert.equal(authorized(token('record','visitor',-1),'record'),false);
+});
+test('storage outage never unlocks a preview',async()=>{
+ delete process.env.SUPABASE_URL;
+ assert.equal((await handlePreview(new Request('https://example.com/api/preview-submit',{method:'POST',body:JSON.stringify(valid)}))).status,503);
+});
+test('saves exact design, deduplicates retries and requires protected access',async()=>{
+ process.env.SUPABASE_URL='https://database.example';process.env.SUPABASE_SERVICE_ROLE_KEY='test';
+ const original=globalThis.fetch;let saved:any;
+ globalThis.fetch=async (_url:any,init:any)=>{
+  if(String(_url).includes('/rpc/'))return Response.json(true);
+  if(init?.method==='POST'){if(saved)return new Response('[]');saved=JSON.parse(init.body);return Response.json([saved]);}
+  return Response.json(saved?[saved]:[]);
+ };
+ try {
+ const request=()=>new Request('https://example.com/api/preview-submit',{method:'POST',headers:{'Idempotency-Key':'12345678-1234-1234-1234-123456789abc'},body:JSON.stringify(valid)});
+ const first=await handlePreview(request()),data=await first.json();assert.equal(first.status,200);assert.equal(data.config.businessName,'Acme');assert.equal(data.config.services,valid.services);
+ const second=await (await handlePreview(request())).json();assert.equal(second.id,data.id);
+ assert.equal((await handlePreview(new Request(`https://example.com/api/preview-submit?id=${data.id}`))).status,403);
+ const access=token(data.id,'owner',60);assert.equal((await handlePreview(new Request(`https://example.com/api/preview-submit?id=${data.id}&access=${access}`))).status,200);
+ }finally {globalThis.fetch=original;}
+});

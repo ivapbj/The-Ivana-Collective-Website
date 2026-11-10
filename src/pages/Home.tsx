@@ -92,7 +92,10 @@ export default function Home({
             <p className="font-mono text-xs tracking-widest uppercase text-[#B9D8CE] mb-5">The Ivana Collective</p>
             <h1 className="font-serif text-[clamp(2.5rem,6vw,5rem)] leading-[1.08] text-[#F4F5F1]">Websites built to grow with your business.</h1>
             <p className="mt-6 text-base sm:text-lg leading-relaxed text-[#E0EBE5]">Thoughtful web design, SEO, and social media support for small businesses.</p>
-            <button onClick={onScheduleCall} className="mt-8 inline-flex items-center justify-center min-h-12 px-6 py-3 rounded-xl bg-[#B9D8CE] text-[#061C1A] font-semibold hover:bg-white transition-colors">Schedule a call</button>
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md">
+              <button onClick={onScheduleCall} className="inline-flex items-center justify-center min-h-12 px-6 py-3 rounded-xl bg-[#B9D8CE] text-[#061C1A] font-semibold hover:bg-white transition-colors">Schedule a call</button>
+              <Link href="/work" className="inline-flex items-center justify-center min-h-12 px-6 py-3 rounded-xl border border-[#B9D8CE] text-[#F4F5F1] font-semibold hover:bg-white/10 transition-colors">View Our Work</Link>
+            </div>
           </div>
         </div>
       </section>

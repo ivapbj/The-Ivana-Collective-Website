@@ -102,7 +102,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
         </button>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8" aria-label="Primary Navigation">
+        <nav className="hidden lg:flex items-center space-x-8" aria-label="Primary Navigation">
           {menuItems.map((item) => {
             const isPageActive = item.id === "hero"
               ? (currentPath === "/" && (activeSection === "hero" || !menuItems.some(m => m.id === activeSection)))
@@ -129,7 +129,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
         </nav>
 
         {/* Desktop CTA Call Button */}
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <button
             id="nav-schedule-btn"
             onClick={onScheduleCall}
@@ -148,7 +148,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
         <button
           id="mobile-menu-toggle"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden p-2 text-[#F4F5F1] hover:text-[#B9D8CE] transition-colors focus:outline-none"
+          className="lg:hidden p-2 text-[#F4F5F1] hover:text-[#B9D8CE] transition-colors focus:outline-none"
           aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
         >
           {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -160,7 +160,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
         <div 
           id="mobile-navigation-overlay"
           className="
-            fixed inset-0 top-[60px] z-40 bg-[#061C1A]/98 backdrop-blur-xl md:hidden
+            fixed inset-0 top-[60px] z-40 bg-[#061C1A]/98 backdrop-blur-xl lg:hidden
             flex flex-col justify-between p-8 border-t border-white/5 animate-in fade-in duration-200
           "
         >

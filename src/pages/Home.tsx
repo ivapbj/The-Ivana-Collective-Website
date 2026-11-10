@@ -10,8 +10,6 @@ import {
   PROJECTS_DATA, 
   SYSTEM_STAGES, 
   METHOD_STEPS, 
-  RESULT_METRICS, 
-  TESTIMONIALS_DATA, 
   PRICING_PACKAGES, 
   INSIGHTS_DATA, 
   FAQS_DATA 
@@ -456,7 +454,7 @@ export default function Home({
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-b border-white/5 py-5 my-4">
                       {project.results.slice(0, 2).map((resText, rIdx) => (
                         <div key={rIdx} className="border-l border-[#B9D8CE]/20 pl-3">
-                          <p className="text-[#B9D8CE] font-mono text-[10px] uppercase tracking-wider font-semibold">METRIC RESULT</p>
+                          <p className="text-[#B9D8CE] font-mono text-[10px] uppercase tracking-wider font-semibold">PROJECT HIGHLIGHT</p>
                           <p className="text-xs text-[#F4F5F1] font-serif italic mt-0.5">{resText}</p>
                         </div>
                       ))}
@@ -582,47 +580,6 @@ export default function Home({
         </div>
       </section>
 
-      {/* 7. Results Section */}
-      <section id="results" className="py-24 md:py-32 bg-[#061C1A] border-b border-white/5 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="max-w-3xl mb-16 space-y-4 text-left">
-            <span className="font-mono text-[10px] tracking-widest uppercase text-[#7CA99B]">
-              MEASURABILITY
-            </span>
-            <h2 className="font-serif text-[clamp(2.2rem,4.5vw,4.2rem)] leading-none text-[#F4F5F1]">
-              Growth should be visible.
-            </h2>
-            <p className="text-sm text-[#B8C6C1] leading-relaxed font-light">
-              We compile metrics directly showing search traffic, mapping positions, booking numbers, and true client acquisition.
-            </p>
-          </div>
-
-          {/* Results Cards grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {RESULT_METRICS.map((item, idx) => (
-              <div 
-                key={idx}
-                className="bg-[#0D2623] border border-white/5 rounded-2xl p-6 md:p-8 space-y-4 text-left"
-              >
-                <span className="font-mono text-[9px] tracking-widest uppercase text-[#7CA99B]">
-                  {item.label}
-                </span>
-                
-                <p className="font-serif text-4xl md:text-5xl text-[#F4F5F1] font-semibold tracking-tight">
-                  {item.metric}
-                </p>
-                
-                <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-                  {item.description}
-                </p>
-              </div>
-            ))}
-          </div>
-
-        </div>
-      </section>
-
       {/* 8. About Section Preview */}
       <section id="about" className="py-24 md:py-32 bg-[#041211] border-b border-white/5 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -681,58 +638,6 @@ export default function Home({
             </div>
 
           </div>
-        </div>
-      </section>
-
-      {/* 9. Testimonials Section */}
-      <section id="testimonials" className="py-24 md:py-32 bg-[#061C1A] border-b border-white/5 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="max-w-3xl mb-16 space-y-4 text-left">
-            <span className="font-mono text-[10px] tracking-widest uppercase text-[#7CA99B]">
-              VOICES
-            </span>
-            <h2 className="font-serif text-[clamp(2.2rem,4.5vw,4.2rem)] leading-none text-[#F4F5F1]">
-              What clients say after launch.
-            </h2>
-          </div>
-
-          {/* Testimonial cards grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 text-left">
-            {TESTIMONIALS_DATA.map((t) => (
-              <div 
-                key={t.id}
-                className="bg-[#0D2623] border border-white/5 rounded-3xl p-8 md:p-10 flex flex-col justify-between space-y-8 relative"
-              >
-                <span className="absolute top-6 right-8 text-5xl font-serif text-[#7CA99B]/10 select-none pointer-events-none font-bold">
-                  &ldquo;
-                </span>
-
-                <p className="text-sm text-[#F4F5F1] leading-relaxed font-serif font-light italic relative z-10">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-
-                <div className="space-y-4 border-t border-white/5 pt-6">
-                  <div>
-                    <h4 className="font-sans text-sm font-semibold text-[#F4F5F1]">{t.author}</h4>
-                    <p className="font-mono text-[10px] text-[#7CA99B] tracking-wider uppercase mt-0.5">{t.business}</p>
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-1.5">
-                    {t.services.map((serv, sIdx) => (
-                      <span 
-                        key={sIdx}
-                        className="font-mono text-[8px] uppercase bg-[#061C1A] text-[#B8C6C1] px-2 py-0.5 rounded border border-white/5"
-                      >
-                        {serv}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
         </div>
       </section>
 

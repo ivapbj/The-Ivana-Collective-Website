@@ -845,7 +845,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                         />
                       </div>
                       <label htmlFor="consent-contact" className="text-[11px] text-[#B8C6C1] leading-relaxed cursor-pointer select-none">
-                        By clicking Submit, I agree that The Ivana Collective may use my information to contact me about my website request and send me marketing emails. I understand that I can unsubscribe from marketing emails at any time. <span className="text-red-500">*</span>
+                        I agree that The Ivana Collective may use my information to contact me about my website request. <span className="text-red-500">*</span>
                       </label>
                     </div>
 
@@ -1328,23 +1328,6 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                     </div>
                   </section>
 
-                  {/* Testimonial Preview */}
-                  <section className={`py-12 px-6 text-center ${isGenZ ? "border-b-4 border-black bg-[var(--preview-background)]" : isHypercolor ? "border-b-[3px] border-black bg-[var(--preview-background)]" : "bg-[var(--preview-background)]"}`}>
-                    <div className="max-w-lg mx-auto space-y-4">
-                      <span className="text-xs text-[var(--preview-accent)]">★★★★★</span>
-                      <p 
-                        style={{ fontFamily: selectedDirection.fontHeading }}
-                        className="text-xs md:text-sm italic text-[var(--preview-primary)] font-light leading-relaxed"
-                      >
-                        "The interface of our new digital portal transformed how clients perceive our brand value. Booking volume increased immediately by 40%."
-                      </p>
-                      <div>
-                        <p style={{ fontFamily: selectedDirection.fontBody }} className="text-[10px] font-bold text-[var(--preview-primary)] uppercase">Dr. Alyson Reed</p>
-                        <p style={{ fontFamily: selectedDirection.fontBody }} className="text-[9px] opacity-65">Aesthetic Clinician & Founder</p>
-                      </div>
-                    </div>
-                  </section>
-
                   {/* Final CTA Section */}
                   <section 
                     className={`p-8 md:p-12 text-center bg-[var(--preview-surface)] border-t ${isGenZ ? "border-t-4 border-black" : isHypercolor ? "border-t-[3px] border-black" : "border-t border-[var(--preview-border)]"}`}
@@ -1396,7 +1379,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
               <div>
                 <h5 className="font-mono text-[9px] tracking-widest text-[#7CA99B] uppercase font-bold">EXPERT INTERFACE METRIC</h5>
                 <p className="text-[11px] text-[#B8C6C1] leading-relaxed mt-1">
-                  Our system utilizes high-contrast color matching and accessible sizing to maintain strict WCAG AAA guidelines. Notice how selecting different curated palettes updates buttons, text styles, and card structures dynamically to safeguard your authority.
+                  Explore how each palette changes the colors and style of your preview. The finished website can be refined for readability and accessibility.
                 </p>
               </div>
             </div>

@@ -241,7 +241,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
     observer.observe(canvas);
     return () => observer.disconnect();
   }, []);
-  const layoutDevice = previewDevice === "mobile" || canvasWidth < 700
+  const layoutDevice = previewDevice === "mobile" || canvasWidth < 560
     ? "mobile"
     : previewDevice === "tablet" || canvasWidth < 860
       ? "tablet"
@@ -1013,6 +1013,12 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                 </button>
               </div>
             </div>
+
+            {canvasWidth > 0 && layoutDevice !== previewDevice && (
+              <p className="text-xs text-[#B8C6C1] leading-relaxed">
+                The preview adjusts to fit the available space.
+              </p>
+            )}
 
             {/* Interactive Browser Frame */}
             <div className="bg-[#0B211E] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col items-center">

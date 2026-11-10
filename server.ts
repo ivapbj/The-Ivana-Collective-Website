@@ -72,15 +72,6 @@ async function startServer() {
     res.json({ status: "ok", time: new Date().toISOString() });
   });
 
-  // Admin inspect endpoint (to view mock bookings/contacts)
-  app.get("/api/admin/data", (req, res) => {
-    res.json({
-      bookings: bookingsStore,
-      contacts: contactsStore,
-      previews: previewsStore
-    });
-  });
-
   // Interactive Website Style Preview Form Submission
   app.post("/api/preview-submit", (req, res) => {
     const {

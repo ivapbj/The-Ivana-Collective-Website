@@ -1,3 +1,4 @@
+import HomepageConcept, { type ConceptType } from "./HomepageConcept";
 import React, { useState, useRef, useEffect } from "react";
 import { 
   Laptop, 
@@ -207,6 +208,7 @@ interface StylePreviewSectionProps {
 
 export default function StylePreviewSection({ onScheduleCall }: StylePreviewSectionProps) {
   // 1. Core Configurator States
+  const [template, setTemplate] = useState<ConceptType>("Restaurant");
   const [businessName, setBusinessName] = useState("");
   const [tagline, setTagline] = useState("");
   const [industry, setIndustry] = useState(INDUSTRIES[0]);
@@ -240,7 +242,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
     const observer = new ResizeObserver(updateWidth);
     observer.observe(canvas);
     return () => observer.disconnect();
-  }, []);
+  });
   const layoutDevice = previewDevice === "mobile" || canvasWidth < 560
     ? "mobile"
     : previewDevice === "tablet" || canvasWidth < 860
@@ -260,6 +262,9 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // Any edits require a fresh submission so the emailed selections match the preview.
+  useEffect(() => { setSubmitSuccess(null); }, [businessName, tagline, industry, email, phone, websiteUrl, notes, logoUrl, template, selectedDirection, selectedPalette, contactConsent, marketingConsent]);
 
   // File Upload Reference
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -392,6 +397,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
           businessName,
           tagline,
           industry,
+          template,
           email,
           phone,
           websiteUrl,
@@ -401,7 +407,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
           logoUrl, // Safe base64 or SVG
           contactConsent,
           marketingConsent,
-          consentTextVersion: "website-preview-v2",
+          consentTextVersion: "website-preview-v3",
           botField // Honeypot spam protector
         })
       });
@@ -847,6 +853,12 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                     </p>
                   </div>
 
+                  <fieldset className="space-y-3 border-t border-white/10 pt-6">
+                    <legend className="text-xs uppercase tracking-widest text-[#B9D8CE]">Homepage template</legend>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {(["Restaurant", "Business / Services", "Portfolio", "E-commerce / Online Store"] as ConceptType[]).map(option => <label key={option} className="flex items-center gap-2 border border-white/20 rounded-lg p-3 text-sm text-white cursor-pointer"><input type="radio" name="homepage-template" value={option} checked={template === option} onChange={() => setTemplate(option)} />{option}</label>)}
+                    </div>
+                  </fieldset>
                   {/* Dual Double Consent Checkboxes for High-Fidelity compliance */}
                   <div className="space-y-3.5">
                     
@@ -863,7 +875,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                         />
                       </div>
                       <label htmlFor="consent-contact" className="text-[11px] text-[#B8C6C1] leading-relaxed cursor-pointer select-none">
-                        I agree that The Ivana Collective may use my information to contact me about my website request. <span className="text-red-500">*</span>
+                        I agree that The Ivana Collective may contact me about my website inquiry by email and, if I provide a phone number, by phone. <span className="text-red-500">*</span>
                       </label>
                     </div>
 
@@ -883,19 +895,11 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                       </label>
                     </div>
 
-                    {/* Legal Links */}
-                    <div style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="text-[10px] text-[#7CA99B] flex items-center gap-3 pt-1">
-                      <span className="hover:text-[#B9D8CE] transition-colors cursor-pointer border-b border-[#7CA99B]/30 pb-0.5">
-                        Privacy Policy
-                      </span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/5" />
-                      <span className="hover:text-[#B9D8CE] transition-colors cursor-pointer border-b border-[#7CA99B]/30 pb-0.5">
-                        Terms and Conditions
-                      </span>
-                    </div>
+                    <p className="text-xs text-[#B8C6C1]">Privacy policy and terms are being prepared.</p>
 
                   </div>
 
+                  <p className="text-xs text-[#B8C6C1]">Enter your business name and a valid email, then check the contact consent box to generate your mockup.</p>
                   {/* Submission States Panel */}
                   {submitError && (
                     <div className="p-3 bg-red-950/30 border border-red-900/30 rounded-xl text-red-300 text-xs flex items-start gap-2.5 animate-in fade-in duration-200">
@@ -921,15 +925,12 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                           type="button"
                           onClick={() => {
                             setSubmitSuccess(null);
-                            setBusinessName("");
-                            setTagline("");
-                            setNotes("");
-                            handleRemoveLogo();
+
                           }}
                           style={{ fontFamily: 'Inter, Arial, sans-serif' }}
                           className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-[#F4F5F1] uppercase tracking-wider transition-colors flex items-center gap-1"
                         >
-                          <RotateCcw className="w-3.5 h-3.5" /> Start New
+                          <RotateCcw className="w-3.5 h-3.5" /> Edit and Regenerate
                         </button>
                         <button
                           type="button"
@@ -937,14 +938,14 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                           style={{ fontFamily: 'Inter, Arial, sans-serif' }}
                           className="px-4 py-2 rounded-lg bg-[#B9D8CE] text-[#061C1A] hover:bg-[#a3cbbf] text-xs uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 shadow-md"
                         >
-                          Schedule a Strategy Call <ArrowRight className="w-3.5 h-3.5" />
+                          Let's Build Your Website <ArrowRight className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
                   ) : (
                     <button
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || !businessName.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !contactConsent}
                       style={{ fontFamily: 'Inter, Arial, sans-serif' }}
                       className="
                         w-full py-3.5 rounded-xl bg-[#B9D8CE] text-[#061C1A] hover:bg-[#a3cbbf] 
@@ -962,7 +963,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                           Submitting your website direction…
                         </>
                       ) : (
-                        "Submit My Website Direction"
+                        "Generate My Mockup"
                       )}
                     </button>
                   )}
@@ -979,7 +980,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
             {/* Device selector panel */}
             <div style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="bg-[#0D2623] border border-[#123B35] rounded-xl px-4 py-3 flex flex-wrap gap-3 items-center justify-between shadow-md">
               <span style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="text-[9px] tracking-widest text-[#7CA99B] uppercase font-bold flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#B9D8CE] animate-pulse" /> LIVE WEBSITE PREVIEW
+                <span className="w-1.5 h-1.5 rounded-full bg-[#B9D8CE] animate-pulse" /> HOMEPAGE CONCEPT
               </span>
 
               {/* Controls */}
@@ -1050,347 +1051,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                   `}
                 >
                   
-                  {/* Web Nav Bar */}
-                  <header 
-                    className={`px-6 py-4 border-b ${isGenZ ? "border-b-4 border-black bg-[var(--preview-surface)]" : isHypercolor ? "border-b-[3px] border-black bg-[var(--preview-surface)]" : "border-b border-[var(--preview-border)]"} grid grid-cols-3 items-center relative`}
-                    style={{ 
-                      borderRadius: selectedDirection.layoutStyle === "organic" ? "0 0 1rem 1rem" : "0"
-                    }}
-                  >
-                    {/* Left Column: Logo Area */}
-                    <div className="flex items-center gap-2 justify-self-start min-w-0">
-                      {logoUrl ? (
-                        <img 
-                          src={logoUrl} 
-                          alt={businessName || "Business Logo"} 
-                          className="max-h-8 max-w-full object-contain"
-                        />
-                      ) : (
-                        <span 
-                          style={{ fontFamily: selectedDirection.fontHeading }}
-                          className={`text-sm font-semibold tracking-wider text-[var(--preview-primary)] uppercase [overflow-wrap:anywhere] ${isGenZ || isHypercolor ? "font-black" : ""}`}
-                        >
-                          {businessName.trim() || "Elite Brand"}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Middle Column: Nav Links (Desktop) OR Call Button (Tablet/Mobile) */}
-                    <div className="justify-self-center flex items-center justify-center">
-                      {layoutDevice === "desktop" ? (
-                        <nav style={{ fontFamily: selectedDirection.fontBody }} className="flex items-center gap-5 text-[11px] font-medium tracking-wide whitespace-nowrap">
-                          <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">Home</span>
-                          <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">Services</span>
-                          <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">About</span>
-                          <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">Contact</span>
-                        </nav>
-                      ) : (
-                        /* CALL Button visible in the middle of the header on mobile and tablet */
-                        <a
-                          href={phone.trim() ? `tel:${phone.trim()}` : "tel:555-019-2834"}
-                          style={{ fontFamily: selectedDirection.fontBody }}
-                          className={`
-                            flex items-center gap-1.5 px-3 py-1.5 font-semibold text-[9px] uppercase tracking-wider transition-all shadow-sm
-                            ${isGenZ
-                              ? "bg-[var(--preview-accent)] text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-[var(--preview-accent)]/95 rounded-none"
-                              : isHypercolor 
-                                ? "bg-[var(--preview-accent)] text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-[var(--preview-accent)]/95 rounded-full" 
-                                : "bg-[var(--preview-primary)] text-[var(--preview-surface)] hover:opacity-90 rounded-full"}
-                          `}
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <Phone className="w-2.5 h-2.5" />
-                          <span>CALL NOW</span>
-                        </a>
-                      )}
-                    </div>
-
-                    {/* Right Column: CTA button (Desktop) OR Hamburger Menu (Tablet/Mobile) */}
-                    <div className="justify-self-end flex items-center">
-                      {layoutDevice === "desktop" ? (
-                        <button 
-                          type="button"
-                          style={{ fontFamily: selectedDirection.fontBody }}
-                          className={`px-4 py-1.5 text-[9px] font-semibold ${getPrimaryButtonClass()} transition-all whitespace-nowrap`}
-                        >
-                          Get Started
-                        </button>
-                      ) : (
-                        /* Hamburger Menu in Mobile and Tablet */
-                        <button
-                          type="button"
-                          onClick={() => setIsPreviewMenuOpen(!isPreviewMenuOpen)}
-                          className={`
-                            p-1.5 cursor-pointer hover:opacity-80 transition-all flex flex-col gap-1 justify-center items-center w-8 h-8
-                            ${isGenZ
-                              ? "bg-[var(--preview-surface)] border-2 border-black text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-none"
-                              : isHypercolor 
-                                ? "bg-[var(--preview-surface)] border-2 border-black text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-md" 
-                                : "bg-[var(--preview-border)] text-[var(--preview-primary)] rounded-md"}
-                          `}
-                          aria-label="Toggle navigation menu"
-                        >
-                          {isPreviewMenuOpen ? (
-                            <X className="w-4 h-4 text-[var(--preview-primary)]" />
-                          ) : (
-                            <>
-                              <span className={`block w-4.5 h-0.5 ${isGenZ || isHypercolor ? "bg-black" : "bg-[var(--preview-primary)]"}`} />
-                              <span className={`block w-4.5 h-0.5 ${isGenZ || isHypercolor ? "bg-black" : "bg-[var(--preview-primary)]"}`} />
-                              <span className={`block w-4.5 h-0.5 ${isGenZ || isHypercolor ? "bg-black" : "bg-[var(--preview-primary)]"}`} />
-                            </>
-                          )}
-                        </button>
-                      )}
-                    </div>
-
-                    {/* Mobile/Tablet Collapsible Menu Overlay */}
-                    {isPreviewMenuOpen && (layoutDevice === "mobile" || layoutDevice === "tablet") && (
-                      <div 
-                        className={`
-                          absolute top-full left-0 right-0 p-4 z-50 transition-all duration-300 origin-top
-                          ${isGenZ 
-                            ? "bg-[var(--preview-surface)] border-b-4 border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]" 
-                            : isHypercolor 
-                              ? "bg-[var(--preview-surface)] border-b-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" 
-                              : "bg-[var(--preview-surface)] border-b border-[var(--preview-border)] shadow-xl"}
-                        `}
-                        style={{ fontFamily: selectedDirection.fontBody }}
-                      >
-                        <nav className="flex flex-col gap-3 text-center text-xs font-semibold">
-                          <span className="py-2 opacity-75 hover:text-[var(--preview-accent)] cursor-pointer transition-colors border-b border-[var(--preview-border)]/20 pb-2">Home</span>
-                          <span className="py-2 opacity-75 hover:text-[var(--preview-accent)] cursor-pointer transition-colors border-b border-[var(--preview-border)]/20 pb-2">Services</span>
-                          <span className="py-2 opacity-75 hover:text-[var(--preview-accent)] cursor-pointer transition-colors border-b border-[var(--preview-border)]/20 pb-2">About</span>
-                          <span className="py-2 opacity-75 hover:text-[var(--preview-accent)] cursor-pointer transition-colors border-b border-[var(--preview-border)]/20 pb-2">Contact</span>
-                          <button 
-                            type="button"
-                            className={`mt-2 w-full py-2 text-[10px] font-semibold ${getPrimaryButtonClass()} transition-all`}
-                          >
-                            Get Started
-                          </button>
-                        </nav>
-                      </div>
-                    )}
-                  </header>
-
-                  {/* Web Hero Section */}
-                  <section 
-                    className={`
-                      flex flex-col text-left justify-center
-                      ${layoutDevice === "mobile" ? "py-10 px-4 gap-6" : "py-16 md:py-20 px-8 md:px-12 gap-8"}
-                    `}
-                  >
-                    <div className={`grid grid-cols-1 ${layoutDevice !== "mobile" ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
-                      
-                      <div className={`${layoutDevice !== "mobile" ? "col-span-7" : ""} space-y-4`}>
-                        <div 
-                          style={{ fontFamily: selectedDirection.fontBody }} 
-                          className={`
-                            inline-flex items-center gap-1.5 px-3 py-1 text-[9px] font-semibold uppercase tracking-widest
-                            ${isGenZ 
-                              ? "bg-emerald-500 text-black border-2 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" 
-                              : isHypercolor 
-                                ? "bg-yellow-300 text-black border-2 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" 
-                                : "bg-[var(--preview-border)] text-[var(--preview-primary)] rounded-full"}
-                          `}
-                        >
-                          {industry}
-                        </div>
-                        
-                        <h1 
-                          style={{ fontFamily: selectedDirection.fontHeading }}
-                          className={`
-                            text-[var(--preview-primary)] leading-tight tracking-tight
-                            ${layoutDevice === "mobile" ? "text-2xl" : "text-3xl md:text-4xl"}
-                            ${selectedDirection.headingClass}
-                          `}
-                        >
-                          Beautiful service. Thoughtfully delivered.
-                        </h1>
-
-                        <p 
-                          style={{ fontFamily: selectedDirection.fontBody }}
-                          className={`text-xs text-[var(--preview-muted)] ${selectedDirection.bodyClass}`}
-                        >
-                          {tagline.trim() ? `${tagline.trim()}. ` : ""}A polished, strategic website designed to help the right customers understand your value and confidently take the next step with {businessName.trim() || "our elite team"}.
-                        </p>
-
-                        <div className="flex flex-wrap gap-3 pt-2">
-                          <button 
-                            type="button"
-                            style={{ fontFamily: selectedDirection.id === "luxury-editorial" ? selectedDirection.fontHeading : selectedDirection.fontBody }}
-                            className={`px-5 py-2.5 text-[10px] font-semibold ${getPrimaryButtonClass()} transition-all`}
-                          >
-                            Get Started
-                          </button>
-                          <button 
-                            type="button"
-                            style={{ fontFamily: selectedDirection.id === "luxury-editorial" ? selectedDirection.fontHeading : selectedDirection.fontBody }}
-                            className={`px-5 py-2.5 text-[10px] font-semibold ${getSecondaryButtonClass()} transition-all`}
-                          >
-                            Explore Offerings
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Featured Image placeholder */}
-                      <div className={`${layoutDevice !== "mobile" ? "col-span-5" : ""} relative`}>
-                        <div 
-                          className={`
-                            w-full aspect-[4/3] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden
-                            ${getCardClass()}
-                          `}
-                        >
-                          {/* Editorial pattern lines if applicable */}
-                          {selectedDirection.layoutStyle === "editorial" && (
-                            <div className="absolute inset-4 border border-[var(--preview-primary)]/10 pointer-events-none" />
-                          )}
-                          <div className={`p-3 ${isGenZ ? "rounded-none border-2 border-black bg-orange-500 text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" : isHypercolor ? "rounded-none border-2 border-black bg-pink-300 text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" : "rounded-full bg-[var(--preview-border)] text-[var(--preview-primary)]"} mb-3`}>
-                            <Check className="w-5 h-5" />
-                          </div>
-                          <span 
-                            style={{ fontFamily: selectedDirection.fontHeading }}
-                            className={`text-xs uppercase tracking-widest text-[var(--preview-primary)] mb-1 ${isGenZ || isHypercolor ? "font-black" : "font-serif"}`}
-                          >
-                            {businessName.trim() || "Elite Design"} Showcase
-                          </span>
-                          <p style={{ fontFamily: selectedDirection.fontBody }} className="text-[9px] opacity-70">
-                            Custom Photography Area
-                          </p>
-                        </div>
-                      </div>
-
-                    </div>
-                  </section>
-
-                  {/* Service Cards Section */}
-                  <section 
-                    className={`border-t ${isGenZ ? "border-t-4 border-black" : isHypercolor ? "border-t-[3px] border-black" : "border-t border-[var(--preview-border)]"}`}
-                    style={{ 
-                      borderRadius: selectedDirection.layoutStyle === "organic" ? "1.5rem" : "0"
-                    }}
-                  >
-                    <div className={`text-left ${layoutDevice === "mobile" ? "p-4 space-y-6" : "p-8 md:p-12 space-y-8"}`}>
-                      
-                      <div className="space-y-1">
-                        <span style={{ fontFamily: selectedDirection.fontBody }} className="text-[9px] tracking-widest text-[var(--preview-accent)] font-bold uppercase">
-                          OUR SERVICES
-                        </span>
-                        <h2 
-                          style={{ fontFamily: selectedDirection.fontHeading }}
-                          className={`text-xl md:text-2xl text-[var(--preview-primary)] ${selectedDirection.headingClass}`}
-                        >
-                          Comprehensive Solutions
-                        </h2>
-                      </div>
-
-                      {/* Cards Grid */}
-                      <div className={`grid grid-cols-1 ${layoutDevice === "desktop" ? "grid-cols-3 gap-6" : layoutDevice === "tablet" ? "grid-cols-2 gap-6" : "gap-4"}`}>
-                        
-                        {[
-                          { title: "Bespoke Consulting", desc: "Tailored strategic architectural blueprints engineered exclusively to scale client-base volume." },
-                          { title: "Signature Experience", desc: "Immersive custom-designed interactions fusing premium editorial aesthetic and program rigor." },
-                          { title: "Digital Optimization", desc: "Systematic local discovery, maps placement, and technical authority syndication networks." }
-                        ].map((serv, sIdx) => (
-                          <div 
-                            key={sIdx}
-                            style={{ fontFamily: selectedDirection.fontBody }}
-                            className={`
-                              text-left flex flex-col justify-between transition-all p-6
-                              ${getCardClass()}
-                            `}
-                          >
-                            <div className="space-y-3">
-                              <span style={{ fontFamily: selectedDirection.fontBody }} className={`text-[9px] font-semibold border-b pb-1 inline-block ${isGenZ || isHypercolor ? "border-black text-black font-black" : "text-[var(--preview-accent)] border-[var(--preview-border)]"}`}>
-                                0{sIdx + 1}
-                              </span>
-                              <h3 
-                                style={{ fontFamily: selectedDirection.fontHeading }}
-                                className={`text-sm font-semibold text-[var(--preview-primary)] leading-tight ${isGenZ || isHypercolor ? "font-black" : ""}`}
-                              >
-                                {serv.title}
-                              </h3>
-                              <p className={`text-[10px] text-[var(--preview-muted)] leading-relaxed font-light ${selectedDirection.bodyClass}`}>
-                                {serv.desc}
-                              </p>
-                            </div>
-
-                            <button 
-                              type="button" 
-                              style={{ fontFamily: selectedDirection.id === "luxury-editorial" ? selectedDirection.fontHeading : selectedDirection.fontBody }}
-                              className={`text-[9px] font-bold ${isGenZ || isHypercolor ? "text-black underline uppercase tracking-widest font-black" : "text-[var(--preview-primary)] hover:text-[var(--preview-accent)]"} mt-4 text-left flex items-center gap-1`}
-                            >
-                              Learn More <ArrowRight className="w-3 h-3" />
-                            </button>
-                          </div>
-                        ))}
-
-                      </div>
-
-                    </div>
-                  </section>
-
-                  {/* About Preview */}
-                  <section className={`bg-[var(--preview-surface)] border-t border-b ${isGenZ ? "border-t-4 border-b-4 border-black" : isHypercolor ? "border-t-[3px] border-b-[3px] border-black" : "border-t border-b border-[var(--preview-border)]"} py-12 px-6 text-left`}>
-                    <div className={`grid grid-cols-1 ${layoutDevice !== "mobile" ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
-                      <div className={layoutDevice !== "mobile" ? "col-span-5" : ""}>
-                        <div className={`aspect-[4/3] bg-[var(--preview-background)] flex items-center justify-center p-4 border ${isGenZ ? "border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none" : isHypercolor ? "border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-none" : "border-[var(--preview-border)] rounded-lg"}`}>
-                          <span style={{ fontFamily: selectedDirection.fontHeading }} className={`text-xs uppercase tracking-widest text-[var(--preview-primary)] text-center opacity-60 ${isGenZ || isHypercolor ? "font-black" : ""}`}>
-                            Studio Environment
-                          </span>
-                        </div>
-                      </div>
-                      <div className={`${layoutDevice !== "mobile" ? "col-span-7" : ""} space-y-3`}>
-                        <span style={{ fontFamily: selectedDirection.fontBody }} className="text-[9px] tracking-widest text-[var(--preview-accent)] font-bold uppercase">
-                          BOUTIQUE PHILOSOPHY
-                        </span>
-                        <h2 style={{ fontFamily: selectedDirection.fontHeading }} className={`text-lg md:text-xl text-[var(--preview-primary)] ${selectedDirection.headingClass}`}>
-                          Dedicated to Aesthetic Caliber
-                        </h2>
-                        <p style={{ fontFamily: selectedDirection.fontBody }} className="text-[10px] text-[var(--preview-muted)] leading-relaxed font-light">
-                          We reject cookie-cutter templates. Every system we produce is tailored dynamically to represent your exact local geographical parameters and signature authority.
-                        </p>
-                      </div>
-                    </div>
-                  </section>
-
-                  {/* Final CTA Section */}
-                  <section 
-                    className={`p-8 md:p-12 text-center bg-[var(--preview-surface)] border-t ${isGenZ ? "border-t-4 border-black" : isHypercolor ? "border-t-[3px] border-black" : "border-t border-[var(--preview-border)]"}`}
-                    style={{ 
-                      borderRadius: selectedDirection.layoutStyle === "organic" ? "2rem 2rem 0 0" : "0"
-                    }}
-                  >
-                    <div className="max-w-md mx-auto space-y-4">
-                      <h2 
-                        style={{ fontFamily: selectedDirection.fontHeading }}
-                        className={`text-xl md:text-2xl text-[var(--preview-primary)] ${selectedDirection.headingClass}`}
-                      >
-                        Let's collaborate.
-                      </h2>
-                      <p 
-                        style={{ fontFamily: selectedDirection.fontBody }}
-                        className="text-[11px] text-[var(--preview-muted)] leading-relaxed font-light"
-                      >
-                        Schedule a signature digital consultation with {businessName.trim() || "our studio"} to secure your territory and establish search dominance today.
-                      </p>
-                      <button 
-                        type="button"
-                        style={{ fontFamily: selectedDirection.id === "luxury-editorial" ? selectedDirection.fontHeading : selectedDirection.fontBody }}
-                        className={`px-6 py-3 text-[10px] font-semibold ${getPrimaryButtonClass()} transition-all inline-block`}
-                      >
-                        Book Your Consultation
-                      </button>
-                    </div>
-                  </section>
-
-                  {/* Web Footer */}
-                  <footer style={{ fontFamily: selectedDirection.fontBody }} className={`px-6 py-6 border-t ${isGenZ ? "border-t-4 border-black" : isHypercolor ? "border-t-[3px] border-black" : "border-t border-[var(--preview-border)]"} bg-[var(--preview-surface)] text-[9px] opacity-75 text-left flex flex-col sm:flex-row justify-between items-center gap-4`}>
-                    <p>© {new Date().getFullYear()} {businessName.trim() || "Elite Brand"}. All rights reserved.</p>
-                    <div className="flex gap-4">
-                      <span>Privacy Policy</span>
-                      <span>Terms of Service</span>
-                    </div>
-                  </footer>
+                  {submitSuccess ? <HomepageConcept type={template} name={businessName} tagline={tagline} industry={industry} email={email} phone={phone} logo={logoUrl} compact={layoutDevice !== "desktop"} /> : <div className="p-8 text-center text-sm" style={{ color: selectedPalette.colors.text }}>Complete the form and agree to be contacted to generate your homepage concept.</div>}
 
                 </div>
 
@@ -1404,7 +1065,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
               <div>
                 <h5 className="font-mono text-[9px] tracking-widest text-[#7CA99B] uppercase font-bold">EXPERT INTERFACE METRIC</h5>
                 <p className="text-[11px] text-[#B8C6C1] leading-relaxed mt-1">
-                  Explore how each palette changes the colors and style of your preview. The finished website can be refined for readability and accessibility.
+                  This is a visual homepage concept created from your selections. Your finished website will be customized to your business. Example navigation and buttons are visual only.
                 </p>
               </div>
             </div>

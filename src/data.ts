@@ -3,8 +3,6 @@ import {
   Project,
   Stage,
   MethodStep,
-  ResultMetric,
-  Testimonial,
   PricingPackage,
   InsightArticle
 } from "./types";
@@ -61,7 +59,7 @@ export const PROJECTS_DATA: Project[] = [
     description: "Designed and built an intuitive, community-first digital platform for Legacy Economic Development Corporation in Springfield, MA. Created clear pathways for micro-entrepreneurs to easily discover grant opportunities, register for business education workshops, and access 1-on-1 technical assistance.",
     results: [
       "Centralized grant & technical assistance portal",
-      "Empowered 150+ Western MA micro-enterprises",
+      "Resources for Western MA entrepreneurs",
       "Streamlined community education & workshops"
     ],
     imageName: "legacy_economic_mockup",
@@ -74,12 +72,12 @@ export const PROJECTS_DATA: Project[] = [
     client: "Posh Body Wellness Spa",
     industry: "Luxury Med Spa & Aesthetics",
     services: ["Hostinger Web Builder", "E-Commerce", "Local SEO & Social Media"],
-    title: "A luxury RN-run med spa in Orlando, FL combining seamless e-commerce, high-converting service booking, and viral social reach.",
+    title: "A wellness spa website combining e-commerce, service booking, and social media content.",
     description: "Designed and launched on Hostinger Web Builder for effortless management and lightning speed. Features an integrated product checkout for medical-grade skincare, treatment appointment scheduling, targeted Orlando local SEO, and synchronized social media content funnels.",
     results: [
-      "+185% Orlando med spa search visibility",
+      "Local SEO for an Orlando wellness spa",
       "Integrated e-commerce & treatment bookings",
-      "High-converting social biolink & campaign funnel"
+      "Social media and campaign links"
     ],
     imageName: "posh_body_wellness_mockup",
     imageUrl: "/images/posh-body-wellness-mockup.png",
@@ -91,12 +89,12 @@ export const PROJECTS_DATA: Project[] = [
     client: "Dr. Sheds",
     industry: "Custom Sheds & Construction",
     services: ["Web Development", "Monthly SEO & GEO", "Google Business Profile"],
-    title: "Custom website development, monthly SEO, and GEO search optimization driving Top 3 Google organic rankings without ads.",
-    description: "Designed and built the official web presence for Dr. Sheds (Drsheds.com). Delivered an ongoing monthly SEO & GEO visibility strategy and local search architecture that propelled Dr. Sheds into the Top 3 on Google organic search results with zero paid ad spend.",
+    title: "Custom website development and ongoing search optimization for a shed and construction business.",
+    description: "Designed and built the web presence for Dr. Sheds, with ongoing SEO and local search work.",
     results: [
-      "Top 3 Google Search ranking (0 ad spend)",
+      "Custom website development",
       "Ongoing monthly SEO & GEO visibility",
-      "#1 Google Rated custom shed builder"
+      "Google Business Profile optimization"
     ],
     imageName: "drsheds_mockup",
     imageUrl: "/images/drsheds-mockup.png",
@@ -109,11 +107,11 @@ export const PROJECTS_DATA: Project[] = [
     industry: "Luxury Candles & Fragrance E-Commerce",
     services: ["WordPress & WooCommerce", "E-Commerce Architecture", "Brand Aesthetic & Catalog"],
     title: "Custom WordPress and WooCommerce luxury e-commerce experience crafted for an artisanal candle & fragrance brand.",
-    description: "Engineered a bespoke, high-converting digital storefront for Aunalux (aunalux.com) utilizing WordPress and WooCommerce. Structured seamless shopping flows for natural oil scented candles, room sprays, and linen collections with elegant typography and fluid mobile checkout.",
+    description: "Engineered a bespoke, digital storefront for Aunalux (aunalux.com) utilizing WordPress and WooCommerce. Structured seamless shopping flows for natural oil scented candles, room sprays, and linen collections with elegant typography and fluid mobile checkout.",
     results: [
       "Custom WordPress & WooCommerce store",
       "Fluid mobile-first product & cart checkout",
-      "High-converting seasonal catalog layout"
+      "Seasonal catalog layout"
     ],
     imageName: "aunalux_mockup",
     imageUrl: "/images/aunalux-mockup.png",
@@ -125,11 +123,11 @@ export const PROJECTS_DATA: Project[] = [
     client: "Ran Art Design",
     industry: "Fine Art Jewelry & E-Commerce",
     services: ["E-Commerce Store", "Trademark Approval", "Nationwide Shipping Integration"],
-    title: "Trademark approval strategy and custom jewelry e-commerce platform that tripled online sales through automated nationwide shipping.",
-    description: "Built the official brand and digital commerce hub for Ran Art Design (ranartdesign.com). Assisted the artist in successfully securing his trademark approval and deployed a high-converting e-commerce boutique for handcrafted jewelry, tripling sales volume with streamlined nationwide shipping.",
+    title: "A custom jewelry e-commerce platform with nationwide shipping.",
+    description: "Built a digital commerce hub for Ran Art Design, featuring handcrafted jewelry and nationwide shipping.",
     results: [
-      "Sales tripled with nationwide shipping",
-      "Successful artist trademark approval",
+      "Nationwide shipping integration",
+      "Jewelry product showcase",
       "Bespoke jewelry e-commerce showcase"
     ],
     imageName: "ranart_mockup",
@@ -231,53 +229,6 @@ export const METHOD_STEPS: MethodStep[] = [
     title: "Grow",
     description: "Continuous optimization, authority syndication, and search visibility expansion.",
     details: "Launch is only day one. We build out your content pipeline, optimize your local maps presence, syndicate authoritative insights, and analyze actual data to systematically scale your organic client acquisition."
-  }
-];
-
-export const RESULT_METRICS: ResultMetric[] = [
-  {
-    metric: "TOP 3",
-    description: "Local Google placement without paid ads",
-    label: "Search Dominance"
-  },
-  {
-    metric: "98/100",
-    description: "Mobile performance optimization and clean Core Web Vitals",
-    label: "Unmatched Speed"
-  },
-  {
-    metric: "+142%",
-    description: "Increased appointments and service bookings within 90 days",
-    label: "Growth Multiplier"
-  },
-  {
-    metric: "2.4x",
-    description: "Stronger customer journey conversion compared to previous site",
-    label: "Conversion Yield"
-  }
-];
-
-export const TESTIMONIALS_DATA: Testimonial[] = [
-  {
-    id: "t1",
-    quote: "Our new digital platform streamlined how local micro-businesses in Western Massachusetts discover and apply for vital grant funding and educational programs. The clarity, speed, and community impact have been transformative.",
-    author: "Program Director",
-    business: "Legacy Economic Development",
-    services: ["Web Design", "Grants & Programs Hub", "Community Portal"]
-  },
-  {
-    id: "t2",
-    quote: "The Ivana Collective crafted our digital presence on Hostinger with seamless e-commerce for our skincare line, instant booking for med spa treatments, and an organic SEO & social strategy that keeps our Orlando treatment rooms booked.",
-    author: "Founding Nurse Injector & Owner",
-    business: "Posh Body Wellness Spa",
-    services: ["Hostinger Builder", "E-Commerce", "SEO & Socials"]
-  },
-  {
-    id: "t3",
-    quote: "The organic system they built connects everything: our blog, our local listing, our socials. We went from being invisible online to booking wedding events consistently through search engines.",
-    author: "Elena Moss",
-    business: "Mint & Moss Florals",
-    services: ["E-Commerce Setup", "Content System", "Google Profile"]
   }
 ];
 

@@ -174,7 +174,7 @@ export default function Footer({ onScheduleCall }: FooterProps) {
             <span>&copy; {new Date().getFullYear()} The Ivana Collective. All rights reserved.</span>
             <span className="flex items-center gap-1">
               <FileText className="w-3 h-3" />
-              Designed for compliance (ADA & WCAG AA)
+              Built with accessibility in mind
             </span>
           </div>
           

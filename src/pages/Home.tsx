@@ -1,4 +1,5 @@
 import React from "react";
+import "./Home.css";
 import { Link } from "../context/NavigationContext";
 import SeoMeta from "../components/SeoMeta";
 import KeycapComposition from "../components/KeycapComposition";
@@ -74,7 +75,9 @@ export default function Home({
   };
 
   return (
-    <div className="animate-in fade-in duration-500">
+    <div className="home-page">
+      <div className="home-forest" aria-hidden="true" />
+      <div className="home-shade" aria-hidden="true" />
       <SeoMeta
         title="Web Design & Social Media Management"
         description="The Ivana Collective provides strategic web design, SEO and social media management for small businesses in Western Massachusetts, Connecticut and beyond."

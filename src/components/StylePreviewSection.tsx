@@ -24,7 +24,7 @@ export default function StylePreviewSection({onScheduleCall}:{onScheduleCall:()=
  }
  async function submit(e:React.FormEvent){
   e.preventDefault();if(busy)return;setBusy(true);setError('');setNotice('');
-  try {const response=await fetch('/api/preview-submit',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':key.current},body:JSON.stringify(form)});const data=await response.json();if(!response.ok)throw Error(data.error || 'Unable to save. Please retry.');
+  try {const response=await fetch('/api/preview-submit',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':key.current},body:JSON.stringify(form)});const data=response.headers.get('content-type')?.includes('application/json')?await response.json():{error:'The preview service is temporarily unavailable. Please try again shortly.'};if(!response.ok)throw Error(data.error || 'Unable to save. Please retry.');
    setSaved(data.config);sessionStorage.setItem('website-preview',data.id);setNotice(data.emailStatus==='accepted'?'Your design is saved. Confirmation emails were accepted for processing.':'Your design is saved. Email confirmation is pending.');
    document.getElementById('saved-website-preview')?.scrollIntoView({behavior:'smooth'});
   } catch(e){setError(e instanceof Error?e.message:'Unable to save. Please retry.');}finally{setBusy(false);}

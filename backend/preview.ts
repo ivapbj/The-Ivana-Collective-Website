@@ -1,4 +1,4 @@
-import { createHash, createHmac, timingSafeEqual, randomUUID } from 'node:crypto';
+import { createHash, createHmac, timingSafeEqual, randomUUID, sign } from 'node:crypto';
 import { Resend } from 'resend';
 export const templates = ['Restaurant','Business / Services','Portfolio','E-commerce / Online Store'];
 const booking = 'https://calendar.app.google/KYrg1R1surXjfRbn7';
@@ -37,13 +37,21 @@ export function authorized(value: string, id: string) {
   return expected.length === actual.length && timingSafeEqual(expected,actual);
 }
 async function db(path: string, init: RequestInit = {}) {
-  const result = await fetch(`${process.env.SUPABASE_URL}/rest/v1/${path}`, {...init, headers:{apikey:process.env.SUPABASE_SERVICE_ROLE_KEY!, Authorization:`Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`, 'Content-Type':'application/json', Prefer:'return=representation', ...init.headers}});
+  const gateway = process.env.PREVIEW_STORAGE_URL;
+  const timestamp = String(Date.now());
+  const method = init.method || 'GET';
+  const body = typeof init.body === 'string' ? init.body : '';
+  const signature = gateway ? sign('RSA-SHA256', Buffer.from(`${timestamp}\n${method}\n${path}\n${body}`), process.env.PREVIEW_STORAGE_PRIVATE_KEY!).toString('base64') : '';
+  const result = await fetch(gateway ? `${gateway}?path=${encodeURIComponent(path)}` : `${process.env.SUPABASE_URL}/rest/v1/${path}`, {...init, headers:{
+    ...(gateway ? {'x-storage-time':timestamp,'x-storage-signature':signature} : {apikey:process.env.SUPABASE_SERVICE_ROLE_KEY!, Authorization:`Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`}),
+    'Content-Type':'application/json', Prefer:'return=representation', ...init.headers
+  }});
   if (!result.ok) throw Error('Storage unavailable');
   return result.status === 204 ? null : result.json();
 }
 function json(status: number, data: any, headers: Record<string,string> = {}) { return new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','Referrer-Policy':'no-referrer',...headers}}); }
 export async function handlePreview(request: Request) {
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY || (process.env.PREVIEW_SIGNING_SECRET?.length || 0) < 32) return json(503,{error:'Website previews are temporarily unavailable. Please contact info@theivanacollective.com.'});
+  if (!(process.env.PREVIEW_STORAGE_URL && process.env.PREVIEW_STORAGE_PRIVATE_KEY || process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) || (process.env.PREVIEW_SIGNING_SECRET?.length || 0) < 32) return json(503,{error:'Website previews are temporarily unavailable. Please contact info@theivanacollective.com.'});
   const url = new URL(request.url);
   try {
     if (request.method === 'GET') {

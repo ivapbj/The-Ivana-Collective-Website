@@ -12,3 +12,7 @@ The integration branch combines PRs #11 and #12. Production remains unchanged un
 
 Local validation: `npm run lint`, `npm run build`, `node --import tsx --test backend/preview.test.ts`.
 Backend tests use a mocked storage transport, not a live database or email provider.
+
+## Configured database connection
+
+The Supabase project uses a narrow storage Edge Function authenticated by RSA signatures. The private key is stored only in Vercel sensitive environment variables; the function source contains only the public key. This avoids sharing the database service-role credential with Vercel. The function accepts only the preview table and rate-limit RPC, with a 60-second signature validity window. `PREVIEW_STORAGE_URL` and `PREVIEW_STORAGE_PRIVATE_KEY` replace direct Supabase credentials.

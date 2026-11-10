@@ -64,7 +64,7 @@ export default function WorkPage({ onSelectProject, onScheduleCall }: WorkPagePr
       }
     }, { threshold: 0.08 });
     page.classList.add("work-motion-ready");
-    items.forEach(item => observer.observe(item));
+    items.forEach(item => observer.observe(item as HTMLElement));
     return () => {
       observer.disconnect();
       page.classList.remove("work-motion-ready");

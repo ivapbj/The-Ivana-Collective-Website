@@ -11,6 +11,7 @@ type PaletteColors = {
 
 type Submission = {
   id: string;
+  contactName: string;
   businessName: string;
   tagline: string;
   industry: string;
@@ -163,6 +164,7 @@ function renderEmail(submission: Submission, internal: boolean, hasImage: boolea
           <p style="margin:0 0 24px;color:#44524D;font:15px Arial,sans-serif;line-height:1.7;">${intro}</p>
           <h2 style="margin:0 0 12px;color:#163C36;font:400 23px Georgia,serif;">${escapeHtml(submission.businessName)}</h2>
           <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+            ${internal ? detailRow("Contact name", submission.contactName) : ""}
             ${detailRow("Tagline", submission.tagline)}
             ${detailRow("Industry", submission.industry)}
             ${detailRow("Website", submission.websiteUrl)}
@@ -193,6 +195,7 @@ function renderTextEmail(submission: Submission, internal: boolean): string {
   return [
     internal ? "New Website Direction Submission" : "Your Website Direction from The Ivana Collective",
     "",
+    internal ? `Contact name: ${submission.contactName}` : "",
     `Business name: ${submission.businessName}`,
     submission.tagline ? `Tagline: ${submission.tagline}` : "",
     `Industry: ${submission.industry}`,
@@ -246,6 +249,8 @@ async function handlePost(request: Request): Promise<Response> {
     return jsonResponse(200, { success: true, message: "Your Website Direction has been sent to your email." });
   }
 
+  const contactName = optionalString(body.contactName);
+  if (!contactName || contactName.length > 120) return jsonResponse(400, { error: "Please enter your name (up to 120 characters)." });
   const businessName = optionalString(body.businessName);
   const industry = optionalString(body.industry);
   const email = optionalString(body.email);
@@ -289,7 +294,7 @@ async function handlePost(request: Request): Promise<Response> {
 
   const windowStart = Math.floor(now / DUPLICATE_WINDOW_MS) * DUPLICATE_WINDOW_MS;
   const submissionValues = {
-    businessName, tagline, industry, email: email.toLowerCase(), phone,
+    contactName, businessName, tagline, industry, email: email.toLowerCase(), phone,
     websiteUrl: normalizedWebsiteUrl, theme: theme || "Luxury Editorial",
     palette: palette || "Collective Forest", notes, logoUrl,
     contactConsent: true, marketingConsent: body.marketingConsent === true,

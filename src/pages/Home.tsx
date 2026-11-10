@@ -1,4 +1,5 @@
 import React from "react";
+import "./Home.css";
 import { Link } from "../context/NavigationContext";
 import SeoMeta from "../components/SeoMeta";
 import KeycapComposition from "../components/KeycapComposition";
@@ -74,7 +75,9 @@ export default function Home({
   };
 
   return (
-    <div className="animate-in fade-in duration-500">
+    <div className="home-page">
+      <div className="home-forest" aria-hidden="true" />
+      <div className="home-shade" aria-hidden="true" />
       <SeoMeta
         title="Web Design & Social Media Management"
         description="The Ivana Collective provides strategic web design, SEO and social media management for small businesses in Western Massachusetts, Connecticut and beyond."
@@ -82,15 +85,15 @@ export default function Home({
         schema={schema}
       />
 
-      {/* 2. Hero Section */}
-      <section 
-        id="hero" 
-        className="relative pt-24 min-h-screen flex flex-col justify-center overflow-hidden px-4 sm:px-6 lg:px-8 border-b border-white/5 bg-[#061C1A]"
-      >
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#123B35]/20 to-[#7CA99B]/5 rounded-full blur-[120px] pointer-events-none" />
-        
-        <div className="max-w-7xl mx-auto w-full flex flex-col items-center justify-center py-12 z-10">
-          <KeycapComposition onKeyClick={onKeyClick} activeKey={activeKey} />
+      {/* The hero can accommodate the planned video when it is available. */}
+      <section id="hero" className="relative min-h-[75vh] flex items-center px-4 sm:px-6 lg:px-8 pt-28 pb-20 border-b border-white/5">
+        <div className="relative z-10 max-w-7xl mx-auto w-full">
+          <div className="max-w-2xl rounded-2xl bg-[#041916]/80 border border-white/10 p-7 sm:p-10">
+            <p className="font-mono text-xs tracking-widest uppercase text-[#B9D8CE] mb-5">The Ivana Collective</p>
+            <h1 className="font-serif text-[clamp(2.5rem,6vw,5rem)] leading-[1.08] text-[#F4F5F1]">Websites built to grow with your business.</h1>
+            <p className="mt-6 text-base sm:text-lg leading-relaxed text-[#E0EBE5]">Thoughtful web design, SEO, and social media support for small businesses.</p>
+            <button onClick={onScheduleCall} className="mt-8 inline-flex items-center justify-center min-h-12 px-6 py-3 rounded-xl bg-[#B9D8CE] text-[#061C1A] font-semibold hover:bg-white transition-colors">Schedule a call</button>
+          </div>
         </div>
       </section>
 
@@ -213,6 +216,18 @@ export default function Home({
             </Link>
           </div>
 
+        </div>
+      </section>
+
+      {/* Interactive service exploration */}
+      <section id="explore-services" className="relative py-20 md:py-28 px-4 sm:px-6 lg:px-8 border-b border-white/5">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="max-w-2xl mb-10">
+            <p className="font-mono text-xs tracking-widest uppercase text-[#B9D8CE] mb-4">Explore our services</p>
+            <h2 className="font-serif text-[clamp(2rem,4vw,3.5rem)] leading-tight text-[#F4F5F1]">Find the right tools for your business.</h2>
+            <p className="mt-4 text-base leading-relaxed text-[#E0EBE5]">Explore the services that can help your business build its presence online.</p>
+          </div>
+          <KeycapComposition onKeyClick={onKeyClick} activeKey={activeKey} />
         </div>
       </section>
 

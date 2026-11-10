@@ -1,0 +1,9 @@
+.home-page{position:relative;isolation:isolate;min-width:0}
+.home-forest,.home-shade{position:fixed;inset:0;pointer-events:none}
+.home-forest{z-index:-2;background:#061c1a url('/images/home-forest-ivana.webp') center center/cover no-repeat}
+.home-shade{z-index:-1;background:linear-gradient(90deg,rgba(3,22,19,.65),rgba(3,22,19,.38) 58%,rgba(3,22,19,.38))}
+.home-page > section{background-color:rgba(4,25,22,.84);background-image:none}
+.home-page > #hero{background-color:rgba(4,25,22,.28)}
+.home-page > #credibility-strip{background-color:rgba(4,25,22,.83)}
+.home-page > #final-cta{background:rgba(4,25,22,.87)}
+@media(max-width:767px){.home-forest{background-position:62% center}.home-shade{background:rgba(3,22,19,.48)}.home-page > #hero{background-color:rgba(4,25,22,.34)}}

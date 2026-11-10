@@ -283,9 +283,9 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
     }
 
     // Validate type
-    const ALLOWED_TYPES = ["image/png", "image/jpg", "image/jpeg", "image/webp", "image/svg+xml"];
+    const ALLOWED_TYPES = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
     if (!ALLOWED_TYPES.includes(file.type)) {
-      setLogoError("Allowed file types are PNG, JPG, JPEG, WebP, or SVG.");
+      setLogoError("Allowed file types are PNG, JPG, JPEG, or WebP.");
       return;
     }
 
@@ -294,10 +294,6 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
     reader.onload = (event) => {
       const result = event.target?.result;
       if (typeof result === "string") {
-        if (file.type === "image/svg+xml") {
-          setLogoUrl(result);
-          setLogoName(file.name);
-        } else {
           // Resize raster image on canvas to ensure compact payload
           const img = new Image();
           img.onload = () => {
@@ -331,7 +327,6 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
             setLogoName(file.name);
           };
           img.src = result;
-        }
       }
     };
     reader.onerror = () => {
@@ -398,7 +393,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
           theme: selectedDirection.name,
           palette: selectedPalette.name,
           notes,
-          logoUrl, // Safe base64 or SVG
+          logoUrl, // Raster image data
           contactConsent,
           marketingConsent,
           consentTextVersion: "website-preview-v2",
@@ -676,10 +671,10 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                           <div className="space-y-2">
                             <Upload className="w-5 h-5 mx-auto text-[#7CA99B]/60" />
                             <p style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="text-[11px] text-[#B8C6C1] font-light">
-                              Drag and drop or click to upload PNG, JPG, or SVG
+                              Drag and drop or click to upload PNG, JPG, or WebP
                             </p>
                             <p style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="text-[9px] text-[#7CA99B]">
-                              MAX SIZE: 2MB (SVG is sanitized automatically)
+                              MAX SIZE: 2MB
                             </p>
                             <button
                               type="button"
@@ -695,7 +690,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                           ref={fileInputRef}
                           id="logo-upload"
                           type="file"
-                          accept=".png,.jpg,.jpeg,.webp,.svg"
+                          accept=".png,.jpg,.jpeg,.webp"
                           className="hidden"
                           onChange={handleLogoUpload}
                         />

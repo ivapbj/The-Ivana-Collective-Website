@@ -30,7 +30,7 @@ type Submission = {
 
 const WEBSITE_URL_ERROR = "Please enter a valid website, such as yourbusiness.com.";
 const DELIVERY_ERROR = "We could not email your Website Direction right now. Please try again shortly.";
-const BOOKING_URL = "https://calendar.app.google/fsvawrwZfkYNESyeA";
+const BOOKING_URL = "https://calendar.app.google/KYrg1R1surXjfRbn7";
 const DUPLICATE_WINDOW_MS = 15_000;
 const MAX_REQUEST_CHARACTERS = 4_000_000;
 const recentSubmissions = new Map<string, number>();
@@ -90,48 +90,6 @@ function safeSubjectText(value: string): string {
   return value.replace(/[\r\n]+/g, " ").trim().slice(0, 120);
 }
 
-function sanitizeSvgDataUrl(value: string): string {
-  if (!value.startsWith("data:image/svg+xml")) return value;
-  try {
-    const commaIndex = value.indexOf(",");
-    if (commaIndex === -1) return "";
-    const metadata = value.slice(0, commaIndex);
-    const encodedSvg = value.slice(commaIndex + 1);
-    const decodedSvg = metadata.includes(";base64")
-      ? Buffer.from(encodedSvg, "base64").toString("utf-8")
-      : decodeURIComponent(encodedSvg);
-    const cleanSvg = decodedSvg
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-      .replace(/on\w+\s*=\s*"[^"]*"/gi, "")
-      .replace(/on\w+\s*=\s*'[^']*'/gi, "");
-    return `data:image/svg+xml;utf8,${encodeURIComponent(cleanSvg)}`;
-  } catch {
-    return "";
-  }
-}
-
-function createImageAttachment(dataUrl: string) {
-  if (!dataUrl) return undefined;
-  const sanitizedDataUrl = sanitizeSvgDataUrl(dataUrl);
-  const match = /^data:(image\/(?:png|jpeg|webp|svg\+xml));(base64)?,(.*)$/s.exec(sanitizedDataUrl);
-  if (!match) return undefined;
-
-  try {
-    const [, mimeType, encoding, content] = match;
-    const base64Content = encoding === "base64"
-      ? content
-      : Buffer.from(decodeURIComponent(content), "utf-8").toString("base64");
-    const extension = mimeType === "image/svg+xml" ? "svg" : mimeType.split("/")[1];
-    return {
-      content: base64Content,
-      filename: `website-direction-preview.${extension}`,
-      contentId: "website-direction-preview"
-    };
-  } catch {
-    return undefined;
-  }
-}
-
 function renderSwatches(colors: PaletteColors): string {
   return Object.entries(colors).map(([name, hex]) => `
     <td style="padding:0 8px 12px 0;text-align:center;vertical-align:top;">
@@ -146,11 +104,11 @@ function detailRow(label: string, value: string): string {
   return `<tr><td style="padding:8px 12px 8px 0;color:#70807A;font:600 11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.08em;vertical-align:top;">${label}</td><td style="padding:8px 0;color:#17231F;font:14px Arial,sans-serif;line-height:1.5;">${escapeHtml(value)}</td></tr>`;
 }
 
-function renderEmail(submission: Submission, internal: boolean, hasImage: boolean): string {
+function renderEmail(submission: Submission, internal: boolean): string {
   const title = internal ? "New Website Direction Submission" : "Your Website Direction";
   const intro = internal
     ? "A new Website Direction has been submitted for review."
-    : "Thank you for sharing your vision. Here is a copy of the Website Direction you created with The Ivana Collective.";
+    : "Thank you for sharing your vision. Your website preview is available in the generator on our website.";
 
   return `<!doctype html><html><body style="margin:0;background:#F4EFE5;padding:24px 12px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
@@ -177,7 +135,6 @@ function renderEmail(submission: Submission, internal: boolean, hasImage: boolea
           </table>
           <h3 style="margin:28px 0 14px;color:#163C36;font:400 18px Georgia,serif;">Selected colors</h3>
           <table role="presentation" cellpadding="0" cellspacing="0"><tr>${renderSwatches(submission.paletteColors)}</tr></table>
-          ${hasImage ? `<div style="margin-top:24px;"><h3 style="color:#163C36;font:400 18px Georgia,serif;">Visual preview</h3><img src="cid:website-direction-preview" alt="Uploaded visual preview" style="display:block;max-width:100%;max-height:260px;border-radius:12px;border:1px solid #D8DED9;" /></div>` : ""}
           <div style="margin-top:30px;padding:24px;background:#E9F0EC;border-radius:14px;text-align:center;">
             <p style="margin:0 0 16px;color:#44524D;font:14px Arial,sans-serif;line-height:1.6;">Ready to turn this direction into a high-performing digital experience?</p>
             <a href="${BOOKING_URL}" style="display:inline-block;background:#163C36;color:#FFFFFF;text-decoration:none;padding:13px 22px;border-radius:9px;font:700 11px Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;">Book Your Consultation</a>
@@ -243,7 +200,7 @@ async function handlePost(request: Request): Promise<Response> {
   if (botField === null) return jsonResponse(400, { error: "The submitted form data is invalid." });
   if (botField) {
     console.warn("[Spam Protection] Honeypot field was triggered.");
-    return jsonResponse(200, { success: true, message: "Your Website Direction has been sent to your email." });
+    return jsonResponse(400, { error: "The submitted form data is invalid." });
   }
 
   const businessName = optionalString(body.businessName);
@@ -266,6 +223,8 @@ async function handlePost(request: Request): Promise<Response> {
   if ([tagline, phone, websiteUrl, theme, palette, notes, logoUrl, consentTextVersion].some((value) => value === null)) {
     return jsonResponse(400, { error: "The submitted form data is invalid." });
   }
+
+  if (logoUrl && !/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]*={0,2}$/.test(logoUrl)) return jsonResponse(400, { error: "Please upload a PNG, JPEG, or WebP logo." });
 
   const normalizedWebsiteUrl = normalizeWebsiteUrl(websiteUrl);
   if (normalizedWebsiteUrl === null) return jsonResponse(400, { error: WEBSITE_URL_ERROR });
@@ -305,17 +264,14 @@ async function handlePost(request: Request): Promise<Response> {
   };
   recentSubmissions.set(duplicateKey, now);
 
-  const attachment = createImageAttachment(submission.logoUrl);
-  const attachments = attachment ? [attachment] : undefined;
   const resend = new Resend(resendApiKey);
 
   const customerResult = await resend.emails.send({
     from: fromEmail,
     to: [submission.email],
-    subject: "Your Website Direction from The Ivana Collective",
-    html: renderEmail(submission, false, Boolean(attachment)),
+    subject: "Your Website Vision Is Taking Shape | The Ivana Collective",
+    html: renderEmail(submission, false),
     text: renderTextEmail(submission, false),
-    attachments,
     replyTo: notificationEmail,
     tags: [{ name: "form", value: "website-direction" }]
   }, { idempotencyKey: `customer/${submissionId}` });
@@ -330,9 +286,8 @@ async function handlePost(request: Request): Promise<Response> {
     from: fromEmail,
     to: [notificationEmail],
     subject: `New Website Direction Submission — ${safeSubjectText(businessName)}`,
-    html: renderEmail(submission, true, Boolean(attachment)),
+    html: renderEmail(submission, true),
     text: renderTextEmail(submission, true),
-    attachments,
     replyTo: submission.email,
     tags: [{ name: "form", value: "website-direction-internal" }]
   }, { idempotencyKey: `internal/${submissionId}` });
@@ -342,9 +297,8 @@ async function handlePost(request: Request): Promise<Response> {
       from: fromEmail,
       to: [notificationEmail],
       subject: `New Website Direction Submission — ${safeSubjectText(businessName)}`,
-      html: renderEmail(submission, true, Boolean(attachment)),
+      html: renderEmail(submission, true),
       text: renderTextEmail(submission, true),
-      attachments,
       replyTo: submission.email,
       tags: [{ name: "form", value: "website-direction-internal" }]
     }, { idempotencyKey: `internal/${submissionId}` });
@@ -352,7 +306,7 @@ async function handlePost(request: Request): Promise<Response> {
 
   if (internalResult.error || !internalResult.data?.id) {
     console.error("[Preview Submission] Internal notification rejected by Resend.", internalResult.error);
-    return jsonResponse(502, { error: "Your copy was sent, but we could not notify our team. Please contact us directly." });
+    return jsonResponse(502, { error: "The email service accepted your message, but we could not notify our team. Please contact us directly." });
   }
 
   console.log("[Preview Submission] Transactional emails accepted.", {
@@ -364,7 +318,7 @@ async function handlePost(request: Request): Promise<Response> {
 
   return jsonResponse(200, {
     success: true,
-    message: "Your Website Direction was sent to your email. Please check your inbox.",
+    message: "Your request was accepted for email processing.",
     submissionId
   });
 }

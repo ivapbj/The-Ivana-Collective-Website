@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SeoMeta from "../components/SeoMeta";
 import { ProjectImage } from "../components/ProjectImage";
 import { PROJECTS_DATA } from "../data";
@@ -11,6 +11,20 @@ interface WorkPageProps {
   onScheduleCall: () => void;
 }
 
+function DeviceImage({ project }: { project: Project }) {
+  const [missing, setMissing] = useState(false);
+  return (
+    <div className="work-image-holder" onErrorCapture={(event) => {
+      const image = event.target as HTMLImageElement;
+      if (project.id === "aunalux" && image.getAttribute("src") === "/images/IMG_5900.png") setMissing(true);
+    }}>
+      {missing
+        ? <span className="work-missing-image">Project image currently unavailable</span>
+        : <ProjectImage project={project} className="work-device-image" />}
+    </div>
+  );
+}
+
 function DeviceDisplay({ project }: { project: Project }) {
   return (
     <div className="work-device-wrap">
@@ -18,7 +32,7 @@ function DeviceDisplay({ project }: { project: Project }) {
         <div className="work-laptop-lid">
           <div className="work-laptop-camera" />
           <div className="work-laptop-screen">
-            <ProjectImage project={project} className="work-device-image" />
+            <DeviceImage project={project} />
           </div>
         </div>
         <div className="work-laptop-base"><span /></div>
@@ -26,7 +40,7 @@ function DeviceDisplay({ project }: { project: Project }) {
       <div className="work-phone">
         <div className="work-phone-screen">
           <div className="work-phone-island" aria-hidden="true" />
-          <ProjectImage project={project} className="work-device-image" />
+          <DeviceImage project={project} />
         </div>
       </div>
       <p className="work-phone-caption">Desktop project image shown within phone frame.</p>

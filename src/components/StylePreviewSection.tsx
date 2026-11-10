@@ -228,6 +228,24 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
   // Responsive device simulator size
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [isPreviewMenuOpen, setIsPreviewMenuOpen] = useState(false);
+  const previewCanvasRef = useRef<HTMLDivElement>(null);
+  const [canvasWidth, setCanvasWidth] = useState(0);
+
+  // Respond to the simulated page's available width.
+  useEffect(() => {
+    const canvas = previewCanvasRef.current;
+    if (!canvas) return;
+    const updateWidth = () => setCanvasWidth(canvas.getBoundingClientRect().width);
+    updateWidth();
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(canvas);
+    return () => observer.disconnect();
+  }, []);
+  const layoutDevice = previewDevice === "mobile" || canvasWidth < 700
+    ? "mobile"
+    : previewDevice === "tablet" || canvasWidth < 860
+      ? "tablet"
+      : "desktop";
 
   // Close preview menu when simulator device is toggled
   useEffect(() => {
@@ -959,7 +977,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
           <div className="lg:col-span-7 space-y-4">
             
             {/* Device selector panel */}
-            <div style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="bg-[#0D2623] border border-[#123B35] rounded-xl px-4 py-3 flex items-center justify-between shadow-md">
+            <div style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="bg-[#0D2623] border border-[#123B35] rounded-xl px-4 py-3 flex flex-wrap gap-3 items-center justify-between shadow-md">
               <span style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="text-[9px] tracking-widest text-[#7CA99B] uppercase font-bold flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#B9D8CE] animate-pulse" /> LIVE WEBSITE PREVIEW
               </span>
@@ -1018,9 +1036,10 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                 {/* Simulated Webpage inside frame */}
                 <div 
                   id="rendered-preview-canvas"
+                  ref={previewCanvasRef}
                   style={previewCustomStyles}
                   className={`
-                    bg-[var(--preview-background)] text-[var(--preview-text)] transition-all duration-500 border border-black/10 shadow-2xl flex flex-col
+                    bg-[var(--preview-background)] text-[var(--preview-text)] transition-all duration-500 border border-black/10 shadow-2xl flex flex-col min-w-0 [overflow-wrap:anywhere]
                     ${getDeviceWidthClass()}
                   `}
                 >
@@ -1033,17 +1052,17 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                     }}
                   >
                     {/* Left Column: Logo Area */}
-                    <div className="flex items-center gap-2 justify-self-start">
+                    <div className="flex items-center gap-2 justify-self-start min-w-0">
                       {logoUrl ? (
                         <img 
                           src={logoUrl} 
                           alt={businessName || "Business Logo"} 
-                          className="max-h-8 object-contain"
+                          className="max-h-8 max-w-full object-contain"
                         />
                       ) : (
                         <span 
                           style={{ fontFamily: selectedDirection.fontHeading }}
-                          className={`text-sm font-semibold tracking-wider text-[var(--preview-primary)] uppercase ${isGenZ || isHypercolor ? "font-black" : ""}`}
+                          className={`text-sm font-semibold tracking-wider text-[var(--preview-primary)] uppercase [overflow-wrap:anywhere] ${isGenZ || isHypercolor ? "font-black" : ""}`}
                         >
                           {businessName.trim() || "Elite Brand"}
                         </span>
@@ -1052,7 +1071,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
 
                     {/* Middle Column: Nav Links (Desktop) OR Call Button (Tablet/Mobile) */}
                     <div className="justify-self-center flex items-center justify-center">
-                      {previewDevice === "desktop" ? (
+                      {layoutDevice === "desktop" ? (
                         <nav style={{ fontFamily: selectedDirection.fontBody }} className="flex items-center gap-5 text-[11px] font-medium tracking-wide whitespace-nowrap">
                           <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">Home</span>
                           <span className="opacity-75 cursor-default hover:text-[var(--preview-accent)] transition-colors">Services</span>
@@ -1075,14 +1094,14 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                           onClick={(e) => e.preventDefault()}
                         >
                           <Phone className="w-2.5 h-2.5" />
-                          <span>{phone.trim() || "CALL NOW"}</span>
+                          <span>CALL NOW</span>
                         </a>
                       )}
                     </div>
 
                     {/* Right Column: CTA button (Desktop) OR Hamburger Menu (Tablet/Mobile) */}
                     <div className="justify-self-end flex items-center">
-                      {previewDevice === "desktop" ? (
+                      {layoutDevice === "desktop" ? (
                         <button 
                           type="button"
                           style={{ fontFamily: selectedDirection.fontBody }}
@@ -1119,7 +1138,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                     </div>
 
                     {/* Mobile/Tablet Collapsible Menu Overlay */}
-                    {isPreviewMenuOpen && (previewDevice === "mobile" || previewDevice === "tablet") && (
+                    {isPreviewMenuOpen && (layoutDevice === "mobile" || layoutDevice === "tablet") && (
                       <div 
                         className={`
                           absolute top-full left-0 right-0 p-4 z-50 transition-all duration-300 origin-top
@@ -1151,12 +1170,12 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                   <section 
                     className={`
                       flex flex-col text-left justify-center
-                      ${previewDevice === "mobile" ? "py-10 px-4 gap-6" : "py-16 md:py-20 px-8 md:px-12 gap-8"}
+                      ${layoutDevice === "mobile" ? "py-10 px-4 gap-6" : "py-16 md:py-20 px-8 md:px-12 gap-8"}
                     `}
                   >
-                    <div className={`grid grid-cols-1 ${previewDevice !== "mobile" ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
+                    <div className={`grid grid-cols-1 ${layoutDevice !== "mobile" ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
                       
-                      <div className={`${previewDevice !== "mobile" ? "col-span-7" : ""} space-y-4`}>
+                      <div className={`${layoutDevice !== "mobile" ? "col-span-7" : ""} space-y-4`}>
                         <div 
                           style={{ fontFamily: selectedDirection.fontBody }} 
                           className={`
@@ -1175,7 +1194,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                           style={{ fontFamily: selectedDirection.fontHeading }}
                           className={`
                             text-[var(--preview-primary)] leading-tight tracking-tight
-                            ${previewDevice === "mobile" ? "text-2xl" : "text-3xl md:text-4xl"}
+                            ${layoutDevice === "mobile" ? "text-2xl" : "text-3xl md:text-4xl"}
                             ${selectedDirection.headingClass}
                           `}
                         >
@@ -1208,7 +1227,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                       </div>
 
                       {/* Featured Image placeholder */}
-                      <div className={`${previewDevice !== "mobile" ? "col-span-5" : ""} relative`}>
+                      <div className={`${layoutDevice !== "mobile" ? "col-span-5" : ""} relative`}>
                         <div 
                           className={`
                             w-full aspect-[4/3] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden
@@ -1244,7 +1263,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                       borderRadius: selectedDirection.layoutStyle === "organic" ? "1.5rem" : "0"
                     }}
                   >
-                    <div className={`text-left ${previewDevice === "mobile" ? "p-4 space-y-6" : "p-8 md:p-12 space-y-8"}`}>
+                    <div className={`text-left ${layoutDevice === "mobile" ? "p-4 space-y-6" : "p-8 md:p-12 space-y-8"}`}>
                       
                       <div className="space-y-1">
                         <span style={{ fontFamily: selectedDirection.fontBody }} className="text-[9px] tracking-widest text-[var(--preview-accent)] font-bold uppercase">
@@ -1259,7 +1278,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                       </div>
 
                       {/* Cards Grid */}
-                      <div className={`grid grid-cols-1 ${previewDevice !== "mobile" ? "grid-cols-3 gap-6" : "gap-4"}`}>
+                      <div className={`grid grid-cols-1 ${layoutDevice === "desktop" ? "grid-cols-3 gap-6" : layoutDevice === "tablet" ? "grid-cols-2 gap-6" : "gap-4"}`}>
                         
                         {[
                           { title: "Bespoke Consulting", desc: "Tailored strategic architectural blueprints engineered exclusively to scale client-base volume." },
@@ -1306,15 +1325,15 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
 
                   {/* About Preview */}
                   <section className={`bg-[var(--preview-surface)] border-t border-b ${isGenZ ? "border-t-4 border-b-4 border-black" : isHypercolor ? "border-t-[3px] border-b-[3px] border-black" : "border-t border-b border-[var(--preview-border)]"} py-12 px-6 text-left`}>
-                    <div className={`grid grid-cols-1 ${previewDevice !== "mobile" ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
-                      <div className={previewDevice !== "mobile" ? "col-span-5" : ""}>
+                    <div className={`grid grid-cols-1 ${layoutDevice !== "mobile" ? "grid-cols-12 gap-8" : "gap-6"} items-center`}>
+                      <div className={layoutDevice !== "mobile" ? "col-span-5" : ""}>
                         <div className={`aspect-[4/3] bg-[var(--preview-background)] flex items-center justify-center p-4 border ${isGenZ ? "border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none" : isHypercolor ? "border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-none" : "border-[var(--preview-border)] rounded-lg"}`}>
                           <span style={{ fontFamily: selectedDirection.fontHeading }} className={`text-xs uppercase tracking-widest text-[var(--preview-primary)] text-center opacity-60 ${isGenZ || isHypercolor ? "font-black" : ""}`}>
                             Studio Environment
                           </span>
                         </div>
                       </div>
-                      <div className={`${previewDevice !== "mobile" ? "col-span-7" : ""} space-y-3`}>
+                      <div className={`${layoutDevice !== "mobile" ? "col-span-7" : ""} space-y-3`}>
                         <span style={{ fontFamily: selectedDirection.fontBody }} className="text-[9px] tracking-widest text-[var(--preview-accent)] font-bold uppercase">
                           BOUTIQUE PHILOSOPHY
                         </span>

@@ -207,6 +207,7 @@ interface StylePreviewSectionProps {
 
 export default function StylePreviewSection({ onScheduleCall }: StylePreviewSectionProps) {
   // 1. Core Configurator States
+  const [contactName, setContactName] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [tagline, setTagline] = useState("");
   const [industry, setIndustry] = useState(INDUSTRIES[0]);
@@ -249,7 +250,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
   // Clean-up errors on change
   useEffect(() => {
     if (submitError) setSubmitError(null);
-  }, [businessName, email, contactConsent]);
+  }, [contactName, businessName, email, contactConsent]);
 
   // Handle Logo Upload File Selection
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -342,6 +343,10 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
     setSubmitSuccess(null);
 
     // Frontend validations
+    if (!contactName.trim()) {
+      setSubmitError("Please enter your name.");
+      return;
+    }
     if (!businessName.trim()) {
       setSubmitError("Please fill in the required field: Business Name.");
       return;
@@ -371,6 +376,7 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          contactName,
           businessName,
           tagline,
           industry,
@@ -524,6 +530,10 @@ export default function StylePreviewSection({ onScheduleCall }: StylePreviewSect
                   </h4>
                   
                   <div className="grid grid-cols-1 gap-4">
+                    <div>
+                      <label htmlFor="contact-name" className="block text-sm text-[#B8C6C1] mb-1.5">Your name <span className="text-red-500">*</span></label>
+                      <input id="contact-name" type="text" autoComplete="name" required maxLength={120} value={contactName} onChange={(e) => setContactName(e.target.value)} className="w-full bg-[#061C1A] border border-white/10 rounded-xl px-4 py-3 text-base text-[#F4F5F1] focus:outline-none focus:border-[#B9D8CE]/50 transition-colors" />
+                    </div>
                     <div>
                       <label style={{ fontFamily: 'Inter, Arial, sans-serif' }} className="block text-[11px] text-[#7CA99B] uppercase tracking-wider mb-1.5" htmlFor="business-name">
                         Business Name <span className="text-red-500">*</span>

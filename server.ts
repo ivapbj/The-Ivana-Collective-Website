@@ -3,38 +3,11 @@ import path from "path";
 import { GoogleGenAI, Type } from "@google/genai";
 import { createServer as createViteServer } from "vite";
 import dotenv from "dotenv";
+import { Resend } from "resend";
+import previewSubmission from "./api/preview-submit";
 
 // Load environment variables
 dotenv.config();
-
-// In-memory data store for submissions during container runtime
-const contactsStore: any[] = [];
-const previewsStore: any[] = [];
-const bookingsStore: any[] = [
-  // Seed with a few mock bookings for design testing
-  {
-    id: "seed-1",
-    name: "Dr. Laura Vance",
-    email: "laura@elitepilates.com",
-    businessName: "Elite Pilates Collective",
-    websiteUrl: "elitepilates.com",
-    date: "2026-07-22",
-    timeSlot: "10:00 AM",
-    notes: "Review our current organic maps ranking and discuss SEO goals.",
-    timestamp: new Date().toISOString()
-  },
-  {
-    id: "seed-2",
-    name: "Arthur Pendleton",
-    email: "arthur@sagewealth.com",
-    businessName: "Sage Wealth Advisors",
-    websiteUrl: "sagewealth.com",
-    date: "2026-07-23",
-    timeSlot: "2:30 PM",
-    notes: "Discuss high-net-worth authority blogging strategy.",
-    timestamp: new Date().toISOString()
-  }
-];
 
 // Initialize Google Gen AI client lazily to handle missing key scenarios gracefully
 let aiClient: GoogleGenAI | null = null;
@@ -59,11 +32,11 @@ function getGeminiClient(): GoogleGenAI {
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
 
-  // Body parsing middleware with expanded limits for high-res logo uploads & previews
-  app.use(express.json({ limit: "50mb" }));
-  app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  // Limit incoming JSON to the size needed for the builder.
+  app.use(express.json({ limit: "4mb" }));
+  app.use(express.urlencoded({ limit: "4mb", extended: true }));
 
   // --- API ROUTES FIRST ---
 
@@ -72,294 +45,53 @@ async function startServer() {
     res.json({ status: "ok", time: new Date().toISOString() });
   });
 
-  // Admin inspect endpoint (to view mock bookings/contacts)
-  app.get("/api/admin/data", (req, res) => {
-    res.json({
-      bookings: bookingsStore,
-      contacts: contactsStore,
-      previews: previewsStore
-    });
-  });
-
-  // Interactive Website Style Preview Form Submission
-  app.post("/api/preview-submit", (req, res) => {
-    const {
-      businessName,
-      tagline,
-      industry,
-      email,
-      phone,
-      websiteUrl,
-      theme,
-      palette,
-      notes,
-      logoUrl, // can be a base64 DataURL
-      contactConsent,
-      marketingConsent,
-      consentTextVersion = "website-preview-v2",
-      botField // Honeypot spam protector
-    } = req.body;
-
-    // 1. Spam Honeypot Check
-    if (botField) {
-      console.warn("[Spam Protection] Honeypot field was triggered. Rejecting silently with fake 200.");
-      return res.json({
-        success: true,
-        message: "Your website direction has been submitted."
+  // Reuse the production email handler in Express on non-Vercel hosts.
+  app.post("/api/preview-submit", async (req, res, next) => {
+    try {
+      const request = new Request("http://localhost/api/preview-submit", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(req.body)
       });
+      const response = await previewSubmission.fetch(request);
+      res.status(response.status);
+      response.headers.forEach((value, key) => res.setHeader(key, value));
+      res.send(await response.text());
+    } catch (error) {
+      next(error);
     }
+  });
 
-    // 2. Server-side Validation
-    if (!businessName || !businessName.trim()) {
-      return res.status(400).json({ error: "Business name is required." });
+  // Do not report success until the email provider accepts the contact message.
+  app.post("/api/contact", async (req, res) => {
+    const { name, email, businessName, message } = req.body || {};
+    if (typeof name !== "string" || !name.trim() || name.length > 120 ||
+        typeof email !== "string" || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+        typeof message !== "string" || !message.trim() || message.length > 5000 ||
+        (businessName != null && (typeof businessName !== "string" || businessName.length > 200))) {
+      return res.status(400).json({ error: "Please enter a valid name, email, and message." });
     }
-    if (!industry || !industry.trim()) {
-      return res.status(400).json({ error: "Industry selection is required." });
-    }
-    if (!email || !email.trim()) {
-      return res.status(400).json({ error: "Business email is required." });
-    }
-
-    // Email Pattern Validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ error: "Please enter a valid business email address." });
-    }
-
-    // Consent Validation
-    if (!contactConsent) {
-      return res.status(400).json({ error: "You must consent to being contacted by The Ivana Collective to save your preview." });
-    }
-
-    // 3. Prevent Duplicate Submissions (within 15 seconds)
-    const now = new Date();
-    const isDuplicate = previewsStore.some(
-      (prev) =>
-        prev.email === email &&
-        prev.businessName === businessName &&
-        (now.getTime() - new Date(prev.consentTimestamp).getTime()) < 15000
-    );
-
-    if (isDuplicate) {
-      return res.status(429).json({
-        error: "A submission with this business name and email address was already received recently."
+    const key = process.env.RESEND_API_KEY?.trim();
+    const from = process.env.FROM_EMAIL?.trim();
+    const to = process.env.FORM_NOTIFICATION_EMAIL?.trim() || "info@theivanacollective.com";
+    if (!key || !from) return res.status(503).json({ error: "Email is temporarily unavailable. Please email us directly." });
+    try {
+      const result = await new Resend(key).emails.send({
+        from, to: [to], replyTo: email,
+        subject: "New website contact request",
+        text: [`Name: ${name.trim()}`, `Email: ${email.trim()}`,
+          `Business: ${(businessName || "").trim()}`, "", message.trim()].join("\n")
       });
+      if (result.error || !result.data?.id) throw new Error("Email provider rejected the request");
+      return res.json({ success: true, message: "Thank you for contacting The Ivana Collective." });
+    } catch {
+      return res.status(502).json({ error: "Your message could not be sent. Please email us directly." });
     }
-
-    // 4. Safe SVG Content Processing / Sanitization
-    let sanitizedLogoUrl = logoUrl || "";
-    if (sanitizedLogoUrl.startsWith("data:image/svg+xml")) {
-      try {
-        // Decode and strip scripts, onload, onerror to prevent XSS
-        let decoded = decodeURIComponent(sanitizedLogoUrl.split(",")[1] || "");
-        if (decoded.includes("base64")) {
-          decoded = Buffer.from(decoded, "base64").toString("utf-8");
-        }
-        
-        // Basic sanitization
-        const cleanSvg = decoded
-          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-          .replace(/on\w+\s*=\s*"[^"]*"/gi, "")
-          .replace(/on\w+\s*=\s*'[^']*'/gi, "");
-
-        // Re-encode
-        sanitizedLogoUrl = "data:image/svg+xml;utf8," + encodeURIComponent(cleanSvg);
-      } catch (err) {
-        console.error("[Sanitization] Error sanitizing SVG logo upload:", err);
-      }
-    }
-
-    // 5. Store Lead securely in database
-    const newSubmission = {
-      id: "prv-" + Math.random().toString(36).substr(2, 9),
-      businessName: businessName.trim(),
-      tagline: (tagline || "").trim(),
-      industry: industry.trim(),
-      email: email.trim(),
-      phone: (phone || "").trim(),
-      websiteUrl: (websiteUrl || "").trim(),
-      theme: theme || "Luxury Editorial",
-      palette: palette || "Collective Forest",
-      notes: (notes || "").trim(),
-      logoUrl: sanitizedLogoUrl,
-      contactConsent: !!contactConsent,
-      marketingConsent: !!marketingConsent,
-      consentTextVersion,
-      consentTimestamp: now.toISOString(),
-      formSource: "Interactive Website Style Preview"
-    };
-
-    previewsStore.push(newSubmission);
-
-    // 6. Send Lead Notification Email to info@theivanacollective.com
-    const notificationEmailConfig = process.env.FORM_NOTIFICATION_EMAIL || "info@theivanacollective.com";
-    const senderEmail = process.env.FROM_EMAIL || "no-reply@theivanacollective.com";
-
-    console.log(`
-================================================================================
-EMAIL DISPATCHED TO: ${notificationEmailConfig}
-SENDER: ${senderEmail}
-SUBJECT: New Website Style Preview — [${newSubmission.businessName}]
---------------------------------------------------------------------------------
-Dear Architecture Team,
-
-A visitor has finalized their Website Style Preview parameters:
-
-[BUSINESS DOSSIER]
-- Business Name: ${newSubmission.businessName}
-- Tagline: ${newSubmission.tagline || "N/A"}
-- Industry: ${newSubmission.industry}
-- Website URL: ${newSubmission.websiteUrl || "N/A"}
-- Business Email: ${newSubmission.email}
-- Phone Number: ${newSubmission.phone || "N/A"}
-
-[BRAND SPECIFICATIONS]
-- Design Direction: ${newSubmission.theme}
-- Selected Color Palette: ${newSubmission.palette}
-- Logo Upload: ${newSubmission.logoUrl ? "Yes (Base64 file attached)" : "No (Using text-based branding)"}
-
-[ADDITIONAL VISITOR NOTES]
-"${newSubmission.notes || "No extra notes submitted."}"
-
-[COMPLIANCE SUMMARY]
-- Submission Timestamp: ${newSubmission.consentTimestamp}
-- Consent Status (Contact): Agreed (Required)
-- Consent Status (Marketing): ${newSubmission.marketingConsent ? "Agreed (Opted-in)" : "Declined (No-promo)"}
-- Consent Version Tag: ${newSubmission.consentTextVersion}
-- Lead Capture Source: ${newSubmission.formSource}
-
-================================================================================
-`);
-
-    // 7. Connect to configured Email Marketing Provider if API Key is active
-    const marketingApiKey = process.env.EMAIL_PROVIDER_API_KEY;
-    const marketingListId = process.env.EMAIL_MARKETING_LIST_ID;
-
-    if (marketingApiKey && marketingListId && newSubmission.marketingConsent) {
-      console.log(`[Marketing API] Dispatching lead to list ${marketingListId}...`);
-      // We perform a real API call to the provider (e.g. Mailchimp, Brevo) here
-      // Example Brevo/Mailchimp integration is mapped out and will be logged as active.
-      console.log(`[Marketing API] User ${newSubmission.email} was successfully subscribed with tags: ['Website Preview Lead', '${newSubmission.theme}']`);
-    } else if (newSubmission.marketingConsent) {
-      console.log(`[Marketing Mock] API key is pending configuration. Lead was queued for list synchronization with tags: ['Website Preview Lead']`);
-    }
-
-    // 8. Return professional success message
-    res.json({
-      success: true,
-      message: "Your website direction has been submitted.",
-      submissionId: newSubmission.id
-    });
   });
 
-  // Contact form submission
-  app.post("/api/contact", (req, res) => {
-    const { name, email, businessName, message } = req.body;
-
-    if (!name || !email || !message) {
-      return res.status(400).json({ error: "Name, email, and message are required." });
-    }
-
-    const newContact = {
-      name,
-      email,
-      businessName: businessName || "",
-      message,
-      timestamp: new Date().toISOString()
-    };
-
-    contactsStore.push(newContact);
-    console.log(`[Contact] New submission from ${name} (${email})`);
-
-    res.json({
-      success: true,
-      message: "Thank you for contacting The Ivana Collective. We will respond within 24 hours."
-    });
-  });
-
-  // Appointment Booking
-  app.post("/api/bookings", (req, res) => {
-    const { name, email, businessName, websiteUrl, date, timeSlot, notes } = req.body;
-
-    if (!name || !email || !date || !timeSlot) {
-      return res.status(400).json({ error: "Name, email, date, and preferred time are required." });
-    }
-
-    // Server-side day validation: Wednesday (3), Friday (5), Saturday (6)
-    const [year, month, day] = date.split("-").map(Number);
-    const dateObj = new Date(year, month - 1, day);
-    const dayOfWeek = dateObj.getDay();
-
-    if (dayOfWeek !== 3 && dayOfWeek !== 5 && dayOfWeek !== 6) {
-      return res.status(400).json({ error: "Friendly chats can only be scheduled on Wednesdays, Fridays, or Saturdays." });
-    }
-
-    const newBooking = {
-      id: "bk-" + Math.random().toString(36).substr(2, 9),
-      name,
-      email,
-      businessName: businessName || "",
-      websiteUrl: websiteUrl || "",
-      date,
-      timeSlot,
-      notes: notes || "",
-      timestamp: new Date().toISOString()
-    };
-
-    bookingsStore.push(newBooking);
-    
-    // Log beautiful email dispatches
-    console.log(`
-================================================================================
-EMAIL DISPATCHED TO: info@theivanacollective.com
-SENDER: no-reply@theivanacollective.com
-SUBJECT: New Booking Scheduled — [${name} - ${businessName || "No Business Name"}]
---------------------------------------------------------------------------------
-Dear Team,
-
-A new meeting has been booked through the website scheduling assistant!
-
-[CLIENT INFORMATION]
-- Name: ${name}
-- Email: ${email}
-- Business Name: ${businessName || "N/A"}
-- Website URL: ${websiteUrl || "N/A"}
-
-[SCHEDULED TIME]
-- Date: ${date} (Day of week: ${dayOfWeek === 3 ? "Wednesday" : dayOfWeek === 5 ? "Friday" : "Saturday"})
-- Time: ${timeSlot}
-
-[CLIENT CONVERSATION NOTES]
-"${notes || "No notes provided."}"
-
-================================================================================
-`);
-
-    console.log(`
-================================================================================
-EMAIL DISPATCHED TO: ${email}
-SENDER: info@theivanacollective.com
-SUBJECT: Your chat with The Ivana Collective is scheduled!
---------------------------------------------------------------------------------
-Hi ${name},
-
-We are so excited to chat with you! This is to confirm that we've booked your free
-friendly chat for ${date} at ${timeSlot}.
-
-We will send a calendar link and a video call invitation to this email address shortly.
-If you have any questions or need to reschedule, simply reply to this email.
-
-Warmly,
-The Ivana Collective Team
-info@theivanacollective.com
-================================================================================
-`);
-
-    res.json({
-      success: true,
-      bookingId: newBooking.id,
-      message: `Your chat has been successfully booked for ${date} at ${timeSlot}! A calendar invitation has been sent to your email.`
-    });
+  // A real calendar integration is not configured; never invent a booking.
+  app.post("/api/bookings", (_req, res) => {
+    res.status(503).json({ error: "Online booking is unavailable here. Please use the scheduling link." });
   });
 
   // AI-Powered SEO and Search Readiness Audit

@@ -85,7 +85,9 @@ export default function Header({ onScheduleCall }: HeaderProps) {
       id="header-navigation"
       className={`
         fixed top-0 inset-x-0 z-50 transition-all duration-300
-        ${isScrolled 
+        ${isMobileMenuOpen
+          ? "py-4 bg-[#061C1A] border-b border-white/8 shadow-lg"
+          : isScrolled 
           ? "py-4 backdrop-blur-[18px] bg-[#061C1A]/85 border-b border-white/8 shadow-lg" 
           : "py-6 bg-transparent border-b border-transparent"}
       `}
@@ -160,7 +162,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
         <div 
           id="mobile-navigation-overlay"
           className="
-            fixed inset-0 top-[60px] z-40 bg-[#061C1A]/98 backdrop-blur-xl md:hidden
+            absolute inset-x-0 top-full z-40 h-[calc(100dvh-4rem)] overflow-y-auto bg-[#061C1A] md:hidden
             flex flex-col justify-between p-8 border-t border-white/5 animate-in fade-in duration-200
           "
         >

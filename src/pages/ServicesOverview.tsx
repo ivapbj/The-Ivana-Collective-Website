@@ -11,12 +11,12 @@ export default function ServicesOverview({ onScheduleCall }: ServicesOverviewPro
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    "name": "Bespoke Digital Foundation & Organic Growth Services",
+    "name": "Website, Google and Social Media Help",
     "provider": {
       "@type": "ProfessionalService",
       "name": "The Ivana Collective"
     },
-    "description": "Full-stack organic digital foundation services including custom web design, traditional & local SEO optimization, search readiness, and content growth syndication.",
+    "description": "Practical help with websites, Google search, social media and ongoing website care.",
     "areaServed": "US"
   };
 
@@ -28,8 +28,8 @@ export default function ServicesOverview({ onScheduleCall }: ServicesOverviewPro
   return (
     <div className="py-24 md:py-32 relative z-10 animate-in fade-in duration-500 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <SeoMeta
-        title="Bespoke Digital Services Overview"
-        description="Discover our integrated organic systems. From high-end custom web design to map proximity SEO and high-converting audience syndication loops."
+        title="Website, Google & Social Media Help"
+        description="Explore simple, practical help with your website, Google listing, social media, and ongoing updates."
         canonicalPath="/services"
         schema={schema}
         breadcrumbs={breadcrumbs}
@@ -38,14 +38,14 @@ export default function ServicesOverview({ onScheduleCall }: ServicesOverviewPro
       {/* Header section */}
       <div className="max-w-4xl text-left space-y-4 mb-20">
         <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#7CA99B]">
-          INTEGRATED SPECIALTIES
+          HOW WE CAN HELP
         </span>
         <h1 className="font-serif text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.05] text-[#F4F5F1] font-normal tracking-tight">
-          Systems designed to amplify your <br />
-          <span className="text-[#B9D8CE]">boutique digital presence.</span>
+          Practical support for your <br />
+          <span className="text-[#B9D8CE]">website and online presence.</span>
         </h1>
         <p className="text-sm md:text-base text-[#B8C6C1] leading-relaxed font-light max-w-3xl">
-          We construct complete, high-performing organic structures that connect luxury brand style with traditional & local search dominance, automated calendars, and high-nurture client pathways.
+          Whether you need a website, more help showing up on Google, or someone to keep things updated, we make the process clear and manageable.
         </p>
       </div>
 
@@ -61,12 +61,12 @@ export default function ServicesOverview({ onScheduleCall }: ServicesOverviewPro
               </div>
               <span className="font-mono text-[10px] tracking-widest uppercase text-[#7CA99B]">SERVICE ONE</span>
             </div>
-            <h2 className="font-serif text-3xl text-[#F4F5F1] tracking-tight">Luxury Editorial Web Design & Custom Web Development</h2>
+            <h2 className="font-serif text-3xl text-[#F4F5F1] tracking-tight">A Website That Feels Like Your Business</h2>
             <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-              We design custom layouts completely balanced by generous negative space, sophisticated typography, and stunning imagery. Our code is entirely free from visual website builder bloat, translating directly into flawless responsive scaling and perfect mobile page speeds.
+              We build clean, thoughtful websites that look great on phones and computers, explain what you do, and make it easy for people to contact or book with you.
             </p>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              {["Custom grid configurations", "High-contrast viewport scales", "Tactile Micro-interactions", "SEO-crawlable semantic structure"].map((item, idx) => (
+              {["A look that fits your business", "Easy-to-read pages on every screen", "Simple contact or booking paths", "Built to be easy for Google to understand"].map((item, idx) => (
                 <li key={idx} className="flex items-center space-x-2 text-xs text-[#B8C6C1] font-light">
                   <Check className="w-3.5 h-3.5 text-[#B9D8CE]" />
                   <span>{item}</span>
@@ -102,12 +102,12 @@ export default function ServicesOverview({ onScheduleCall }: ServicesOverviewPro
               </div>
               <span className="font-mono text-[10px] tracking-widest uppercase text-[#7CA99B]">SERVICE TWO</span>
             </div>
-            <h2 className="font-serif text-3xl text-[#F4F5F1] tracking-tight">Traditional, Local Maps Proximity & Conversational AI Search</h2>
+            <h2 className="font-serif text-3xl text-[#F4F5F1] tracking-tight">Help More Local Customers Find You</h2>
             <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-              We position your business where premium customers look. We combine technical SEO architecture with robust local map proximity profiles, and inject semantic structured data arrays that feed answers to conversational AI indexes.
+              We improve the parts of your website and Google Business Profile that help nearby customers find you when they are ready to call, visit, or book.
             </p>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              {["Local map pack proximity", "Conversational entity schemas", "Advanced technical diagnostics", "In-depth speed optimization"].map((item, idx) => (
+              {["Google Business Profile support", "Clear local service information", "Website checkups and fixes", "Faster, easier-to-use pages"].map((item, idx) => (
                 <li key={idx} className="flex items-center space-x-2 text-xs text-[#B8C6C1] font-light">
                   <Check className="w-3.5 h-3.5 text-[#B9D8CE]" />
                   <span>{item}</span>
@@ -119,7 +119,7 @@ export default function ServicesOverview({ onScheduleCall }: ServicesOverviewPro
                 href="/services/seo"
                 className="inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-lg bg-[#123B35] border border-[#B9D8CE]/20 text-xs font-mono text-[#F4F5F1] uppercase tracking-wider font-semibold hover:bg-[#B9D8CE] hover:text-[#061C1A] transition-all"
               >
-                <span>Explore SEO & AI Search</span>
+                <span>Explore Google & Search Help</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -143,12 +143,12 @@ export default function ServicesOverview({ onScheduleCall }: ServicesOverviewPro
               </div>
               <span className="font-mono text-[10px] tracking-widest uppercase text-[#7CA99B]">SERVICE THREE</span>
             </div>
-            <h2 className="font-serif text-3xl text-[#F4F5F1] tracking-tight">Social Media Syndication, Editorial Content & Nurturing Loops</h2>
+            <h2 className="font-serif text-3xl text-[#F4F5F1] tracking-tight">Keep Showing Up Online</h2>
             <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-              We translate your professional expertise into cohesive, premium social carousels, bi-weekly editorial briefings, and high-authority case studies that drive qualified organic traffic back to your primary digital flagship.
+              We help turn what you already do into useful posts, updates, and emails that keep your business visible and point people back to your website.
             </p>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              {["High-contrast social infographics", "Monthly email briefs", "Continuous content recycling", "Direct authority blog posts"].map((item, idx) => (
+              {["Social posts that match your brand", "Simple email updates", "Reuse the content you already have", "Helpful website articles when they make sense"].map((item, idx) => (
                 <li key={idx} className="flex items-center space-x-2 text-xs text-[#B8C6C1] font-light">
                   <Check className="w-3.5 h-3.5 text-[#B9D8CE]" />
                   <span>{item}</span>
@@ -184,12 +184,12 @@ export default function ServicesOverview({ onScheduleCall }: ServicesOverviewPro
               </div>
               <span className="font-mono text-[10px] tracking-widest uppercase text-[#7CA99B]">MAINTENANCE & ENGINE HYDRATION</span>
             </div>
-            <h2 className="font-serif text-3xl text-[#F4F5F1] tracking-tight">Active Engine Care & Continuous Performance Tuning</h2>
+            <h2 className="font-serif text-3xl text-[#F4F5F1] tracking-tight">Keep Your Website in Good Shape</h2>
             <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-              Websites are dynamic engines. Standard visual visual builders rot over time, exposing security gaps and degrading load speeds. We provide persistent maintenance passes, Core Web Vital security updates, and daily analytical performance logging to preserve search power.
+              Websites need occasional care. We handle updates, backups, security checks, and small fixes so your site stays dependable and you do not have to figure it out alone.
             </p>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              {["Daily structural database snapshots", "Proactive API token synchronization", "Continuous server-level defense pass", "Ongoing metadata index refresh"].map((item, idx) => (
+              {["Regular backups", "Important updates handled", "Security checks", "Help when something needs attention"].map((item, idx) => (
                 <li key={idx} className="flex items-center space-x-2 text-xs text-[#B8C6C1] font-light">
                   <Check className="w-3.5 h-3.5 text-[#B9D8CE]" />
                   <span>{item}</span>
@@ -211,15 +211,15 @@ export default function ServicesOverview({ onScheduleCall }: ServicesOverviewPro
 
       {/* Action / CTA */}
       <div className="text-center space-y-6 border border-white/5 bg-[#0A2C28]/40 rounded-3xl p-12 max-w-4xl mx-auto mt-24">
-        <h2 className="font-serif text-2xl md:text-3xl text-[#F4F5F1]">Unlock your digital organic growth.</h2>
+        <h2 className="font-serif text-2xl md:text-3xl text-[#F4F5F1]">Not sure where to start?</h2>
         <p className="text-xs text-[#B8C6C1] max-w-xl mx-auto leading-relaxed font-light">
-          Let&apos;s map your local competitive landscape. Direct consultation with our senior digital systems builder guarantees aesthetic consistency and absolute search performance.
+          Let&apos;s talk through what your business needs most right now and make a simple plan together.
         </p>
         <button
           onClick={onScheduleCall}
           className="inline-flex items-center justify-center space-x-2 px-8 py-4 rounded-lg font-mono text-xs uppercase tracking-wider font-semibold bg-[#F4F5F1] text-[#061C1A] hover:bg-[#B9D8CE] transition-all cursor-pointer"
         >
-          <span>Schedule an Introductory Review</span>
+          <span>Schedule a Free Call</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

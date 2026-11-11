@@ -37,7 +37,7 @@ export default function ContactPage({
     "@context": "https://schema.org",
     "@type": "ContactPage",
     "name": "Contact The Ivana Collective",
-    "description": "Get in touch with The Ivana Collective boutique office to request a digital experience audit or schedule an introductory strategy call."
+    "description": "Get in touch with The Ivana Collective to talk about your website, Google presence, or social media."
   };
 
   const breadcrumbs = [
@@ -48,8 +48,8 @@ export default function ContactPage({
   return (
     <div className="py-24 md:py-32 relative z-10 animate-in fade-in duration-500 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <SeoMeta
-        title="Initiate Your System: Contact Us"
-        description="Connect with our design, development, and SEO architects. Deliver your project parameters directly to get started."
+        title="Contact The Ivana Collective"
+        description="Tell us what you need help with, and we’ll get back to you."
         canonicalPath="/contact"
         schema={schema}
         breadcrumbs={breadcrumbs}
@@ -58,14 +58,14 @@ export default function ContactPage({
       {/* Title / Hero */}
       <div className="max-w-4xl text-left space-y-4 mb-20">
         <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#7CA99B]">
-          COMMENCE ENGAGEMENT
+          LET'S TALK
         </span>
         <h1 className="font-serif text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.05] text-[#F4F5F1] font-normal tracking-tight">
-          Initiate your system. <br />
-          <span className="text-[#B9D8CE]">Connect with our studio.</span>
+          Let’s talk about <br />
+          <span className="text-[#B9D8CE]">your business and your goals.</span>
         </h1>
         <p className="text-sm md:text-base text-[#B8C6C1] leading-relaxed font-light max-w-3xl">
-          Have a premium web layout request, specialized keyword questions, or complete project parameters? Reach out directly through our dedicated specification portal below.
+          Need a website, help showing up on Google, or someone to keep your online presence current? Tell us what you have in mind.
         </p>
       </div>
 
@@ -75,9 +75,9 @@ export default function ContactPage({
         {/* Left column info details */}
         <div className="lg:col-span-5 space-y-8">
           <div className="space-y-4">
-            <h2 className="font-serif text-2xl text-[#F4F5F1]">The Boutique Office</h2>
+            <h2 className="font-serif text-2xl text-[#F4F5F1]">A small studio with personal support</h2>
             <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-              We focus on a small, selective list of active partnerships each quarter to ensure total aesthetic quality and high-authority search placements.
+              We take on a limited number of projects at a time so every client gets thoughtful work and clear communication.
             </p>
           </div>
 
@@ -91,10 +91,10 @@ export default function ContactPage({
             
             <div className="p-4 bg-[#0D2623] border border-white/5 rounded-2xl max-w-xs space-y-2">
               <p className="font-mono text-[8px] tracking-widest uppercase text-[#7CA99B]">
-                TYPICAL SYSTEM LATENCY
+                WHEN YOU'LL HEAR BACK
               </p>
               <p className="text-xs text-[#B8C6C1] leading-relaxed">
-                Strategic proposals and custom specifications are reviewed and dispatched within 24 business hours.
+                We usually reply within one business day.
               </p>
             </div>
           </div>
@@ -111,9 +111,9 @@ export default function ContactPage({
               </div>
               
               <div className="space-y-1">
-                <h3 className="font-serif text-2xl text-[#F4F5F1]">Parameter Relay Complete</h3>
+                <h3 className="font-serif text-2xl text-[#F4F5F1]">Message received</h3>
                 <p className="font-mono text-[9px] text-[#7CA99B] uppercase tracking-wider">
-                  STATUS · SYSTEM LOCKED
+                  THANK YOU
                 </p>
               </div>
 
@@ -125,12 +125,12 @@ export default function ContactPage({
                 onClick={() => setContactSuccess(null)}
                 className="px-5 py-2.5 rounded-lg border border-white/15 font-mono text-[10px] uppercase tracking-wider text-[#B8C6C1] hover:text-[#F4F5F1] hover:bg-white/5 transition-all cursor-pointer"
               >
-                Send Another Specification
+                Send Another Message
               </button>
             </div>
           ) : (
             <form onSubmit={onContactSubmit} className="space-y-5">
-              <h3 className="font-serif text-xl text-[#F4F5F1] mb-6">Specification Parameter Intake</h3>
+              <h3 className="font-serif text-xl text-[#F4F5F1] mb-6">Tell us what you need</h3>
               
               {contactError && (
                 <div className="p-3 bg-rose-950/20 border border-rose-900/30 text-rose-300 rounded-lg text-xs font-mono">

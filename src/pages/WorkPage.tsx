@@ -76,7 +76,7 @@ export default function WorkPage({ onSelectProject, onScheduleCall }: WorkPagePr
     "@type": "CreativeWorkPortfolio",
     "name": "The Ivana Collective Digital Portfolio",
     "creator": { "@type": "ProfessionalService", "name": "The Ivana Collective" },
-    "description": "Showcase of boutique custom-coded digital flagships, high-performing localized SEO architectures, and content growth syndication systems."
+    "description": "A collection of websites and online projects created for real businesses."
   };
   const breadcrumbs = [
     { name: "Home", item: "/" },
@@ -86,16 +86,16 @@ export default function WorkPage({ onSelectProject, onScheduleCall }: WorkPagePr
   return (
     <div className="work-page" ref={pageRef}>
       <SeoMeta title="Selected Work & Case Studies"
-        description="Explore our portfolio of high-performing digital flagships. Custom coding, technical maps pack SEO positioning, and luxury brand design."
+        description="Explore websites we have created for real businesses and organizations."
         canonicalPath="/work" schema={schema} breadcrumbs={breadcrumbs} />
       <div className="work-forest" aria-hidden="true" />
       <div className="work-shade" aria-hidden="true" />
 
       <div className="work-container">
         <header className="work-intro">
-          <span className="work-eyebrow">Aesthetic Portfolio</span>
-          <h1>Exceptional design.<br /><span>Impeccable performance.</span></h1>
-          <p>Browse our selected case studies. Each project highlights a complete synthesis of custom typography, premium visual compositions, zero template bloat, and highly-lucrative search rankings.</p>
+          <span className="work-eyebrow">OUR WORK</span>
+          <h1>Websites made for <br /><span>real businesses.</span></h1>
+          <p>Take a look at a few of the websites we have created—each one shaped around the client’s business, customers, and goals.</p>
         </header>
 
         <div className="work-list">
@@ -135,9 +135,9 @@ export default function WorkPage({ onSelectProject, onScheduleCall }: WorkPagePr
         </div>
 
         <section className="work-cta">
-          <h2>Build a digital system designed to scale.</h2>
-          <p>Your brand narrative deserves elite visual execution. Connect directly with our lead developer to discuss your custom project.</p>
-          <button onClick={onScheduleCall} className="work-action work-action-primary">Schedule Strategy Call <ArrowUpRight size={16} aria-hidden="true" /></button>
+          <h2>Ready for a website that works for you?</h2>
+          <p>Let’s talk about what your business needs and what would make the biggest difference.</p>
+          <button onClick={onScheduleCall} className="work-action work-action-primary">Schedule a Free Call <ArrowUpRight size={16} aria-hidden="true" /></button>
         </section>
       </div>
     </div>

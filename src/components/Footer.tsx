@@ -38,7 +38,7 @@ export default function Footer({ onScheduleCall }: FooterProps) {
               THE IVANA COLLECTIVE
             </h3>
             <p className="text-sm text-[#B8C6C1] leading-relaxed max-w-xs">
-              Bespoke high-performing digital systems fusing visual editorial design with technical search engine visibility. Designed for small businesses ready to be found, trusted, and chosen.
+              Websites, Google help, and social media support for small businesses that want to look great online and make it easier for customers to find them.
             </p>
             <div className="flex space-x-4">
               <a 
@@ -84,10 +84,10 @@ export default function Footer({ onScheduleCall }: FooterProps) {
             <ul className="space-y-4">
               {[
                 { label: "Website Design", id: "services", path: "/services" },
-                { label: "Local SEO & Map Packs", id: "services", path: "/services" },
-                { label: "WordPress & Shopify", id: "services", path: "/services" },
-                { label: "Authority Copywriting", id: "services", path: "/services" },
-                { label: "AI Search Optimization", id: "services", path: "/services" }
+                { label: "Google & Local Search Help", id: "services", path: "/services" },
+                { label: "Website Updates & Care", id: "services", path: "/services" },
+                { label: "Social Media Help", id: "services", path: "/services" },
+                { label: "Content & Email Support", id: "services", path: "/services" }
               ].map((link, idx) => (
                 <li key={idx}>
                   <button

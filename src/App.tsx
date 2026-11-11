@@ -15,6 +15,8 @@ import WorkPage from "./pages/WorkPage";
 import PricingPage from "./pages/PricingPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import ConciseHome from "./pages/ConciseHome";
+import WebsiteGeneratorPage from "./pages/WebsiteGeneratorPage";
 
 // Navigation
 import { NavigationProvider, useNavigation } from "./context/NavigationContext";
@@ -171,23 +173,9 @@ function AppContent() {
         {(() => {
           switch (currentPath) {
             case "/":
-              return (
-                <Home
-                  activeKey={activeKey}
-                  onKeyClick={handleKeycapClick}
-                  setActiveKey={setActiveKey}
-                  activeStageId={activeStageId}
-                  setActiveStageId={setActiveStageId}
-                  onScheduleCall={handleScheduleGeneral}
-                  onScheduleWithAuditData={handleScheduleWithAuditData}
-                  onSelectProject={setSelectedProject}
-                  onSelectArticle={setSelectedArticle}
-                  newsletterEmail={newsletterEmail}
-                  setNewsletterEmail={setNewsletterEmail}
-                  newsletterSuccess={newsletterSuccess}
-                  onNewsletterSubmit={handleNewsletterSubmit}
-                />
-              );
+              return <ConciseHome onScheduleCall={handleScheduleGeneral} />;
+            case "/website-generator":
+              return <WebsiteGeneratorPage onScheduleCall={handleScheduleGeneral} />;
             case "/services":
               return <ServicesOverview onScheduleCall={handleScheduleGeneral} />;
             case "/services/web-design":
@@ -197,6 +185,7 @@ function AppContent() {
             case "/services/content-growth":
               return <ContentGrowth onScheduleCall={handleScheduleGeneral} />;
             case "/work":
+            case "/portfolio":
               return (
                 <WorkPage
                   onSelectProject={setSelectedProject}
@@ -229,22 +218,7 @@ function AppContent() {
                 />
               );
             default:
-              return (
-                <Home
-                  activeKey={activeKey}
-                  onKeyClick={handleKeycapClick}
-                  activeStageId={activeStageId}
-                  setActiveStageId={setActiveStageId}
-                  onScheduleCall={handleScheduleGeneral}
-                  onScheduleWithAuditData={handleScheduleWithAuditData}
-                  onSelectProject={setSelectedProject}
-                  onSelectArticle={setSelectedArticle}
-                  newsletterEmail={newsletterEmail}
-                  setNewsletterEmail={setNewsletterEmail}
-                  newsletterSuccess={newsletterSuccess}
-                  onNewsletterSubmit={handleNewsletterSubmit}
-                />
-              );
+              return <ConciseHome onScheduleCall={handleScheduleGeneral} />;
           }
         })()}
       </main>

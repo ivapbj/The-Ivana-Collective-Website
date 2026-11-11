@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/:page(work|services|pricing|method|about|insights|contact)", "destination": "/index.html" },
+    { "source": "/:page(work|portfolio|services|pricing|method|about|insights|contact|website-generator)", "destination": "/index.html" },
     { "source": "/services/:service(web-design|seo|content-growth)", "destination": "/index.html" }
   ]
 }

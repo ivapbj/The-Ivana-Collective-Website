@@ -84,7 +84,8 @@ export default function Header({ onScheduleCall }: HeaderProps) {
     <header
       id="header-navigation"
       className={`
-        fixed top-0 inset-x-0 z-50 transition-all duration-300
+        fixed top-0 inset-x-0 transition-all duration-300
+        ${isMobileMenuOpen ? "z-[90] lg:z-50" : "z-50"}
         ${isMobileMenuOpen
           ? "py-2 bg-[#061C1A] border-b border-white/8 shadow-lg"
           : isScrolled 

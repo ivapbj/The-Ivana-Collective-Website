@@ -26,6 +26,18 @@ export function validate(body: any) {
     const webp = bytes.subarray(0,4).toString() === 'RIFF' && bytes.subarray(8,12).toString() === 'WEBP';
     if (!(type === 'image/png' && png || type === 'image/jpeg' && jpeg || type === 'image/webp' && webp)) throw Error('Invalid image file.');
   }
+  if (body.requestType != null && body.requestType !== 'quote') throw Error('Invalid request type.');
+  if (body.requestType === 'quote') {
+    if (!['Within a month', 'In 1–3 months', 'In 3+ months', 'Just exploring'].includes(body.launchTimeline)) {
+      throw Error('Choose your preferred launch timeline.');
+    }
+    if (typeof body.projectRequirements !== 'string' || !body.projectRequirements.trim() || body.projectRequirements.length > 3000) {
+      throw Error('Enter your must-have features in 3,000 characters or fewer.');
+    }
+    clean.requestType = 'quote';
+    clean.launchTimeline = body.launchTimeline;
+    clean.projectRequirements = body.projectRequirements.trim();
+  }
   return {...clean, email:clean.email.toLowerCase(), template:body.template, colors:body.colors, contactConsent:true, marketingConsent:body.marketingConsent, consentTextVersion:'website-preview-v4'};
 }
 function signature(value: string) { return createHmac('sha256', process.env.PREVIEW_SIGNING_SECRET!).update(value).digest('base64url'); }
@@ -85,9 +97,14 @@ export async function handlePreview(request: Request) {
       const ownerUrl = `${url.origin}/?preview=${row.id}&access=${token(row.id,'owner',7*86400)}#interactive-preview`;
       const resend = new Resend(process.env.RESEND_API_KEY);
       const details = Object.entries(config).filter(([k])=>!['logo','image'].includes(k)).map(([k,v])=>`${k}: ${Array.isArray(v)?v.join(', '):v}`).join('\n');
+      const isQuote = config.requestType === 'quote';
+      const subject = isQuote ? 'Website quote request' : 'Website request';
+      const confirmation = isQuote
+        ? 'I received your quote request and will review your design, timeline, and must-have features before following up about pricing.'
+        : 'Your request has been saved. I look forward to discussing your website.';
       const results = await Promise.all([
-        resend.emails.send({from:process.env.FROM_EMAIL,to:'info@theivanacollective.com',replyTo:config.email,subject:`Website request: ${config.businessName.replace(/[\r\n]/g,' ')}`,text:`${details}\nSubmitted: ${row.created_at}\nReview (expires in 7 days): ${ownerUrl}`},{idempotencyKey:`owner/${row.id}`}),
-        resend.emails.send({from:process.env.FROM_EMAIL,to:config.email,replyTo:'info@theivanacollective.com',subject:'Your website request | The Ivana Collective',text:`Hi ${config.fullName},\n\nThank you for sharing your vision for ${config.businessName}. Your request has been saved. I look forward to discussing your website.\n\nSchedule a consultation: ${booking}\n\nIvana\nThe Ivana Collective`},{idempotencyKey:`visitor/${row.id}`})
+        resend.emails.send({from:process.env.FROM_EMAIL,to:'info@theivanacollective.com',replyTo:config.email,subject:`${subject}: ${config.businessName.replace(/[\r\n]/g,' ')}`,text:`${details}\nSubmitted: ${row.created_at}\nReview (expires in 7 days): ${ownerUrl}`},{idempotencyKey:`owner/${row.id}`}),
+        resend.emails.send({from:process.env.FROM_EMAIL,to:config.email,replyTo:'info@theivanacollective.com',subject:`Your ${subject.toLowerCase()} | The Ivana Collective`,text:`Hi ${config.fullName},\n\nThank you for sharing your vision for ${config.businessName}. ${confirmation}\n\nSchedule a consultation: ${booking}\n\nIvana\nThe Ivana Collective`},{idempotencyKey:`visitor/${row.id}`})
       ]);
       emailStatus = results.every(r=>r.data?.id && !r.error) ? 'accepted' : 'failed';
       await db(`website_previews?id=eq.${row.id}`,{method:'PATCH',body:JSON.stringify({email_status:emailStatus,email_ids:results.map(r=>r.data?.id || null)})});

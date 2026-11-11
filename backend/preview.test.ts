@@ -5,6 +5,7 @@ const valid={fullName:'Test Visitor',email:'visitor@example.com',businessName:'A
 process.env.PREVIEW_SIGNING_SECRET='test-secret-with-at-least-thirty-two-characters';
 test('validates consent, email, template, colors and unsafe images',()=>{
  assert.equal(validate(valid).marketingConsent,false);
+ assert.throws(()=>validate({...valid,requestType:'quote'}), /launch timeline/);
  for(const change of [{email:'invalid'},{contactConsent:false},{marketingConsent:'yes'},{template:'unknown'},{logo:'data:image/svg+xml;base64,AAAA'},{colors:['red']},{fullName:''}])assert.throws(()=>validate({...valid,...change}));
 });
 test('signed access rejects tampering, expired links and another submission',()=>{
@@ -27,8 +28,9 @@ test('saves exact design, deduplicates retries and requires protected access',as
   return Response.json(saved?[saved]:[]);
  };
  try {
- const request=()=>new Request('https://example.com/api/preview-submit',{method:'POST',headers:{'Idempotency-Key':'12345678-1234-1234-1234-123456789abc'},body:JSON.stringify(valid)});
+ const request=()=>new Request('https://example.com/api/preview-submit',{method:'POST',headers:{'Idempotency-Key':'12345678-1234-1234-1234-123456789abc'},body:JSON.stringify({...valid,requestType:'quote',launchTimeline:'In 1–3 months',projectRequirements:'Online booking'})});
  const first=await handlePreview(request()),data=await first.json();assert.equal(first.status,200);assert.equal(data.config.businessName,'Acme');assert.equal(data.config.services,valid.services);
+ assert.equal(data.config.requestType,'quote');assert.equal(data.config.launchTimeline,'In 1–3 months');assert.equal(data.config.projectRequirements,'Online booking');
  const second=await (await handlePreview(request())).json();assert.equal(second.id,data.id);
  assert.equal((await handlePreview(new Request(`https://example.com/api/preview-submit?id=${data.id}`))).status,403);
  const access=token(data.id,'owner',60);assert.equal((await handlePreview(new Request(`https://example.com/api/preview-submit?id=${data.id}&access=${access}`))).status,200);

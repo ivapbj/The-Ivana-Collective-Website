@@ -2,6 +2,7 @@ import React from "react";
 import { ArrowRight, BarChart3, Globe2, Search, Wrench } from "lucide-react";
 import SeoMeta from "../components/SeoMeta";
 import { Link } from "../context/NavigationContext";
+import PortfolioShowcase from "../components/PortfolioShowcase";
 import "./Home.css";
 
 const services = [
@@ -34,7 +35,7 @@ export default function ConciseHome({ onScheduleCall }: { onScheduleCall: () => 
 
     <section className="px-5 py-20 bg-[#0D2623]"><div className="max-w-6xl mx-auto rounded-3xl border border-[#B9D8CE]/30 bg-[#123B35] p-8 md:p-14 grid lg:grid-cols-[1.4fr_.6fr] gap-8 items-center"><div><p className="font-mono text-xs tracking-widest text-[#B9D8CE]">TRY A WEBSITE IDEA</p><h2 className="font-serif text-4xl sm:text-5xl mt-4">See what your business could look like online.</h2><p className="mt-5 text-[#E0EBE5] leading-relaxed">Pick a style, add a few details about your business, and we’ll show you a personalized website idea.</p></div><Link href="/website-generator" className="min-h-12 inline-flex items-center justify-center rounded-xl bg-[#B9D8CE] text-[#061C1A] px-6 font-semibold">Start My Website Idea</Link></div></section>
 
-    <section className="px-5 py-20 bg-[#061C1A]"><div className="max-w-7xl mx-auto"><div className="flex justify-between gap-5 items-end"><div><p className="font-mono text-xs tracking-widest text-[#7CA99B]">FEATURED PORTFOLIO</p><h2 className="font-serif text-4xl sm:text-5xl mt-4">Work made for real businesses.</h2></div><Link href="/portfolio" className="text-[#B9D8CE] underline">View our portfolio</Link></div><div className="grid md:grid-cols-3 gap-5 mt-10">{[["Legacy Economic Development","Community and small-business resource hub"],["Posh Body Wellness Spa","Luxury wellness, services, and e-commerce"],["Dr. Sheds","Custom construction website and SEO"]].map(([name,copy])=><div key={name}><Link href="/portfolio" className="block h-full rounded-2xl border border-white/10 p-6 bg-[#0D2623]"><p className="font-serif text-2xl">{name}</p><p className="text-sm mt-3 text-[#B8C6C1]">{copy}</p></Link></div>)}</div></div></section>
+    <PortfolioShowcase onScheduleCall={onScheduleCall} />
 
     <section className="px-5 py-20 bg-[#0D2623]"><div className="max-w-5xl mx-auto"><p className="font-mono text-xs tracking-widest text-[#7CA99B]">HOW IT WORKS</p><h2 className="font-serif text-4xl sm:text-5xl mt-4">A straightforward path from idea to launch.</h2><ol className="grid md:grid-cols-3 gap-7 mt-10">{[["01","Tell us about your business."],["02","Design and preview your website."],["03","Work with us to bring it to life."]].map(([n,text])=><li key={n} className="border-t border-[#B9D8CE]/40 pt-5"><span className="font-mono text-[#B9D8CE]">{n}</span><p className="font-serif text-2xl mt-5">{text}</p></li>)}</ol></div></section>
 

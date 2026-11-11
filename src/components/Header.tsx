@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, Calendar } from "lucide-react";
-import { useNavigation } from "../context/NavigationContext";
+import { Link, useNavigation } from "../context/NavigationContext";
 
 interface HeaderProps {
   onScheduleCall: () => void;
@@ -105,7 +105,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
         </button>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-8" aria-label="Primary Navigation">
+        <nav className="hidden lg:flex items-center gap-4 xl:gap-6" aria-label="Primary Navigation">
           {menuItems.map((item) => {
             const isPageActive = item.id === "hero"
               ? (currentPath === "/" && (activeSection === "hero" || !menuItems.some(m => m.id === activeSection)))
@@ -129,6 +129,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
               </button>
             );
           })}
+          <Link href="/#interactive-preview" className="py-2 font-mono text-[11px] uppercase tracking-wider text-[#B9D8CE] hover:text-white">Website Preview</Link>
         </nav>
 
         {/* Desktop CTA Call Button */}
@@ -171,6 +172,12 @@ export default function Header({ onScheduleCall }: HeaderProps) {
           "
         >
           <div className="flex flex-col gap-1">
+            <button type="button" onClick={() => {
+              setIsMobileMenuOpen(false);
+              navigate("/#interactive-preview");
+            }} className="mb-2 flex min-h-11 items-center justify-center rounded-lg bg-[#F4F5F1] px-4 text-center font-mono text-xs font-semibold uppercase tracking-wider text-[#061C1A]">
+              Build Your Website
+            </button>
             {menuItems.map((item) => {
               const isPageActive = item.id === "hero"
                 ? (currentPath === "/" && (activeSection === "hero" || !menuItems.some(m => m.id === activeSection)))

@@ -161,7 +161,16 @@ function AppContent() {
   };
 
   return (
-    <div className="relative min-h-screen selection:bg-[#B9D8CE]/20 selection:text-[#F4F5F1] bg-[#061C1A] text-[#F4F5F1]">
+    <div className="relative isolate min-h-screen selection:bg-[#B9D8CE]/20 selection:text-[#F4F5F1] text-[#F4F5F1]">
+      {/* Shared fixed backdrop keeps the forest treatment continuous on every route. */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 -z-20 pointer-events-none bg-[#061c1a] bg-[url('/images/home-forest-ivana.webp')] bg-cover bg-center"
+      />
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 -z-10 pointer-events-none bg-[linear-gradient(90deg,rgba(3,22,19,.72),rgba(3,22,19,.42)_58%,rgba(3,22,19,.48))]"
+      />
       {/* Fine grain layout overlay */}
       <div className="fine-grain-overlay" />
 

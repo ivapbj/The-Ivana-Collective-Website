@@ -19,13 +19,13 @@ const directionStyles: Record<string, string> = {
 };
 const forestPalette = ['#163c36', '#f4efe5', '#17231f'];
 const servicesPalette = ['#741d32', '#f5f0e9', '#201b1b'];
-const storePalette = ['#93aa58', '#efeee5', '#22221f'];
+const storePalette = ['#93aa58', '#f5d8e2', '#22221f'];
 const portfolioPalette = ['#39483d', '#ccd1c1', '#181e19'];
 const palettes: [string, string[]][] = [
  ['Collective Forest', forestPalette],
  ['Burgundy & Paper', servicesPalette],
  ['Sage & Charcoal', portfolioPalette],
- ['Nectarine Playful', storePalette],
+ ['Nectarine Pink & Green', storePalette],
  ['Editorial Champagne', ['#171717','#f7f1e5','#211c18']],
  ['Orchid Authority', ['#4e2943','#fcf3f5','#2e1b29']],
  ['Digital Blueprint', ['#12263a','#f4f8fd','#17202a']],
@@ -42,27 +42,33 @@ const initial = {template:'Restaurant' as ConceptType, businessName:'',industry:
 export default function StylePreviewSection({onScheduleCall}:{onScheduleCall:()=>void}) {
  const [form,setForm]=useState(initial), [saved,setSaved]=useState<typeof initial|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[width,setWidth]=useState('100%');
  const key=useRef(crypto.randomUUID());
- const paletteEdited=useRef(false);
+ const editedPalettes=useRef<Partial<Record<ConceptType, string[]>>>({});
+ const previewScroll=useRef<HTMLDivElement>(null);
  const update=(name:string,value:unknown)=>{
-  if (name === 'colors') paletteEdited.current = true;
+  if (name === 'colors') editedPalettes.current[form.template] = value as string[];
   setForm(previous=>({...previous,[name]:value}));
   setSaved(null);
   setNotice('');
   key.current=crypto.randomUUID();
  };
  function selectTemplate(template: ConceptType) {
-  const preserveColors = paletteEdited.current;
-  setForm(previous=>({...previous,template,colors:preserveColors ? previous.colors : defaultPalette(template)}));
+  if (template === form.template) return;
+  if (template === 'E-commerce / Online Store') setWidth('375px');
+  const colors = editedPalettes.current[template] ?? defaultPalette(template);
+  setForm(previous=>({...previous,template,colors}));
   setSaved(null);
   setNotice('');
   key.current=crypto.randomUUID();
  }
+ useEffect(()=>{
+  if (previewScroll.current) previewScroll.current.scrollTop = 0;
+ },[form.template]);
  const paletteIndex = palettes.findIndex(([, colors])=>colors.every((color,index)=>color===form.colors[index]));
  useEffect(()=>{
   const params=new URLSearchParams(location.search), id=params.get('preview') || sessionStorage.getItem('website-preview');
   if (!id) return;
   const startingKey=key.current;
-  fetch(`/api/preview-submit?id=${encodeURIComponent(id)}&access=${encodeURIComponent(params.get('access') || '')}`).then(async r=>{if(!r.ok) throw Error('Saved preview access is unavailable or expired.');return r.json();}).then(data=>{if(key.current!==startingKey)return;paletteEdited.current=true;setSaved(data.config);setForm({...initial,...data.config,requestType:'quote'});}).catch(e=>{if(key.current===startingKey)setError(e.message);});
+  fetch(`/api/preview-submit?id=${encodeURIComponent(id)}&access=${encodeURIComponent(params.get('access') || '')}`).then(async r=>{if(!r.ok) throw Error('Saved preview access is unavailable or expired.');return r.json();}).then(data=>{if(key.current!==startingKey)return;editedPalettes.current[data.config.template as ConceptType]=data.config.colors;if(data.config.template==='E-commerce / Online Store')setWidth('375px');setSaved(data.config);setForm({...initial,...data.config,requestType:'quote'});}).catch(e=>{if(key.current===startingKey)setError(e.message);});
   if(params.has('access')) {params.delete('access');history.replaceState(null,'',`${location.pathname}?${params}#interactive-preview`);}
  },[]);
  async function upload(file:File|undefined,field:string) {
@@ -125,7 +131,7 @@ export default function StylePreviewSection({onScheduleCall}:{onScheduleCall:()=
      <span className="flex gap-1.5" aria-hidden="true"><span className="size-2 rounded-full bg-[#92545a]" /><span className="size-2 rounded-full bg-[#a78c56]" /><span className="size-2 rounded-full bg-[#648977]" /></span>
      <span className="min-w-0 truncate rounded bg-[#061c1a] px-3 py-1 text-xs text-[#b9d8ce]">{preview.businessName.trim() || 'Your business'}</span>
     </div>
-    <div tabIndex={0} aria-label="Scrollable homepage preview" className="max-h-[65vh] min-h-0 overflow-auto p-2 focus-visible:outline-2 focus-visible:outline-[#b9d8ce] sm:p-3 lg:max-h-[calc(100dvh-17rem)]">
+    <div ref={previewScroll} tabIndex={0} aria-label="Scrollable homepage preview" className="max-h-[65vh] min-h-0 overflow-auto p-2 focus-visible:outline-2 focus-visible:outline-[#b9d8ce] sm:p-3 lg:max-h-[calc(100dvh-17rem)]">
      <div className="mx-auto max-w-full overflow-hidden" data-design-direction={preview.template==='Restaurant' ? directionStyles[preview.theme] : undefined} style={{width,'--preview-primary':preview.colors[0],'--preview-background':preview.colors[1],'--preview-text':preview.colors[2],'--preview-surface':preview.colors[1],'--preview-font-heading':preview.template==='E-commerce / Online Store'?'Bebas Neue, Impact, sans-serif':preview.theme==='Luxury Editorial'?'Georgia, serif':'Arial, sans-serif','--preview-font-body':preview.template==='E-commerce / Online Store'?'DM Sans, Arial, sans-serif':'Arial, sans-serif'} as React.CSSProperties}>
       <HomepageConcept type={preview.template} name={preview.businessName} tagline={preview.tagline} industry={preview.industry} email={saved?.email || ''} phone={preview.phone} logo={preview.logo} compact={width==='375px'} description={preview.description} services={preview.services} image={preview.image}/>
      </div>

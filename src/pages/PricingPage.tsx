@@ -1,601 +1,457 @@
 import React from "react";
 import SeoMeta from "../components/SeoMeta";
-import { 
-  WORDPRESS_PRICING_PLANS, 
-  ECOMMERCE_GROWTH_PLANS, 
-  SERVICE_GROWTH_PLANS, 
-  WEBSITE_ONLY_PLANS, 
-  CUSTOM_CODED_PLAN,
-  BOOKING_CALENDAR_URL 
-} from "../data";
-import { 
-  Check, 
-  ArrowUpRight, 
-  Sparkles, 
-  ShieldCheck, 
-  Calendar, 
-  Layers, 
-  ShoppingBag, 
-  Briefcase, 
-  Code2, 
-  CheckCircle2,
-  Clock,
-  HelpCircle,
-  Zap,
-  ArrowRight
-} from "lucide-react";
+import { BOOKING_CALENDAR_URL } from "../data";
 
-interface PricingPageProps {
-  onScheduleCall?: () => void;
+const EMAIL = "info@theivanacollective.com";
+const mailto = (service: string) =>
+  "mailto:" + EMAIL + "?subject=" + encodeURIComponent(service + " Inquiry — The Ivana Collective");
+
+const buttonPrimary =
+  "inline-flex min-h-11 items-center justify-center rounded-lg bg-[#B9D8CE] px-5 py-3 text-center text-sm font-semibold text-[#061C1A] transition-colors hover:bg-[#F4F5F1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#B9D8CE]";
+const buttonSecondary =
+  "inline-flex min-h-11 items-center justify-center rounded-lg border border-[#B9D8CE]/35 bg-[#0D2623] px-5 py-3 text-center text-sm font-semibold text-[#F4F5F1] transition-colors hover:border-[#B9D8CE] hover:bg-[#123B35] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#B9D8CE]";
+
+const socialPlans = [
+  {
+    name: "Starter",
+    price: "$449",
+    platforms: "Choose 3 platforms",
+    content: ["4 short videos each month", "8 branded posts each month"],
+    note: "Choose three: Facebook, Instagram, TikTok, or Google Business Profile.",
+    highlighted: false,
+    cta: "Start Growing My Brand",
+  },
+  {
+    name: "Growth",
+    price: "$649",
+    platforms: "All 4 platforms",
+    content: ["5 short videos each month", "12 branded posts each month"],
+    note: "Facebook, Instagram, TikTok, and Google Business Profile.",
+    highlighted: true,
+    cta: "Choose Growth",
+  },
+  {
+    name: "Local Authority",
+    price: "$949",
+    platforms: "All 4 platforms",
+    content: [
+      "10 short videos each month",
+      "18 branded posts each month",
+      "Mobile-friendly Link Hub mini-site while the package is active",
+    ],
+    note: "Premium content cadence and visibility support.",
+    highlighted: false,
+    cta: "Let’s Talk Social Media",
+  },
+];
+
+const socialSetup = [
+  ["Instagram", "$149"],
+  ["Facebook", "$99"],
+  ["TikTok", "$149"],
+  ["Google Business Profile", "$249"],
+  ["All-four setup bundle", "$499"],
+];
+
+const emailPlans = [
+  { name: "Email Starter", price: "$99" },
+  { name: "Email Growth", price: "$179" },
+];
+
+function SectionIntro({
+  eyebrow,
+  title,
+  subtitle,
+}: {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+}) {
+  return (
+    <header className="mb-8 max-w-3xl space-y-3">
+      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#7CA99B]">
+        {eyebrow}
+      </p>
+      <h2 className="font-serif text-3xl font-normal leading-tight text-[#F4F5F1] sm:text-4xl">
+        {title}
+      </h2>
+      <p className="max-w-2xl text-sm leading-7 text-[#B8C6C1] sm:text-base">
+        {subtitle}
+      </p>
+    </header>
+  );
 }
 
-export default function PricingPage({ onScheduleCall }: PricingPageProps) {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "PriceSpecification",
-    "name": "The Ivana Collective Digital Growth & Website Pricing",
-    "description": "WordPress sites, growth packages for e-commerce and service businesses, website-only builds, and custom coded web applications."
-  };
+function PriceCard({
+  name,
+  price,
+  period,
+  description,
+  features,
+  href,
+  cta,
+  highlighted = false,
+  note,
+}: {
+  name: string;
+  price: string;
+  period?: string;
+  description: string;
+  features?: string[];
+  href: string;
+  cta: string;
+  highlighted?: boolean;
+  note?: string;
+}) {
+  return (
+    <article
+      className={
+        "flex h-full flex-col rounded-2xl border p-6 sm:p-7 " +
+        (highlighted
+          ? "border-[#B9D8CE]/60 bg-[#0D2623]"
+          : "border-white/10 bg-[#0D2623]/55")
+      }
+    >
+      <div className="flex-1">
+        <h3 className="font-serif text-2xl font-medium text-[#F4F5F1]">{name}</h3>
+        <p className="mt-2 min-h-12 text-sm leading-6 text-[#B8C6C1]">{description}</p>
+        <p className="mt-5 flex flex-wrap items-baseline gap-x-2 border-b border-white/10 pb-4">
+          <span className="font-serif text-4xl font-semibold tracking-tight text-[#F4F5F1]">
+            {price}
+          </span>
+          {period && (
+            <span className="text-xs uppercase tracking-wide text-[#7CA99B]">{period}</span>
+          )}
+        </p>
+        {features && (
+          <ul className="mt-5 space-y-3 text-sm leading-6 text-[#D4DEDA]">
+            {features.map((feature) => (
+              <li key={feature} className="flex gap-2.5">
+                <span aria-hidden="true" className="mt-1 text-[#B9D8CE]">✓</span>
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        {note && <p className="mt-4 text-xs leading-5 text-[#91AAA1]">{note}</p>}
+      </div>
+      <a
+        href={href}
+        className={(highlighted ? buttonPrimary : buttonSecondary) + " mt-7 w-full"}
+      >
+        {cta}
+      </a>
+    </article>
+  );
+}
 
+export default function PricingPage() {
+  const schema = {
+    "@type": "WebPage",
+    name: "Pricing | The Ivana Collective",
+    description:
+      "Explore website design, maintenance, social media, email marketing, and local SEO services from The Ivana Collective.",
+  };
   const breadcrumbs = [
     { name: "Home", item: "/" },
-    { name: "Pricing", item: "/pricing" }
+    { name: "Pricing", item: "/pricing" },
   ];
 
   return (
-    <div className="py-24 md:py-32 relative z-10 animate-in fade-in duration-500 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="relative z-10 mx-auto max-w-7xl px-4 pb-20 pt-20 sm:px-6 md:pt-28 lg:px-8">
       <SeoMeta
-        title="Website & Growth Packages Pricing | The Ivana Collective"
-        description="Transparent pricing for WordPress websites, e-commerce growth plans, service business maintenance, website-only builds, and custom coded platforms."
+        title="Pricing for Websites, Social Media & SEO | The Ivana Collective"
+        description="Explore transparent starting prices for website design, maintenance, social media management, email marketing, and local SEO."
         canonicalPath="/pricing"
         schema={schema}
         breadcrumbs={breadcrumbs}
       />
 
-      {/* Hero Header */}
-      <div className="max-w-4xl text-left space-y-4 mb-14">
-        <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#7CA99B] flex items-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-[#B9D8CE]" />
-          TRANSPARENT INVESTMENT MATRIX
-        </span>
-        <h1 className="font-serif text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.05] text-[#F4F5F1] font-normal tracking-tight">
-          Website & Growth Packages. <br />
-          <span className="text-[#B9D8CE]">Engineered for sustainable visibility.</span>
-        </h1>
-        <p className="text-sm md:text-base text-[#B8C6C1] leading-relaxed font-light max-w-3xl">
-          Every site includes 1-year free hosting, SSL security, and foundational SEO setup so customers can find you online. Choose the right build and care package for your stage of growth.
-        </p>
-      </div>
-
-      {/* Explanatory Commitment & Pricing Structure Banner */}
-      <div className="bg-[#0D2623] border border-[#B9D8CE]/20 rounded-3xl p-8 md:p-10 mb-20 relative overflow-hidden text-left shadow-2xl">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-[#123B35]/40 via-transparent to-transparent pointer-events-none rounded-full blur-3xl" />
-        
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-          <div className="lg:col-span-8 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#123B35] border border-[#B9D8CE]/30 text-[#B9D8CE] font-mono text-[10px] uppercase tracking-wider">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>How Our 6-Month Term Works</span>
-            </div>
-            
-            <h3 className="font-serif text-2xl md:text-3xl text-[#F4F5F1] font-normal">
-              Built to be affordable upfront, lower cost long-term.
-            </h3>
-            
-            <div className="space-y-3 text-xs md:text-sm text-[#B8C6C1] font-light leading-relaxed">
-              <p>
-                All website packages require an initial <strong className="text-[#F4F5F1] font-medium">6-month commitment</strong>. During those first six months, your monthly payment includes both the cost of building your website and your ongoing website maintenance.
-              </p>
-              <p>
-                After the first six months, the website is <strong className="text-[#B9D8CE] font-medium">fully paid for</strong>, so the website-building portion is removed from your monthly payment. You only continue paying for maintenance, updates, hosting, and ongoing support.
-              </p>
-              <div className="p-3.5 rounded-xl bg-[#061C1A]/70 border border-white/5 text-[#B9D8CE] text-xs font-mono">
-                💡 <strong>Example:</strong> The $239/month Service Website Package decreases to approximately <span className="text-[#F4F5F1] underline font-bold">$106/month</span> after the initial six-month term.
-              </div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-4 flex flex-col items-start lg:items-end justify-center space-y-3">
-            <a
-              href={BOOKING_CALENDAR_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="
-                w-full sm:w-auto inline-flex items-center justify-center space-x-2.5 px-8 py-4 rounded-xl font-mono text-xs uppercase tracking-wider font-semibold
-                bg-[#B9D8CE] text-[#061C1A] hover:bg-[#F4F5F1] hover:shadow-lg hover:shadow-[#B9D8CE]/10
-                transition-all duration-200 cursor-pointer shadow-md group
-              "
-            >
-              <Calendar className="w-4 h-4" />
-              <span>Book My Free Consult</span>
-              <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+      <section aria-labelledby="pricing-title" className="pb-16 sm:pb-20">
+        <div className="max-w-4xl">
+          <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.22em] text-[#7CA99B]">
+            Thoughtful digital support for growing businesses
+          </p>
+          <h1
+            id="pricing-title"
+            className="font-serif text-[clamp(2.6rem,6vw,5rem)] font-normal leading-[1.02] tracking-tight text-[#F4F5F1]"
+          >
+            Simple, Transparent Pricing for Your Business
+          </h1>
+          <p className="mt-5 max-w-3xl text-base leading-7 text-[#B8C6C1] sm:text-lg">
+            Whether you’re launching your first website or growing your online presence, find the
+            right digital solution for your business.
+          </p>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-[#91AAA1]">
+            Every business is different. We can tailor the scope to your goals, timeline, and budget
+            before you commit.
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a className={buttonPrimary} href={BOOKING_CALENDAR_URL} target="_blank" rel="noreferrer">
+              Schedule a Free Consultation
             </a>
-            <span className="text-[11px] font-mono text-[#7CA99B] text-center lg:text-right">
-              Free 30-min strategy call · No obligation
-            </span>
+            <a className={buttonSecondary} href="#website-design">
+              Explore Our Services
+            </a>
           </div>
-        </div>
-      </div>
-
-      {/* ======================================================== */}
-      {/* 1. WORDPRESS SITES (FIRST AS REQUESTED)                   */}
-      {/* ======================================================== */}
-      <section id="wordpress-pricing" className="mb-28 scroll-mt-28">
-        <div className="text-left space-y-3 mb-10 pb-6 border-b border-white/5">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#7CA99B] bg-[#123B35]/60 border border-[#7CA99B]/30 px-3 py-1 rounded-full">
-              Category 01
-            </span>
-            <span className="font-mono text-[10px] tracking-wider uppercase text-[#B8C6C1]/70">
-              CMS Architecture
-            </span>
-          </div>
-          
-          <h2 className="font-serif text-3xl md:text-4xl text-[#F4F5F1] font-normal">
-            WORDPRESS SITES
-          </h2>
-          
-          <div className="p-4 rounded-2xl bg-[#061C1A] border border-[#7CA99B]/20 max-w-4xl space-y-2">
-            <p className="font-mono text-xs text-[#B9D8CE]">
-              🎯 <strong>Perfect for:</strong> Real Estate and Law firms, Marketing Agencies, Insurance Agencies, and Industries focused on selling & shipping.
-            </p>
-            <p className="text-xs text-[#B8C6C1] font-light leading-relaxed">
-              Every WordPress website includes one year of hosting, domain registration or renewal, SSL security, foundational SEO setup, backups, and six months of website care. Website packages may be paid over an initial six-month term. During those six months, the monthly payment includes both the website build and the included care plan. After the website has been paid in full, the website-building portion ends. Clients may continue with a monthly WordPress Care Plan for hosting, security, updates, maintenance and ongoing support.
-            </p>
-          </div>
-        </div>
-
-        {/* 4 Cards Grid for WordPress */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-          {WORDPRESS_PRICING_PLANS.map((plan) => (
-            <div
-              key={plan.id}
-              className={`
-                relative rounded-3xl p-7 md:p-8 flex flex-col justify-between space-y-6 text-left transition-all duration-300 hover:-translate-y-1.5
-                ${plan.isPopular 
-                  ? "bg-[#0D2623] border border-[#B9D8CE]/40 shadow-2xl ring-1 ring-[#B9D8CE]/20" 
-                  : "bg-[#061C1A]/60 border border-white/8 hover:border-[#7CA99B]/30"}
-              `}
-            >
-              {plan.isPopular && (
-                <span className="absolute top-4 right-4 font-mono text-[8px] tracking-[0.2em] font-bold text-[#061C1A] bg-[#B9D8CE] px-3 py-1 rounded-full uppercase shadow">
-                  Popular
-                </span>
-              )}
-
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-serif text-xl text-[#F4F5F1] font-semibold">{plan.title}</h3>
-                  <p className="text-xs text-[#B8C6C1] font-light mt-1 min-h-[34px]">{plan.subtitle}</p>
-                </div>
-
-                <div className="pt-2 border-b border-white/5 pb-3">
-                  <div className="flex items-baseline space-x-1">
-                    <span className="font-serif text-3xl md:text-4xl text-[#F4F5F1] font-bold">{plan.price}</span>
-                    <span className="font-mono text-[10px] text-[#7CA99B] tracking-wider uppercase">{plan.period}</span>
-                  </div>
-                  {plan.commitment && (
-                    <p className="text-[9px] font-mono text-[#B8C6C1]/50 mt-1 uppercase tracking-wide">
-                      {plan.commitment}
-                    </p>
-                  )}
-                </div>
-
-                {/* Features list */}
-                <ul className="space-y-2.5 pt-1">
-                  {plan.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start space-x-2.5 text-xs text-[#B8C6C1] font-light">
-                      <Check className="w-3.5 h-3.5 text-[#B9D8CE] flex-shrink-0 mt-0.5" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <a
-                  href={plan.ctaLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`
-                    w-full flex items-center justify-center space-x-2 py-3 rounded-xl font-mono text-xs uppercase tracking-wider font-semibold cursor-pointer transition-all duration-200
-                    ${plan.isPopular 
-                      ? "bg-[#B9D8CE] text-[#061C1A] hover:bg-[#F4F5F1] shadow-md" 
-                      : "bg-[#123B35] text-[#F4F5F1] border border-[#B9D8CE]/15 hover:bg-[#B9D8CE] hover:text-[#061C1A]"}
-                  `}
-                >
-                  <span>{plan.ctaText}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
-          ))}
         </div>
       </section>
 
-      {/* ======================================================== */}
-      {/* 2. GROWTH PACKAGES FOR E-COMMERCE WEBSITES               */}
-      {/* ======================================================== */}
-      <section id="ecommerce-growth-pricing" className="mb-28 scroll-mt-28">
-        <div className="text-left space-y-3 mb-10 pb-6 border-b border-white/5">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#7CA99B] bg-[#123B35]/60 border border-[#7CA99B]/30 px-3 py-1 rounded-full flex items-center gap-1.5">
-              <ShoppingBag className="w-3 h-3" />
-              Category 02
-            </span>
-            <span className="font-mono text-[10px] tracking-wider uppercase text-[#B8C6C1]/70">
-              Commerce & Products
-            </span>
-          </div>
-          
-          <h2 className="font-serif text-3xl md:text-4xl text-[#F4F5F1] font-normal">
-            GROWTH PACKAGES FOR E-COMMERCE WEBSITES
-          </h2>
-          
-          <div className="p-4 rounded-2xl bg-[#061C1A] border border-[#7CA99B]/20 max-w-4xl">
-            <p className="font-mono text-xs text-[#B9D8CE]">
-              🛍️ <strong>Perfect for:</strong> Candle Businesses, Bakeries selling custom orders, Skincare and beauty product companies. Industries focused on selling & shipping.
-            </p>
-          </div>
-        </div>
-
-        {/* 4 Cards Grid for E-Commerce */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-          {ECOMMERCE_GROWTH_PLANS.map((plan) => (
-            <div
-              key={plan.id}
-              className={`
-                relative rounded-3xl p-7 md:p-8 flex flex-col justify-between space-y-6 text-left transition-all duration-300 hover:-translate-y-1.5
-                ${plan.isPopular 
-                  ? "bg-[#0D2623] border border-[#B9D8CE]/40 shadow-2xl ring-1 ring-[#B9D8CE]/20" 
-                  : "bg-[#061C1A]/60 border border-white/8 hover:border-[#7CA99B]/30"}
-              `}
-            >
-              {plan.isPopular && (
-                <span className="absolute top-4 right-4 font-mono text-[8px] tracking-[0.2em] font-bold text-[#061C1A] bg-[#B9D8CE] px-3 py-1 rounded-full uppercase shadow">
-                  Popular
-                </span>
-              )}
-
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-serif text-xl text-[#F4F5F1] font-semibold">{plan.title}</h3>
-                  <p className="text-xs text-[#B8C6C1] font-light mt-1 min-h-[34px]">{plan.subtitle}</p>
-                </div>
-
-                <div className="pt-2 border-b border-white/5 pb-3">
-                  <div className="flex items-baseline space-x-1">
-                    <span className="font-serif text-3xl md:text-4xl text-[#F4F5F1] font-bold">{plan.price}</span>
-                    <span className="font-mono text-[10px] text-[#7CA99B] tracking-wider uppercase">{plan.period}</span>
-                  </div>
-                </div>
-
-                {/* Features list */}
-                <ul className="space-y-2.5 pt-1">
-                  {plan.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start space-x-2.5 text-xs text-[#B8C6C1] font-light">
-                      <Check className="w-3.5 h-3.5 text-[#B9D8CE] flex-shrink-0 mt-0.5" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <a
-                  href={plan.ctaLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`
-                    w-full flex items-center justify-center space-x-2 py-3 rounded-xl font-mono text-xs uppercase tracking-wider font-semibold cursor-pointer transition-all duration-200
-                    ${plan.isPopular 
-                      ? "bg-[#B9D8CE] text-[#061C1A] hover:bg-[#F4F5F1] shadow-md" 
-                      : "bg-[#123B35] text-[#F4F5F1] border border-[#B9D8CE]/15 hover:bg-[#B9D8CE] hover:text-[#061C1A]"}
-                  `}
-                >
-                  <span>{plan.ctaText}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ======================================================== */}
-      {/* 2b. GROWTH PACKAGES FOR SERVICE WEBSITES                 */}
-      {/* ======================================================== */}
-      <section id="service-growth-pricing" className="mb-28 scroll-mt-28">
-        <div className="text-left space-y-3 mb-10 pb-6 border-b border-white/5">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#7CA99B] bg-[#123B35]/60 border border-[#7CA99B]/30 px-3 py-1 rounded-full flex items-center gap-1.5">
-              <Briefcase className="w-3 h-3" />
-              Category 02b
-            </span>
-            <span className="font-mono text-[10px] tracking-wider uppercase text-[#B8C6C1]/70">
-              Services & Booking
-            </span>
-          </div>
-          
-          <h2 className="font-serif text-3xl md:text-4xl text-[#F4F5F1] font-normal">
-            GROWTH PACKAGES FOR SERVICE WEBSITES
-          </h2>
-          
-          <div className="p-4 rounded-2xl bg-[#061C1A] border border-[#7CA99B]/20 max-w-4xl">
-            <p className="font-mono text-xs text-[#B9D8CE]">
-              🔧 <strong>Perfect for:</strong> Plumbers, Roofers, Electricians, Salons, Personal Trainers. Industries focused on booking.
-            </p>
-          </div>
-        </div>
-
-        {/* 4 Cards Grid for Service */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-          {SERVICE_GROWTH_PLANS.map((plan) => (
-            <div
-              key={plan.id}
-              className={`
-                relative rounded-3xl p-7 md:p-8 flex flex-col justify-between space-y-6 text-left transition-all duration-300 hover:-translate-y-1.5
-                ${plan.isPopular 
-                  ? "bg-[#0D2623] border border-[#B9D8CE]/40 shadow-2xl ring-1 ring-[#B9D8CE]/20" 
-                  : "bg-[#061C1A]/60 border border-white/8 hover:border-[#7CA99B]/30"}
-              `}
-            >
-              {plan.isPopular && (
-                <span className="absolute top-4 right-4 font-mono text-[8px] tracking-[0.2em] font-bold text-[#061C1A] bg-[#B9D8CE] px-3 py-1 rounded-full uppercase shadow">
-                  Popular
-                </span>
-              )}
-
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-serif text-xl text-[#F4F5F1] font-semibold">{plan.title}</h3>
-                  <p className="text-xs text-[#B8C6C1] font-light mt-1 min-h-[34px]">{plan.subtitle}</p>
-                </div>
-
-                <div className="pt-2 border-b border-white/5 pb-3">
-                  <div className="flex items-baseline space-x-1">
-                    <span className="font-serif text-3xl md:text-4xl text-[#F4F5F1] font-bold">{plan.price}</span>
-                    <span className="font-mono text-[10px] text-[#7CA99B] tracking-wider uppercase">{plan.period}</span>
-                  </div>
-                </div>
-
-                {/* Features list */}
-                <ul className="space-y-2.5 pt-1">
-                  {plan.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start space-x-2.5 text-xs text-[#B8C6C1] font-light">
-                      <Check className="w-3.5 h-3.5 text-[#B9D8CE] flex-shrink-0 mt-0.5" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <a
-                  href={plan.ctaLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`
-                    w-full flex items-center justify-center space-x-2 py-3 rounded-xl font-mono text-xs uppercase tracking-wider font-semibold cursor-pointer transition-all duration-200
-                    ${plan.isPopular 
-                      ? "bg-[#B9D8CE] text-[#061C1A] hover:bg-[#F4F5F1] shadow-md" 
-                      : "bg-[#123B35] text-[#F4F5F1] border border-[#B9D8CE]/15 hover:bg-[#B9D8CE] hover:text-[#061C1A]"}
-                  `}
-                >
-                  <span>{plan.ctaText}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ======================================================== */}
-      {/* 3. WEBSITE ONLY PRICES                                   */}
-      {/* ======================================================== */}
-      <section id="website-only-pricing" className="mb-28 scroll-mt-28">
-        <div className="text-left space-y-3 mb-10 pb-6 border-b border-white/5">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#7CA99B] bg-[#123B35]/60 border border-[#7CA99B]/30 px-3 py-1 rounded-full flex items-center gap-1.5">
-              <Layers className="w-3 h-3" />
-              Category 03
-            </span>
-            <span className="font-mono text-[10px] tracking-wider uppercase text-[#B8C6C1]/70">
-              One-Time Builds & Revamps
-            </span>
-          </div>
-          
-          <h2 className="font-serif text-3xl md:text-4xl text-[#F4F5F1] font-normal">
-            WEBSITE ONLY
-          </h2>
-          
-          <p className="text-xs text-[#B8C6C1] font-light max-w-2xl">
-            Clean standalone builds with no monthly maintenance obligation. Includes 1-year free hosting, full SSL security, and complete mobile optimization.
+      <section id="website-design" className="scroll-mt-28 border-t border-white/10 py-14 sm:py-16">
+        <SectionIntro
+          eyebrow="01 · Website projects"
+          title="Website Design & Development"
+          subtitle="Beautiful, functional websites built to help your business stand out and grow."
+        />
+        <div className="mb-7 rounded-xl border border-[#B9D8CE]/20 bg-[#0D2623]/65 p-5 sm:p-6">
+          <p className="text-sm leading-6 text-[#D4DEDA]">
+            Website projects start at <strong className="text-[#F4F5F1]">$1,800</strong>. Your
+            written proposal confirms the exact scope, price, timeline, hosting, and any ongoing
+            support before work begins.
           </p>
         </div>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <PriceCard
+            name="Business & Service Websites"
+            price="$1,800+"
+            description="A polished, mobile-friendly home for your services, story, and inquiries."
+            features={["Service-focused page structure", "Clear contact and booking paths"]}
+            href={mailto("Website Design")}
+            cta="Start My Website"
+          />
+          <PriceCard
+            name="E-commerce & Online Stores"
+            price="Custom quote"
+            description="A tailored storefront that helps customers browse and place orders."
+            features={["Product and category structure", "Checkout and payment setup scoped to your store"]}
+            href={mailto("E-commerce Website")}
+            cta="Let’s Build Your Store"
+          />
+          <PriceCard
+            name="Landing Pages"
+            price="Custom quote"
+            description="A focused page for a campaign, service, launch, or lead-generation goal."
+            features={["Clear message and next step", "Mobile-first layout"]}
+            href={mailto("Landing Page")}
+            cta="Plan My Landing Page"
+          />
+          <PriceCard
+            name="Custom Development"
+            price="Custom quote"
+            description="Purpose-built functionality for projects that need a more tailored approach."
+            features={["Scope and technical requirements reviewed first", "Proposal before development begins"]}
+            href={mailto("Custom Website Development")}
+            cta="Discuss Custom Development"
+          />
+        </div>
+        <div className="mt-6 rounded-xl border border-white/10 p-5 sm:flex sm:items-center sm:justify-between sm:gap-6">
+          <div>
+            <h3 className="font-serif text-xl text-[#F4F5F1]">Want to see your business in a design?</h3>
+            <p className="mt-1 text-sm leading-6 text-[#B8C6C1]">
+              Choose a template and create a personalized preview in the website generator.
+            </p>
+          </div>
+          <a
+            className={buttonSecondary + " mt-4 w-full shrink-0 sm:mt-0 sm:w-auto"}
+            href="/#interactive-preview"
+          >
+            Preview Your Own Website
+          </a>
+        </div>
+        <p className="mt-4 text-sm text-[#91AAA1]">
+          <a className="underline decoration-[#7CA99B]/60 underline-offset-4 hover:text-[#F4F5F1]" href="/services/web-design">
+            Explore website design services
+          </a>
+        </p>
+      </section>
 
-        {/* 3 Cards Grid for Website Only */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-          {WEBSITE_ONLY_PLANS.map((plan) => (
-            <div
-              key={plan.id}
-              className={`
-                relative rounded-3xl p-8 md:p-9 flex flex-col justify-between space-y-6 text-left transition-all duration-300 hover:-translate-y-1.5
-                ${plan.isPopular 
-                  ? "bg-[#0D2623] border border-[#B9D8CE]/40 shadow-2xl ring-1 ring-[#B9D8CE]/20" 
-                  : "bg-[#061C1A]/60 border border-white/8 hover:border-[#7CA99B]/30"}
-              `}
-            >
-              {plan.isPopular && (
-                <span className="absolute top-5 right-5 font-mono text-[8px] tracking-[0.2em] font-bold text-[#061C1A] bg-[#B9D8CE] px-3.5 py-1 rounded-full uppercase shadow">
-                  Popular
-                </span>
-              )}
+      <section id="maintenance" className="scroll-mt-28 border-t border-white/10 py-14 sm:py-16">
+        <SectionIntro
+          eyebrow="02 · Ongoing care"
+          title="Website Maintenance & Support"
+          subtitle="Keep your website secure, updated, and performing at its best."
+        />
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(250px,0.42fr)]">
+          <PriceCard
+            name="Essential Website Maintenance"
+            price="$99"
+            period="per month"
+            description="An ongoing care option for businesses that want help looking after their website."
+            features={["Website hosting included"]}
+            note="Your proposal will spell out the care, update, and support scope for your specific website."
+            href={mailto("Website Maintenance")}
+            cta="Protect My Website"
+            highlighted
+          />
+          <aside className="rounded-2xl border border-white/10 bg-[#0D2623]/35 p-6 sm:p-7">
+            <h3 className="font-serif text-2xl text-[#F4F5F1]">Need more hands-on support?</h3>
+            <p className="mt-3 text-sm leading-6 text-[#B8C6C1]">
+              Additional updates, technical help, and ongoing website care can be scoped to your
+              platform and needs.
+            </p>
+            <a className={buttonSecondary + " mt-6 w-full"} href={mailto("Website Care and Support")}>
+              Ask About Website Care
+            </a>
+          </aside>
+        </div>
+      </section>
 
-              <div className="space-y-5">
-                <div>
-                  <h3 className="font-serif text-2xl text-[#F4F5F1] font-semibold">{plan.title}</h3>
-                  <p className="text-xs text-[#B8C6C1] font-light mt-1">{plan.subtitle}</p>
-                </div>
+      <section id="social-media" className="scroll-mt-28 border-t border-white/10 py-14 sm:py-16">
+        <SectionIntro
+          eyebrow="03 · Consistent content"
+          title="Social Media Management"
+          subtitle="Consistent, engaging content that builds your brand and keeps your business connected with customers."
+        />
+        <div className="mb-7 rounded-xl border border-[#B9D8CE]/25 bg-[#0D2623] p-5 sm:flex sm:items-start sm:justify-between sm:gap-6">
+          <div>
+            <h3 className="font-serif text-xl text-[#F4F5F1]">
+              Commit to 6 Months. We’ll Waive Your Setup Fee.
+            </h3>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-[#B8C6C1]">
+              Choose an eligible six-month social media agreement and we’ll waive the setup fee for
+              the marketing accounts included in that package. Monthly service fees still apply;
+              shorter agreements use the standard setup fees listed below.
+            </p>
+          </div>
+          <span className="mt-4 inline-block shrink-0 rounded-full border border-[#B9D8CE]/20 px-3 py-1 font-mono text-[10px] uppercase tracking-wide text-[#B9D8CE] sm:mt-1">
+            6-month enrollment
+          </span>
+        </div>
+        <div className="grid items-stretch gap-4 lg:grid-cols-3">
+          {socialPlans.map((plan) => (
+            <div key={plan.name}>
+              <PriceCard
+                name={plan.name}
+                price={plan.price}
+                period="per month"
+                description={plan.platforms}
+                features={[
+                  ...plan.content,
+                  "Content planning, captions, scheduling, and monthly review",
+                  "Branded graphics with clear calls to action",
+                ]}
+                note={
+                  plan.note +
+                  " Content counts are unique monthly assets adapted for selected channels, not separate assets for each platform."
+                }
+                href={mailto("Social Media Management — " + plan.name)}
+                cta={plan.cta}
+                highlighted={plan.highlighted}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="mt-6 rounded-xl border border-white/10 p-5">
+          <h3 className="font-serif text-xl text-[#F4F5F1]">One-time platform setup</h3>
+          <p className="mt-1 text-sm leading-6 text-[#B8C6C1]">
+            Setup and profile optimization can also be purchased separately. The six-month waiver
+            applies to eligible package setup fees.
+          </p>
+          <ul className="mt-4 grid gap-2 text-sm text-[#D4DEDA] sm:grid-cols-2 lg:grid-cols-5">
+            {socialSetup.map(([platform, price]) => (
+              <li key={platform} className="flex justify-between gap-3 border-t border-white/10 pt-2">
+                <span>{platform}</span>
+                <strong className="whitespace-nowrap text-[#F4F5F1]">{price}</strong>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p className="mt-4 text-sm text-[#91AAA1]">
+          <a className="underline decoration-[#7CA99B]/60 underline-offset-4 hover:text-[#F4F5F1]" href="/services/content-growth">
+            Explore content and social media services
+          </a>
+        </p>
+      </section>
 
-                <div className="pt-2 border-b border-white/5 pb-4">
-                  <div className="flex items-baseline space-x-1.5">
-                    <span className="font-serif text-4xl text-[#F4F5F1] font-bold">{plan.price}</span>
-                    <span className="font-mono text-[10px] text-[#7CA99B] tracking-wider uppercase">{plan.period}</span>
-                  </div>
-                </div>
-
-                {/* Features list */}
-                <ul className="space-y-3 pt-1">
-                  {plan.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start space-x-3 text-xs text-[#B8C6C1] font-light">
-                      <Check className="w-4 h-4 text-[#B9D8CE] flex-shrink-0 mt-0.5" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <a
-                  href={plan.ctaLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`
-                    w-full flex items-center justify-center space-x-2 py-3.5 rounded-xl font-mono text-xs uppercase tracking-wider font-semibold cursor-pointer transition-all duration-200
-                    ${plan.isPopular 
-                      ? "bg-[#B9D8CE] text-[#061C1A] hover:bg-[#F4F5F1] shadow-md" 
-                      : "bg-[#123B35] text-[#F4F5F1] border border-[#B9D8CE]/15 hover:bg-[#B9D8CE] hover:text-[#061C1A]"}
-                  `}
-                >
-                  <span>{plan.ctaText}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
+      <section id="email-marketing" className="scroll-mt-28 border-t border-white/10 py-14 sm:py-16">
+        <SectionIntro
+          eyebrow="04 · Audience connection"
+          title="Email Marketing & Automation"
+          subtitle="Stay connected with your audience, nurture leads, and turn interest into lasting customer relationships."
+        />
+        <div className="mb-6 rounded-xl border border-white/10 p-5">
+          <p className="text-sm leading-6 text-[#B8C6C1]">
+            These are email marketing management packages. Website lead-response messages and
+            transactional notices, such as order confirmations, are separate systems and are not
+            included here by default.
+          </p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          {emailPlans.map((plan) => (
+            <div key={plan.name}>
+              <PriceCard
+                name={plan.name}
+                price={plan.price}
+                period="per month"
+                description="Monthly email marketing service."
+                note="Campaign volume, audience setup, and automation deliverables will be confirmed in your written proposal."
+                href={mailto("Email Marketing — " + plan.name)}
+                cta={plan.name === "Email Starter" ? "Start My Email Campaign" : "Discuss Email Automation"}
+                highlighted={plan.name === "Email Growth"}
+              />
             </div>
           ))}
         </div>
       </section>
 
-      {/* ======================================================== */}
-      {/* 4. CUSTOM CODED SITES                                    */}
-      {/* ======================================================== */}
-      <section id="custom-coded-pricing" className="mb-20 scroll-mt-28">
-        <div className="text-left space-y-3 mb-10 pb-6 border-b border-white/5">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#7CA99B] bg-[#123B35]/60 border border-[#7CA99B]/30 px-3 py-1 rounded-full flex items-center gap-1.5">
-              <Code2 className="w-3 h-3" />
-              Category 04
-            </span>
-            <span className="font-mono text-[10px] tracking-wider uppercase text-[#B8C6C1]/70">
-              Bespoke Engineering
-            </span>
-          </div>
-          
-          <h2 className="font-serif text-3xl md:text-4xl text-[#F4F5F1] font-normal">
-            CUSTOM CODED WEBSITES
-          </h2>
+      <section id="seo" className="scroll-mt-28 border-t border-white/10 py-14 sm:py-16">
+        <SectionIntro
+          eyebrow="05 · Search visibility"
+          title="SEO & Local Business Visibility"
+          subtitle="Help more customers discover your business when they’re searching for services like yours."
+        />
+        <div className="grid gap-3 sm:grid-cols-2">
+          {[
+            ["Search engine optimization", "On-page and ongoing search improvements"],
+            ["Local SEO", "Location-focused visibility and service area planning"],
+            ["Google Business Profile", "Profile setup and optimization"],
+            ["Technical SEO", "Site health and search readiness"],
+          ].map(([name, description]) => (
+            <div key={name} className="rounded-xl border border-white/10 bg-[#0D2623]/45 p-5">
+              <h3 className="font-serif text-xl text-[#F4F5F1]">{name}</h3>
+              <p className="mt-1 text-sm leading-6 text-[#B8C6C1]">{description}</p>
+            </div>
+          ))}
         </div>
+        <p className="mt-4 max-w-4xl text-xs leading-5 text-[#91AAA1]">
+          SEO work is scoped separately unless your written proposal says it is included. Google
+          Business Profile publishing already covered by a social media package is not charged again
+          as the same work under SEO.
+        </p>
+        <a className={buttonPrimary + " mt-6"} href={mailto("SEO and Local Visibility")}>
+          Improve My Online Visibility
+        </a>
+        <p className="mt-4 text-sm text-[#91AAA1]">
+          <a className="underline decoration-[#7CA99B]/60 underline-offset-4 hover:text-[#F4F5F1]" href="/services/seo">
+            Explore SEO services
+          </a>
+        </p>
+      </section>
 
-        {/* Custom Coded Feature Showcase Card */}
-        <div className="bg-[#0D2623] border border-[#B9D8CE]/30 rounded-3xl p-8 md:p-12 text-left relative overflow-hidden shadow-2xl">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#7CA99B]/10 via-[#123B35]/30 to-transparent pointer-events-none rounded-full blur-3xl" />
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-            <div className="lg:col-span-8 space-y-5">
-              <div className="flex items-center gap-2 text-xs font-mono text-[#7CA99B] uppercase tracking-wider">
-                <Zap className="w-4 h-4 text-[#B9D8CE]" />
-                <span>HTML / CSS / JavaScript / React</span>
-              </div>
-              
-              <h3 className="font-serif text-2xl md:text-3xl lg:text-4xl text-[#F4F5F1] font-normal leading-snug">
-                Fully custom websites coded in HTML/CSS/JS and React.
-              </h3>
-              
-              <p className="text-sm md:text-base text-[#B8C6C1] font-light leading-relaxed max-w-2xl">
-                {CUSTOM_CODED_PLAN.description} Built from scratch with zero template constraints, flawless Core Web Vitals, custom animations, custom API integrations, and unmatched page speeds.
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                {[
-                  "100% Bespoke UI/UX Design",
-                  "Ultra-Fast Load Times (< 1s)",
-                  "Custom React / Next.js Components",
-                  "API & Database Integrations",
-                  "Clean Semantic Code & Schema",
-                  "Full Intellectual Property Ownership"
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center space-x-2.5 text-xs text-[#B8C6C1]">
-                    <Check className="w-3.5 h-3.5 text-[#B9D8CE] flex-shrink-0" />
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Price Badge and CTA */}
-            <div className="lg:col-span-4 bg-[#061C1A]/80 border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col items-center justify-center text-center space-y-5">
-              <span className="font-mono text-[10px] uppercase tracking-widest text-[#7CA99B]">
-                Per-Page Flat Rate
-              </span>
-              
-              <div className="flex items-baseline justify-center space-x-1.5">
-                <span className="font-serif text-5xl text-[#F4F5F1] font-bold">{CUSTOM_CODED_PLAN.price}</span>
-                <span className="font-mono text-xs text-[#7CA99B] uppercase tracking-wider">{CUSTOM_CODED_PLAN.period}</span>
-              </div>
-              
-              <p className="text-[11px] text-[#B8C6C1] font-light leading-relaxed">
-                Scaled directly to your scope without hidden fees.
-              </p>
-
-              <a
-                href={CUSTOM_CODED_PLAN.ctaLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="
-                  w-full flex items-center justify-center space-x-2 py-4 rounded-xl font-mono text-xs uppercase tracking-wider font-semibold
-                  bg-[#B9D8CE] text-[#061C1A] hover:bg-[#F4F5F1] transition-all duration-200 cursor-pointer shadow-lg group
-                "
-              >
-                <span>{CUSTOM_CODED_PLAN.ctaText}</span>
-                <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
-            </div>
+      <section className="mt-4 rounded-2xl border border-[#B9D8CE]/25 bg-[#0D2623] px-6 py-10 sm:px-9 sm:py-12">
+        <div className="grid gap-7 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div className="max-w-2xl">
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#7CA99B]">
+              A thoughtful fit for your business
+            </p>
+            <h2 className="mt-3 font-serif text-3xl text-[#F4F5F1] sm:text-4xl">
+              Need Something More Custom?
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-[#B8C6C1] sm:text-base">
+              Not every business fits into a standard package. Let’s build a solution around your
+              goals, timeline, and budget.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row lg:min-w-[380px] lg:flex-col">
+            <a className={buttonPrimary} href={BOOKING_CALENDAR_URL} target="_blank" rel="noreferrer">
+              Let’s Build Something Great
+            </a>
+            <a className={buttonSecondary} href={mailto("New Project Inquiry")}>
+              Email Us About Your Project
+            </a>
           </div>
         </div>
       </section>
-
-      {/* Bottom FAQ / Assurance */}
-      <div className="mt-20 p-8 rounded-3xl bg-[#061C1A]/40 border border-white/5 text-left max-w-4xl mx-auto space-y-6">
-        <h4 className="font-serif text-xl text-[#F4F5F1] flex items-center gap-2">
-          <HelpCircle className="w-5 h-5 text-[#7CA99B]" />
-          <span>Have questions before booking?</span>
-        </h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-[#B8C6C1] font-light leading-relaxed">
-          <div>
-            <strong className="text-[#F4F5F1] block mb-1">What happens during the initial 6-month term?</strong>
-            Your monthly rate covers your entire custom website build, initial SEO setup, and complete ongoing maintenance. After 6 months, your build is 100% paid off, and your monthly investment decreases to standard care.
-          </div>
-          <div>
-            <strong className="text-[#F4F5F1] block mb-1">Can I upgrade or customize my package?</strong>
-            Yes. Every package can be tailored to add custom features, e-commerce products, additional blogs, or multi-location SEO. Book a consultation to get a tailored plan.
-          </div>
-        </div>
-        
-        <div className="pt-4 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="font-mono text-xs text-[#7CA99B]">Ready to take your digital presence to the next level?</span>
-          <a
-            href={BOOKING_CALENDAR_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center space-x-2 font-mono text-xs text-[#B9D8CE] hover:text-[#F4F5F1] uppercase tracking-wider transition-colors"
-          >
-            <span>Open Booking Calendar</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </a>
-        </div>
-      </div>
     </div>
   );
 }

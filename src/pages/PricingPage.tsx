@@ -237,9 +237,10 @@ export default function PricingPage() {
           />
           <PriceCard
             name="Custom Development"
-            price="Custom quote"
-            description="Purpose-built functionality for projects that need a more tailored approach."
-            features={["Scope and technical requirements reviewed first", "Proposal before development begins"]}
+            price="$250"
+            period="per page"
+            description="Custom websites coded in HTML, CSS, JavaScript, and React."
+            features={["Bespoke design and development", "Project scope confirmed before work begins"]}
             href={mailto("Custom Website Development")}
             cta="Discuss Custom Development"
           />

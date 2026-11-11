@@ -5,18 +5,18 @@
 @container (max-width:560px){.concept-nav span{display:none}.concept-hero-text,.concept-store .concept-hero-text{max-width:100%}.concept-cards,.concept-store .concept-cards,.concept-portfolio .concept-cards{grid-template-columns:1fr}.concept-story,.concept-restaurant .concept-story{grid-template-columns:1fr;gap:24px}.concept-portfolio .concept-cards article:nth-child(even){padding-top:0}}
 
 /* Nectarine-inspired storefront treatment: scoped to the online-store concept. */
-.concept-store{background:var(--preview-background);color:var(--preview-text);font-family:var(--preview-font-body,'DM Sans',Arial,sans-serif)}
+.concept-store{--store-pink:#e99ab7;background:var(--preview-background);color:var(--preview-text);font-family:var(--preview-font-body,'DM Sans',Arial,sans-serif)}
 .concept-store-promo{background:var(--preview-primary);color:var(--preview-text);padding:9px 16px;text-align:center;font:14px 'Bebas Neue',Impact,sans-serif;letter-spacing:.12em;text-transform:uppercase}
-.concept-store-promo span{color:#f4bfd0;padding:0 5px}
+.concept-store-promo span{color:inherit;padding:0 5px}
 .concept-store-nav{min-height:66px;padding:12px 5%;background:var(--preview-background);border-bottom:1px solid color-mix(in srgb,var(--preview-text) 14%,transparent);display:grid;grid-template-columns:1fr auto 1fr}
 .concept-store-brand{justify-self:start;display:flex;align-items:center}
-.concept-store-logo{font:clamp(23px,4cqw,34px)/.9 'Lilita One',system-ui,sans-serif;color:var(--preview-primary);letter-spacing:-.035em}
+.concept-store-nav .concept-store-logo{font:clamp(23px,4cqw,34px)/.9 'Lilita One',system-ui,sans-serif;color:var(--preview-text);letter-spacing:-.035em}
 .concept-store-nav nav{display:flex;gap:22px;align-items:center;font:17px 'Bebas Neue',Impact,sans-serif;letter-spacing:.07em;text-transform:uppercase}
 .concept-store-bag{justify-self:end;font:17px 'Bebas Neue',Impact,sans-serif;letter-spacing:.07em;text-transform:uppercase}
-.concept-store-bag b{display:inline-grid;place-items:center;background:#e99ab7;color:#22221f;border-radius:50%;width:20px;height:20px;font:12px 'DM Sans',Arial,sans-serif;margin-left:4px}
+.concept-store-bag b{display:inline-grid;place-items:center;background:var(--store-pink);color:#22221f;border-radius:50%;width:20px;height:20px;font:12px 'DM Sans',Arial,sans-serif;margin-left:4px}
 .concept-store-hero{display:grid;grid-template-columns:1fr 1fr;min-height:300px;background:var(--preview-surface)}
 .concept-store-hero-copy{padding:9% 8%;align-self:center}
-.concept-store-hero-copy small,.concept-store-story-copy small,.concept-store-contact small{color:var(--preview-primary);font:17px 'Bebas Neue',Impact,sans-serif;letter-spacing:.13em;text-transform:uppercase}
+.concept-store-hero-copy small,.concept-store-story-copy small,.concept-store-contact small{color:var(--preview-text);font:17px 'Bebas Neue',Impact,sans-serif;letter-spacing:.13em;text-transform:uppercase}
 .concept-store-hero h2{font:clamp(38px,7cqw,68px)/.88 'Bebas Neue',Impact,sans-serif;text-transform:uppercase;letter-spacing:-.015em;margin:16px 0}
 .concept-store-hero p,.concept-store-story-copy p{font:13px/1.7 'DM Sans',Arial,sans-serif;max-width:370px}
 .concept-store-cta{display:inline-flex;gap:12px;align-items:center;margin-top:10px;padding:11px 16px;background:var(--preview-primary);color:var(--preview-text);font:17px 'Bebas Neue',Impact,sans-serif;letter-spacing:.08em;text-transform:uppercase}
@@ -24,11 +24,11 @@
 .concept-store-art{min-height:300px;background-size:cover;background-position:center;position:relative;display:flex;align-items:flex-end;justify-content:flex-end;padding:20px;background-color:#e99ab7}
 .concept-store-art:before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(233,154,183,.28),rgba(147,170,88,.12))}
 .concept-store-art-name{position:relative;color:white;font:clamp(34px,5cqw,66px)/.85 'Lilita One',system-ui,sans-serif;text-shadow:0 1px 12px #3336;transform:rotate(-4deg)}
-.concept-store-sticker{position:absolute;top:18px;left:18px;width:78px;height:78px;border-radius:50%;background:#e99ab7;color:#22221f;display:grid;place-content:center;text-align:center;font:14px/.95 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em;transform:rotate(-9deg)}
-.concept-store-perks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px 5%;background:var(--preview-background);border-block:1px solid color-mix(in srgb,var(--preview-text) 12%,transparent);text-align:center;font:15px 'Bebas Neue',Impact,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.concept-store-sticker{position:absolute;top:18px;left:18px;width:78px;height:78px;border-radius:50%;background:var(--store-pink);color:#22221f;display:grid;place-content:center;text-align:center;font:14px/.95 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em;transform:rotate(-9deg)}
+.concept-store-perks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px 5%;background:var(--preview-primary);border-block:1px solid color-mix(in srgb,var(--preview-text) 12%,transparent);text-align:center;font:15px 'Bebas Neue',Impact,sans-serif;letter-spacing:.08em;text-transform:uppercase}
 .concept-store-perks span+span{border-left:1px solid color-mix(in srgb,var(--preview-text) 18%,transparent)}
 .concept-store-products{text-align:left;background:var(--preview-background)}
-.concept-store-products>small{color:var(--preview-primary);font:17px 'Bebas Neue',Impact,sans-serif;letter-spacing:.12em}
+.concept-store-products>small{color:var(--preview-text);font:17px 'Bebas Neue',Impact,sans-serif;letter-spacing:.12em}
 .concept-store .concept-store-products h3,.concept-store-story-copy h3,.concept-store-contact h3{font:clamp(34px,5cqw,58px)/.9 'Bebas Neue',Impact,sans-serif;letter-spacing:.01em;text-transform:uppercase;margin:12px 0 25px}
 .concept-store .concept-cards{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .concept-store .concept-cards article{min-width:0}
@@ -45,13 +45,14 @@
 .concept-store-story-copy p{max-width:420px}
 .concept-store-story .concept-store-cta{background:var(--preview-background);color:var(--preview-text)}
 .concept-store-contact{text-align:center;padding:7% 6%;background:var(--preview-surface)}
-.concept-store-contact>small{color:#d9799b}
+.concept-store-contact>small{color:var(--preview-text)}
 .concept-store-contact h3{margin:11px 0}
 .concept-store-contact p{font:13px/1.6 'DM Sans',Arial,sans-serif}
 .concept-store-contact>span{font-size:11px;color:color-mix(in srgb,var(--preview-text) 70%,transparent)}
 .concept-store-footer{background:var(--preview-text);color:var(--preview-surface);padding:18px 6%;display:flex;justify-content:space-between;gap:10px;font:14px 'Bebas Neue',Impact,sans-serif;letter-spacing:.08em;text-transform:uppercase}
 .concept-compact .concept-store-nav{grid-template-columns:1fr auto}
 .concept-compact .concept-store-nav nav{display:none}
+.concept-compact .concept-store-nav .concept-store-bag{display:block}
 .concept-compact .concept-store-hero{grid-template-columns:1fr}
 .concept-compact .concept-store-art{min-height:220px}
 .concept-compact .concept-store-perks{grid-template-columns:1fr;gap:8px}
@@ -61,7 +62,17 @@
 .concept-compact .concept-store-story-image{min-height:180px}
 .concept-compact .concept-store-footer{flex-direction:column;text-align:center}
 @container (max-width:560px){
- .concept-store-nav{grid-template-columns:1fr auto}.concept-store-nav nav{display:none}
+ .concept-store-nav{grid-template-columns:minmax(0,1fr) auto;min-height:58px;gap:12px}
+ .concept-store-nav nav{display:none}
+ .concept-store-nav .concept-store-bag{display:block;font-size:16px}
+ .concept-store-hero-copy{padding:24px 7% 26px}
+ .concept-store-hero h2{font-size:clamp(36px,12cqw,54px);margin:10px 0 12px}
+ .concept-store-cta{min-height:44px}
+ .concept-store-sticker{width:66px;height:66px;top:12px;left:12px;font-size:12px}
+ .concept-store-art-name{max-width:100%;overflow-wrap:anywhere;font-size:clamp(27px,9cqw,38px)}
+ .concept-store-product-art{padding:6px}
+ .concept-store-product-label{top:6px;left:6px;font-size:12px}
+ .concept-store-contact>span{overflow-wrap:anywhere}
  .concept-store-hero{grid-template-columns:1fr}.concept-store-art{min-height:220px}
  .concept-store-perks{grid-template-columns:1fr;gap:8px}.concept-store-perks span+span{border:0}
  .concept-store .concept-cards{grid-template-columns:1fr 1fr}
@@ -142,6 +153,6 @@
 .template-card-art-services img { height: clamp(38px, 6vw, 75px); }
 .template-card-art-portfolio { text-align: center; background: #39483d; color: #fff; }
 .template-card-art-portfolio span { font: 700 1.7rem 'Barlow Condensed', Impact, sans-serif; text-transform: uppercase; }
-.template-card-art-store { grid-template-columns: 1fr 1fr; align-items: center; gap: 8%; background: #efeee5; color: #22221f; }
+.template-card-art-store { grid-template-columns: 1fr 1fr; align-items: center; gap: 8%; background: #f5d8e2; color: #22221f; box-shadow: inset 0 .6rem #93aa58; }
 .template-card-art-store span { font: 1.55rem 'Bebas Neue', Impact, sans-serif; }
 .template-card-art-store img { aspect-ratio: 3 / 4; border-radius: 45% 45% .3rem .3rem; }

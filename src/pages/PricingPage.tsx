@@ -87,6 +87,53 @@ const emailPlans = [
   { name: "Email Growth", price: "$179" },
 ];
 
+type PlatformIconName = "google" | "instagram" | "tiktok" | "facebook" | "linkedin";
+
+const supportedPlatforms: { name: string; icon: PlatformIconName }[] = [
+  { name: "Google Business Profile", icon: "google" },
+  { name: "Instagram", icon: "instagram" },
+  { name: "TikTok", icon: "tiktok" },
+  { name: "Facebook", icon: "facebook" },
+  { name: "LinkedIn", icon: "linkedin" },
+];
+
+function PlatformLogo({ icon }: { icon: PlatformIconName }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-7 w-7 shrink-0 text-[#B9D8CE]"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {icon === "google" && (
+        <>
+          <path d="M12 2.5a7 7 0 0 0-7 7c0 5.1 7 12 7 12s7-6.9 7-12a7 7 0 0 0-7-7Z" fill="none" stroke="currentColor" strokeWidth="1.7" />
+          <text x="12" y="12.2" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="8" fontWeight="700" fill="currentColor">G</text>
+        </>
+      )}
+      {icon === "instagram" && (
+        <>
+          <rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+          <circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" strokeWidth="1.8" />
+          <circle cx="17.6" cy="6.7" r="1.1" />
+        </>
+      )}
+      {icon === "tiktok" && (
+        <path d="M19.7 8.1a6.4 6.4 0 0 1-4.2-2V15a5.1 5.1 0 1 1-5.1-5.1c.4 0 .8 0 1.2.1v3a2.2 2.2 0 1 0 1.1 1.9V2.5h3a6.4 6.4 0 0 0 4.1 4.4v3.1Z" />
+      )}
+      {icon === "facebook" && (
+        <path d="M13.6 21v-8h2.7l.4-3.1h-3.1V8c0-.9.3-1.5 1.6-1.5h1.7V3.7c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.3v2H7.6V13h2.8v8h3.2Z" />
+      )}
+      {icon === "linkedin" && (
+        <>
+          <path d="M19.3 3H4.7A1.7 1.7 0 0 0 3 4.7v14.6A1.7 1.7 0 0 0 4.7 21h14.6a1.7 1.7 0 0 0 1.7-1.7V4.7A1.7 1.7 0 0 0 19.3 3ZM8.3 18H5.6V9.1h2.7V18ZM7 7.9a1.6 1.6 0 1 1 0-3.2 1.6 1.6 0 0 1 0 3.2ZM18.4 18h-2.7v-4.3c0-1 0-2.3-1.4-2.3s-1.6 1.1-1.6 2.2V18H10V9.1h2.6v1.2h.1a2.9 2.9 0 0 1 2.6-1.4c2.8 0 3.3 1.8 3.3 4.1V18Z" />
+        </>
+      )}
+    </svg>
+  );
+}
+
 function SectionIntro({
   eyebrow,
   title,
@@ -334,6 +381,25 @@ export default function PricingPage() {
           title="Social Media Management"
           subtitle="Consistent, engaging content that builds your brand and keeps your business connected with customers."
         />
+        <div className="mb-7 rounded-2xl border border-white/10 bg-[#0D2623]/45 p-5 sm:p-6">
+          <div className="mb-4">
+            <h3 className="font-serif text-xl text-[#F4F5F1]">Platforms We Support</h3>
+            <p className="mt-1 text-sm leading-6 text-[#B8C6C1]">
+              Platform coverage depends on your selected package. Ask about LinkedIn when we scope your plan.
+            </p>
+          </div>
+          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            {supportedPlatforms.map((platform) => (
+              <li
+                key={platform.name}
+                className="flex min-h-16 min-w-0 items-center gap-2.5 rounded-xl border border-[#B9D8CE]/15 bg-[#061C1A]/45 px-3 py-3 text-sm text-[#D4DEDA]"
+              >
+                <PlatformLogo icon={platform.icon} />
+                <span>{platform.name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
         <div className="mb-7 rounded-xl border border-[#B9D8CE]/25 bg-[#0D2623] p-5 sm:flex sm:items-start sm:justify-between sm:gap-6">
           <div>
             <h3 className="font-serif text-xl text-[#F4F5F1]">

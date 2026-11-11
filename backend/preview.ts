@@ -2,6 +2,7 @@ import { createHash, createHmac, timingSafeEqual, randomUUID, sign } from 'node:
 import { Resend } from 'resend';
 export const templates = ['Restaurant','Business / Services','Portfolio','E-commerce / Online Store'];
 const booking = 'https://calendar.app.google/KYrg1R1surXjfRbn7';
+const ownerEmail = 'info@theivanacollective.com';
 export function validate(body: any) {
   if (!body || body.botField || body.contactConsent !== true || typeof body.marketingConsent !== 'boolean') throw Error('Please agree to be contacted about your website request.');
   const fields = ['fullName','email','businessName','industry','description','services','phone','tagline','theme'];
@@ -41,7 +42,13 @@ export function validate(body: any) {
   return {...clean, email:clean.email.toLowerCase(), template:body.template, colors:body.colors, contactConsent:true, marketingConsent:body.marketingConsent, consentTextVersion:'website-preview-v4'};
 }
 function signature(value: string) { return createHmac('sha256', process.env.PREVIEW_SIGNING_SECRET!).update(value).digest('base64url'); }
-export function token(id: string, role: string, seconds: number) { const value = `${id}.${role}.${Math.floor(Date.now()/1000)+seconds}`; return `${value}.${signature(value)}`; }
+function tokenUntil(id: string, role: string, expires: number) {
+  const value = `${id}.${role}.${expires}`;
+  return `${value}.${signature(value)}`;
+}
+export function token(id: string, role: string, seconds: number) {
+  return tokenUntil(id, role, Math.floor(Date.now()/1000) + seconds);
+}
 export function authorized(value: string, id: string) {
   const parts = value.split('.');
   if (parts.length !== 4 || parts[0] !== id || !['visitor','owner'].includes(parts[1]) || Number(parts[2]) < Date.now()/1000) return false;
@@ -88,27 +95,101 @@ export async function handlePreview(request: Request) {
     if (allowed !== true) return json(429,{error:'Too many requests. Please try again later.'});
     const hash = createHash('sha256').update(JSON.stringify(config)).digest('hex');
     // Atomic insert with a unique idempotency key. Repeated clicks reuse the saved record.
-    let rows = await db(`website_previews?on_conflict=request_key`,{method:'POST',headers:{Prefer:'resolution=ignore-duplicates,return=representation'},body:JSON.stringify({id:randomUUID(),request_key:key,config,content_hash:hash,created_at:new Date().toISOString()})});
+    let rows = await db(`website_previews?on_conflict=request_key`,{method:'POST',headers:{Prefer:'resolution=ignore-duplicates,return=representation'},body:JSON.stringify({id:randomUUID(),request_key:key,config,content_hash:hash,created_at:new Date().toISOString(),notification_due:new Date().toISOString()})});
     if (!rows.length) rows = await db(`website_previews?request_key=eq.${key}&select=*`);
     const row = rows[0];
     if (row.content_hash !== hash) return json(409,{error:'Your selections changed. Please submit again.'});
     let emailStatus = row.email_status || 'pending';
     if (process.env.RESEND_API_KEY && process.env.FROM_EMAIL && emailStatus !== 'accepted') {
-      const ownerUrl = `${url.origin}/?preview=${row.id}&access=${token(row.id,'owner',7*86400)}#interactive-preview`;
-      const resend = new Resend(process.env.RESEND_API_KEY);
-      const details = Object.entries(config).filter(([k])=>!['logo','image'].includes(k)).map(([k,v])=>`${k}: ${Array.isArray(v)?v.join(', '):v}`).join('\n');
-      const isQuote = config.requestType === 'quote';
-      const subject = isQuote ? 'Website quote request' : 'Website request';
-      const confirmation = isQuote
-        ? 'I received your quote request and will review your design, timeline, and must-have features before following up about pricing.'
-        : 'Your request has been saved. I look forward to discussing your website.';
-      const results = await Promise.all([
-        resend.emails.send({from:process.env.FROM_EMAIL,to:'info@theivanacollective.com',replyTo:config.email,subject:`${subject}: ${config.businessName.replace(/[\r\n]/g,' ')}`,text:`${details}\nSubmitted: ${row.created_at}\nReview (expires in 7 days): ${ownerUrl}`},{idempotencyKey:`owner/${row.id}`}),
-        resend.emails.send({from:process.env.FROM_EMAIL,to:config.email,replyTo:'info@theivanacollective.com',subject:`Your ${subject.toLowerCase()} | The Ivana Collective`,text:`Hi ${config.fullName},\n\nThank you for sharing your vision for ${config.businessName}. ${confirmation}\n\nSchedule a consultation: ${booking}\n\nIvana\nThe Ivana Collective`},{idempotencyKey:`visitor/${row.id}`})
-      ]);
-      emailStatus = results.every(r=>r.data?.id && !r.error) ? 'accepted' : 'failed';
-      await db(`website_previews?id=eq.${row.id}`,{method:'PATCH',body:JSON.stringify({email_status:emailStatus,email_ids:results.map(r=>r.data?.id || null)})});
+      try {
+        const rows = await claimNotifications(row.id);
+        if (rows.length) emailStatus = await sendNotifications(rows[0]);
+      } catch {
+        // The lead is already saved. Its scheduled retry remains in the database.
+        console.error('Website preview notification attempt could not finish');
+      }
     }
     return json(200,{id:row.id,config:row.config,emailStatus,message:'Your website request is saved.'},{'Set-Cookie':`preview_${row.id}=${token(row.id,'visitor',86400)}; HttpOnly; Secure; SameSite=Lax; Path=/api/preview-submit; Max-Age=86400`});
   } catch { return json(503,{error:'We could not complete your request. Please retry; duplicate clicks will not create another submission.'}); }
+}
+
+type Notification = {
+  id: string;
+  config: ReturnType<typeof validate>;
+  created_at: string;
+  email_ids: [string | null, string | null] | null;
+  notification_attempts: number;
+};
+
+function claimNotifications(id: string | null = null): Promise<Notification[]> {
+  return db('rpc/claim_preview_notifications', {method:'POST',body:JSON.stringify({preview_id:id})});
+}
+
+function escapeHtml(value: unknown) {
+  return String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[char]!);
+}
+
+function brandedEmail(title: string, content: string) {
+  return `<div style="background:#f4efe5;padding:24px;color:#17231f;font:16px/1.5 Arial,sans-serif"><div style="max-width:600px;margin:auto;background:#fff;padding:24px"><p style="color:#163c36;letter-spacing:.1em">THE IVANA COLLECTIVE</p><h1 style="font:28px Georgia,serif">${title}</h1>${content}</div></div>`;
+}
+
+async function sendNotifications(row: Notification) {
+  const {config} = row;
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const from = process.env.FROM_EMAIL!;
+  const ids = row.email_ids ?? [null, null];
+  const expires = Math.floor(Date.parse(row.created_at)/1000) + 7*86400;
+  // The same record always produces the same URL and provider payload on retry.
+  const ownerUrl = `https://theivanacollective.com/?preview=${row.id}&access=${tokenUntil(row.id,'owner',expires)}#interactive-preview`;
+  const fields = [
+    ['Full name',config.fullName], ['Email',config.email], ['Business',config.businessName],
+    ['Category',config.industry], ['Description',config.description], ['Template',config.template],
+    ['Preferred colors',config.colors.join(', ')], ['Services or products',config.services],
+    ['Phone',config.phone], ['Tagline',config.tagline], ['Design direction',config.theme],
+    ['Launch timeline',config.launchTimeline], ['Must-have features',config.projectRequirements],
+    ['Logo provided',config.logo ? 'Yes' : 'No'], ['Hero image provided',config.image ? 'Yes' : 'No'],
+    ['Marketing opt-in',config.marketingConsent ? 'Yes' : 'No'], ['Submitted (UTC)',row.created_at],
+  ].filter(([,value])=>value);
+  const confirmation = 'Thank you for sharing your website plans. I’ll review your request and follow up about the next steps.';
+  const messages = [
+    {
+      from, to:ownerEmail, replyTo:config.email,
+      subject:`New Website Generator Lead — ${config.businessName.replace(/[\r\n]+/g,' ')}`,
+      text:`${fields.map(([label,value])=>`${label}: ${value}`).join('\n')}\n\nOpen saved preview (expires in 7 days): ${ownerUrl}`,
+      html:brandedEmail('New website generator lead', `${fields.map(([label,value])=>`<p style="white-space:pre-wrap"><strong>${label}</strong><br>${escapeHtml(value)}</p>`).join('')}<p><a href="${escapeHtml(ownerUrl)}">Open saved preview</a> · expires in 7 days</p>`),
+    },
+    {
+      from, to:config.email, replyTo:ownerEmail,
+      subject:'We received your website request | The Ivana Collective',
+      text:`Hi ${config.fullName},\n\n${confirmation}\n\nSchedule a consultation: ${booking}\n\nIvana\nThe Ivana Collective`,
+      html:brandedEmail('We received your website request', `<p>Hi ${escapeHtml(config.fullName)},</p><p>${confirmation}</p><p><a href="${booking}">Schedule a consultation</a></p><p>Ivana<br>The Ivana Collective</p>`),
+    },
+  ];
+  const results = await Promise.allSettled(messages.map(async (message,index)=>{
+    if (ids[index]) return ids[index];
+    const role = index === 0 ? 'owner' : 'visitor';
+    const {data,error} = await resend.emails.send(message,{idempotencyKey:`generator/${role}/${row.id}`});
+    return error ? null : data?.id ?? null;
+  }));
+  const emailIds = results.map(result=>result.status === 'fulfilled' ? result.value : null);
+  const emailStatus = emailIds.every(Boolean) ? 'accepted' : 'failed';
+  await db(`website_previews?id=eq.${row.id}&notification_attempts=eq.${row.notification_attempts}`,{
+    method:'PATCH',body:JSON.stringify({email_status:emailStatus,email_ids:emailIds,...(emailStatus === 'accepted' ? {notification_due:null} : {})}),
+  });
+  return emailStatus;
+}
+
+export async function handleNotificationRetry(authorization: string) {
+  const secret = process.env.PREVIEW_RETRY_SECRET;
+  const actual = Buffer.from(authorization);
+  const expected = Buffer.from(`Bearer ${secret}`);
+  if (!secret || actual.length !== expected.length || !timingSafeEqual(actual,expected)) return json(401,{error:'Unauthorized'});
+  if (!process.env.RESEND_API_KEY || !process.env.FROM_EMAIL) return json(503,{error:'Email unavailable'});
+  try {
+    const rows = await claimNotifications();
+    const results = await Promise.allSettled(rows.map(sendNotifications));
+    return json(200,{claimed:rows.length,accepted:results.filter(r=>r.status === 'fulfilled' && r.value === 'accepted').length});
+  } catch {
+    return json(503,{error:'Notification storage unavailable'});
+  }
 }

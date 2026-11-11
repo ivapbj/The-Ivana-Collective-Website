@@ -36,3 +36,45 @@ test('saves exact design, deduplicates retries and requires protected access',as
  const access=token(data.id,'owner',60);assert.equal((await handlePreview(new Request(`https://example.com/api/preview-submit?id=${data.id}&access=${access}`))).status,200);
  }finally {globalThis.fetch=original;}
 });
+
+test('retries the failed email without resending the accepted owner notification',async()=>{
+ const {handleNotificationRetry}=await import('./preview');
+ process.env.PREVIEW_RETRY_SECRET='test-retry-secret';
+ process.env.RESEND_API_KEY='re_test';
+ process.env.FROM_EMAIL='Test <test@example.com>';
+ const original=globalThis.fetch;
+ const notification={id:'12345678-1234-1234-1234-123456789abc',config:validate(valid),created_at:new Date().toISOString(),email_ids:[null,null],notification_attempts:0};
+ const sent: {to:string,subject:string,text:string,reply_to:string[]}[]=[];
+ globalThis.fetch=async (url,init)=>{
+  if(String(url).includes('/rpc/claim_preview_notifications')){
+   notification.notification_attempts++;
+   return Response.json([notification]);
+  }
+  if(init?.method==='PATCH'){
+   notification.email_ids=JSON.parse(String(init.body)).email_ids;
+   return Response.json([notification]);
+  }
+  const message=JSON.parse(String(init?.body));
+  sent.push(message);
+  if(sent.length===2) return Response.json({name:'application_error',message:'Test outage'},{status:500});
+  return Response.json({id:'message-'+sent.length});
+ };
+ try {
+  assert.equal((await handleNotificationRetry('Bearer invalid')).status,401);
+  const first=await handleNotificationRetry('Bearer test-retry-secret');
+  assert.deepEqual(await first.json(),{claimed:1,accepted:0});
+  assert.deepEqual(notification.email_ids,['message-1',null]);
+  const second=await handleNotificationRetry('Bearer test-retry-secret');
+  assert.deepEqual(await second.json(),{claimed:1,accepted:1});
+  assert.equal(sent.length,3);
+  assert.equal(sent[0].to,'info@theivanacollective.com');
+  assert.equal(sent[0].subject,'New Website Generator Lead — Acme');
+  assert.match(sent[0].text,/theivanacollective.com\/\?preview=/);
+  assert.doesNotMatch(sent[2].text,/\?preview=/);
+ }finally {
+  globalThis.fetch=original;
+  delete process.env.PREVIEW_RETRY_SECRET;
+  delete process.env.RESEND_API_KEY;
+  delete process.env.FROM_EMAIL;
+ }
+});

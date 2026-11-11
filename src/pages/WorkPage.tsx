@@ -3,6 +3,7 @@ import SeoMeta from "../components/SeoMeta";
 import { ProjectImage } from "../components/ProjectImage";
 import { PROJECTS_DATA } from "../data";
 import { Project } from "../types";
+import { Link } from "../context/NavigationContext";
 import { ArrowUpRight } from "lucide-react";
 import "./WorkPage.css";
 
@@ -25,6 +26,11 @@ function DeviceImage({ project }: { project: Project }) {
   );
 }
 
+const phoneImages: Record<string, string> = {
+  "dr-sheds": "/images/drsheds-phone.webp",
+  "legacy-economic-development": "/images/legacy-edc-phone.webp",
+};
+
 function DeviceDisplay({ project }: { project: Project }) {
   return (
     <div className="work-device-wrap">
@@ -40,10 +46,13 @@ function DeviceDisplay({ project }: { project: Project }) {
       <div className="work-phone">
         <div className="work-phone-screen">
           <div className="work-phone-island" aria-hidden="true" />
-          <DeviceImage project={project} />
+          {phoneImages[project.id] ? (
+            <div className="work-image-holder">
+              <img src={phoneImages[project.id]} alt={project.client} className="work-device-image" loading="lazy" />
+            </div>
+          ) : <DeviceImage project={project} />}
         </div>
       </div>
-      <p className="work-phone-caption">Desktop project image shown within phone frame.</p>
     </div>
   );
 }
@@ -96,6 +105,9 @@ export default function WorkPage({ onSelectProject, onScheduleCall }: WorkPagePr
           <span className="work-eyebrow">Aesthetic Portfolio</span>
           <h1>Exceptional design.<br /><span>Impeccable performance.</span></h1>
           <p>Browse our selected case studies. Each project highlights a complete synthesis of custom typography, premium visual compositions, zero template bloat, and highly-lucrative search rankings.</p>
+          <div className="work-actions">
+            <Link href="/#interactive-preview" className="work-action work-action-primary">Preview Your Own Website <ArrowUpRight size={16} aria-hidden="true" /></Link>
+          </div>
         </header>
 
         <div className="work-list">
@@ -129,6 +141,9 @@ export default function WorkPage({ onSelectProject, onScheduleCall }: WorkPagePr
                   <button type="button" onClick={() => onSelectProject(project)} className="work-action work-action-primary">View case study <ArrowUpRight size={16} aria-hidden="true" /></button>
                   {project.websiteUrl && <a href={project.websiteUrl} target="_blank" rel="noopener noreferrer" className="work-action work-action-secondary" aria-label={`Visit ${project.client} website (opens in a new tab)`}>Visit website <ArrowUpRight size={16} aria-hidden="true" /></a>}
                 </div>
+                {index === 0 && (
+                  <Link href="/#interactive-preview" className="work-project-generator">Build Something Like This <ArrowUpRight size={14} aria-hidden="true" /></Link>
+                )}
               </div>
             </article>
           ))}
@@ -137,7 +152,10 @@ export default function WorkPage({ onSelectProject, onScheduleCall }: WorkPagePr
         <section className="work-cta">
           <h2>Build a digital system designed to scale.</h2>
           <p>Your brand narrative deserves elite visual execution. Connect directly with our lead developer to discuss your custom project.</p>
-          <button onClick={onScheduleCall} className="work-action work-action-primary">Schedule Strategy Call <ArrowUpRight size={16} aria-hidden="true" /></button>
+          <div className="work-actions work-cta-actions">
+            <Link href="/#interactive-preview" className="work-action work-action-primary">Start Building Your Website <ArrowUpRight size={16} aria-hidden="true" /></Link>
+            <button onClick={onScheduleCall} className="work-action work-action-secondary">Schedule Strategy Call <ArrowUpRight size={16} aria-hidden="true" /></button>
+          </div>
         </section>
       </div>
     </div>

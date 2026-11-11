@@ -90,7 +90,7 @@ export default function StylePreviewSection({onScheduleCall}:{onScheduleCall:()=
  const input='min-w-0 w-full rounded-lg border border-white/20 bg-[#0d2623] p-3 text-base text-white focus:outline-2 focus:outline-[#b9d8ce]';
  const textField=(name:keyof typeof initial,label:string,required=false,multiline=false)=><label className="block space-y-2" key={name}><span>{label}{required?' *':''}</span>{multiline?<textarea className={input} required={required} maxLength={3000} value={String(form[name])} onChange={e=>update(name,e.target.value)}/>:<input className={input} required={required} maxLength={200} type={name==='email'?'email':'text'} value={String(form[name])} onChange={e=>update(name,e.target.value)}/>}</label>;
  const preview=form;
- return <section id="interactive-preview" className="bg-[#061c1a] text-[#f4f5f1] px-5 py-20"><div className="max-w-7xl mx-auto space-y-10">
+ return <section id="interactive-preview" className="scroll-mt-20 bg-[#061c1a] text-[#f4f5f1] px-5 py-20"><div className="max-w-7xl mx-auto space-y-10">
   <header className="max-w-2xl space-y-4"><h2 className="text-4xl md:text-5xl">Imagine your website.</h2><p>Choose a template and watch it change as you add your business details. Request a quote when you’re ready.</p></header>
   <fieldset><legend className="text-xl mb-5">1. Choose your template</legend><div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">{choices.map(c=><label key={c.name} className={`cursor-pointer rounded-xl overflow-hidden border-2 ${form.template===c.name?'border-[#b9d8ce]':'border-white/15'}`}><div aria-hidden="true" className={`template-card-art template-card-art-${c.image}`}>
   <span>{cardHeadlines[c.name]}</span>

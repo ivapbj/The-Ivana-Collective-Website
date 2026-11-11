@@ -6,6 +6,17 @@ const choices: {name:ConceptType;image:string;summary:string}[] = [
  {name:'Portfolio',image:'portfolio',summary:'Bold typography and a curated project gallery.'},
  {name:'E-commerce / Online Store',image:'store',summary:'Editorial collections and featured products.'}
 ];
+const cardHeadlines: Record<ConceptType, string> = {
+ 'Restaurant': 'A place to gather',
+ 'Business / Services': 'Good work. Done with care.',
+ 'Portfolio': 'Work with a point of view.',
+ 'E-commerce / Online Store': 'Find something worth keeping.',
+};
+const directionStyles: Record<string, string> = {
+ 'Gen Z Brutalist': 'brutalist',
+ 'Hypercolor Modern': 'hypercolor',
+ 'Clean Modern': 'clean',
+};
 const forestPalette = ['#163c36', '#f4efe5', '#17231f'];
 const servicesPalette = ['#741d32', '#f5f0e9', '#201b1b'];
 const storePalette = ['#93aa58', '#efeee5', '#22221f'];
@@ -75,7 +86,10 @@ export default function StylePreviewSection({onScheduleCall}:{onScheduleCall:()=
  const preview=form;
  return <section id="interactive-preview" className="bg-[#061c1a] text-[#f4f5f1] px-5 py-20"><div className="max-w-7xl mx-auto space-y-10">
   <header className="max-w-2xl space-y-4"><h2 className="text-4xl md:text-5xl">Imagine your website.</h2><p>Choose a template and watch it change as you add your business details. Request a quote when you’re ready.</p></header>
-  <fieldset><legend className="text-xl mb-5">1. Choose your template</legend><div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">{choices.map(c=><label key={c.name} className={`cursor-pointer rounded-xl overflow-hidden border-2 ${form.template===c.name?'border-[#b9d8ce]':'border-white/15'}`}><img src={`/images/concept-${c.image}.webp`} alt={`${c.name} template visual example`} className="w-full aspect-[4/3] object-cover"/><div className="p-4 space-y-3"><h3 className="text-lg">{c.name}</h3><p className="text-sm text-white/70">{c.summary}</p><span className="flex gap-2 items-center"><input type="radio" name="template" checked={form.template===c.name} onChange={()=>selectTemplate(c.name)}/>{form.template===c.name?'Selected':'Choose template'}</span></div></label>)}</div></fieldset>
+  <fieldset><legend className="text-xl mb-5">1. Choose your template</legend><div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">{choices.map(c=><label key={c.name} className={`cursor-pointer rounded-xl overflow-hidden border-2 ${form.template===c.name?'border-[#b9d8ce]':'border-white/15'}`}><div aria-hidden="true" className={`template-card-art template-card-art-${c.image}`}>
+  <span>{cardHeadlines[c.name]}</span>
+  <img src={`/images/concept-${c.image}.webp`} alt="" />
+ </div><div className="p-4 space-y-3"><h3 className="text-lg">{c.name}</h3><p className="text-sm text-white/70">{c.summary}</p><span className="flex gap-2 items-center"><input type="radio" name="template" checked={form.template===c.name} onChange={()=>selectTemplate(c.name)}/>{form.template===c.name?'Selected':'Choose template'}</span></div></label>)}</div></fieldset>
   <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-8">
   <form id="website-editor" onSubmit={submit} className="min-w-0 scroll-mt-28 space-y-8 rounded-2xl border border-white/15 bg-[#0d2623] p-5 text-sm sm:p-7">
    <div className="flex flex-wrap items-center justify-between gap-3"><h3 className="text-2xl">Create your site</h3><a className="underline lg:hidden" href="#saved-website-preview">View live preview</a></div>
@@ -97,6 +111,9 @@ export default function StylePreviewSection({onScheduleCall}:{onScheduleCall:()=
   <aside id="saved-website-preview" aria-label="Website preview" className="min-w-0 scroll-mt-28 space-y-3 lg:sticky lg:top-24">
    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/15 bg-[#0d2623] px-4 py-3">
     <h3 className="text-sm font-semibold uppercase tracking-wider">Live website preview</h3>
+    <select aria-label="Preview template" className="max-w-full rounded-md border border-white/20 bg-[#0d2623] px-2 py-2 text-xs" value={form.template} onChange={e=>selectTemplate(e.target.value as ConceptType)}>
+     {choices.map(choice=><option key={choice.name}>{choice.name}</option>)}
+    </select>
     <div className="flex flex-wrap gap-1" role="group" aria-label="Preview width">
      {[['Desktop','100%'],['Tablet','768px'],['Mobile','375px']].map(([label,value])=>(
       <button key={label} type="button" aria-pressed={width===value} className={`rounded-md px-2 py-2 text-xs ${width===value?'bg-[#b9d8ce] text-[#061c1a]':'hover:bg-white/10'}`} onClick={()=>setWidth(value)}>{label}</button>
@@ -109,7 +126,7 @@ export default function StylePreviewSection({onScheduleCall}:{onScheduleCall:()=
      <span className="min-w-0 truncate rounded bg-[#061c1a] px-3 py-1 text-xs text-[#b9d8ce]">{preview.businessName.trim() || 'Your business'}</span>
     </div>
     <div tabIndex={0} aria-label="Scrollable homepage preview" className="max-h-[65vh] min-h-0 overflow-auto p-2 focus-visible:outline-2 focus-visible:outline-[#b9d8ce] sm:p-3 lg:max-h-[calc(100dvh-17rem)]">
-     <div className="mx-auto max-w-full overflow-hidden" style={{width,'--preview-primary':preview.colors[0],'--preview-background':preview.colors[1],'--preview-text':preview.colors[2],'--preview-surface':preview.colors[1],'--preview-font-heading':preview.template==='E-commerce / Online Store'?'Bebas Neue, Impact, sans-serif':preview.theme==='Luxury Editorial'?'Georgia, serif':'Arial, sans-serif','--preview-font-body':preview.template==='E-commerce / Online Store'?'DM Sans, Arial, sans-serif':'Arial, sans-serif'} as React.CSSProperties}>
+     <div className="mx-auto max-w-full overflow-hidden" data-design-direction={preview.template==='Restaurant' ? directionStyles[preview.theme] : undefined} style={{width,'--preview-primary':preview.colors[0],'--preview-background':preview.colors[1],'--preview-text':preview.colors[2],'--preview-surface':preview.colors[1],'--preview-font-heading':preview.template==='E-commerce / Online Store'?'Bebas Neue, Impact, sans-serif':preview.theme==='Luxury Editorial'?'Georgia, serif':'Arial, sans-serif','--preview-font-body':preview.template==='E-commerce / Online Store'?'DM Sans, Arial, sans-serif':'Arial, sans-serif'} as React.CSSProperties}>
       <HomepageConcept type={preview.template} name={preview.businessName} tagline={preview.tagline} industry={preview.industry} email={saved?.email || ''} phone={preview.phone} logo={preview.logo} compact={width==='375px'} description={preview.description} services={preview.services} image={preview.image}/>
      </div>
     </div>

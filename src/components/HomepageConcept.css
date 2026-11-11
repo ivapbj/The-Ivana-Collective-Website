@@ -68,3 +68,80 @@
  .concept-store-story{grid-template-columns:1fr;gap:20px}.concept-store-story-image{min-height:180px}
  .concept-store-footer{flex-direction:column;text-align:center}
 }
+
+/* Design directions change the composition while the selected palette supplies the colors. */
+[data-design-direction="brutalist"] .concept-nav {
+  border-bottom: 4px solid var(--preview-text);
+  text-transform: uppercase;
+}
+[data-design-direction="brutalist"] .concept-photo { align-items: flex-end; }
+[data-design-direction="brutalist"] .concept-hero-text {
+  max-width: 100%;
+  width: 100%;
+  margin: 0 0 4%;
+  padding: 5%;
+  border-block: 4px solid var(--preview-text);
+  background: var(--preview-background);
+  color: var(--preview-text);
+}
+[data-design-direction="brutalist"] .concept h2 {
+  font-family: Impact, 'Arial Black', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -.035em;
+  font-size: clamp(2.25rem, 10cqw, 5.5rem);
+}
+[data-design-direction="brutalist"] .concept-btn {
+  border: 2px solid var(--preview-text);
+  box-shadow: 4px 4px 0 var(--preview-text);
+  text-transform: uppercase;
+}
+[data-design-direction="brutalist"] .concept-tile { border-radius: 0; }
+
+[data-design-direction="hypercolor"] .concept-hero {
+  padding: 5%;
+  background: linear-gradient(135deg, var(--preview-background), var(--preview-primary));
+}
+[data-design-direction="hypercolor"] .concept-photo {
+  border-radius: 2rem;
+  overflow: hidden;
+  align-items: flex-end;
+}
+[data-design-direction="hypercolor"] .concept-hero-text {
+  max-width: 100%;
+  width: 100%;
+  padding: 6%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, .85));
+}
+[data-design-direction="hypercolor"] .concept h2 {
+  font-family: 'DM Sans', Arial, sans-serif;
+  font-size: clamp(2rem, 8.5cqw, 5rem);
+  font-weight: 700;
+  letter-spacing: -.055em;
+}
+[data-design-direction="hypercolor"] .concept-btn { border-radius: 999px; }
+[data-design-direction="clean"] .concept-hero { padding: 4%; }
+[data-design-direction="clean"] .concept-photo { border-radius: .75rem; }
+
+.template-card-art {
+  position: relative;
+  display: grid;
+  align-content: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 8%;
+}
+.template-card-art span { z-index: 1; line-height: .98; }
+.template-card-art img { width: 100%; height: 100%; object-fit: cover; }
+.template-card-art-restaurant { color: #fff; background: #151c16; }
+.template-card-art-restaurant img, .template-card-art-portfolio img { position: absolute; inset: 0; opacity: .55; }
+.template-card-art-restaurant span { font: 1.5rem Georgia, serif; }
+.template-card-art-services { gap: 10%; background: #f5f0e9; color: #741d32; }
+.template-card-art-services span { font: 1.55rem 'Instrument Serif', Georgia, serif; text-transform: uppercase; }
+.template-card-art-services img { height: clamp(38px, 6vw, 75px); }
+.template-card-art-portfolio { text-align: center; background: #39483d; color: #fff; }
+.template-card-art-portfolio span { font: 700 1.7rem 'Barlow Condensed', Impact, sans-serif; text-transform: uppercase; }
+.template-card-art-store { grid-template-columns: 1fr 1fr; align-items: center; gap: 8%; background: #efeee5; color: #22221f; }
+.template-card-art-store span { font: 1.55rem 'Bebas Neue', Impact, sans-serif; }
+.template-card-art-store img { aspect-ratio: 3 / 4; border-radius: 45% 45% .3rem .3rem; }

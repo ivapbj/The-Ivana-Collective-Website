@@ -15,10 +15,10 @@ Deno.serve(async req => {
  }catch{return fail(401)}
  const parsed=new URL('https://storage.invalid/'+path);
  const entries=[...parsed.searchParams.entries()];
- if(parsed.pathname==='/rpc/allow_preview_request') {if(req.method!=='POST'||entries.length)return fail(403);}
+ if(['/rpc/allow_preview_request','/rpc/claim_preview_notifications'].includes(parsed.pathname)) {if(req.method!=='POST'||entries.length)return fail(403);}
  else if(parsed.pathname==='/website_previews'){
  if(!['GET','POST','PATCH'].includes(req.method))return fail(405);
- if(!entries.every(([k,v])=> k==='id'||k==='request_key' ? v.startsWith('eq.')&&uuid.test(v.slice(3)) : k==='select'?['*','id,config,created_at'].includes(v):k==='on_conflict'&&v==='request_key'))return fail(403);
+ if(!entries.every(([k,v])=> k==='id'||k==='request_key' ? v.startsWith('eq.')&&uuid.test(v.slice(3)) : k==='select'?['*','id,config,created_at'].includes(v):k==='notification_attempts'?/^eq\.[0-9]+$/.test(v):k==='on_conflict'&&v==='request_key'))return fail(403);
  if(req.method==='PATCH'&&!parsed.searchParams.has('id'))return fail(403);
  }else return fail(403);
  const key=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;

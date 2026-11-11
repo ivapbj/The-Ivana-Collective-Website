@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://theivanacollective.com/sitemap.xml

@@ -49,7 +49,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
   const menuItems = [
     { id: "hero", label: "Home", path: "/" },
     { id: "services", label: "Services", path: "/services" },
-    { id: "work", label: "Work", path: "/work" },
+    { id: "work", label: "Portfolio", path: "/portfolio" },
     { id: "pricing", label: "Pricing", path: "/pricing" },
     { id: "about", label: "About", path: "/about" },
     { id: "contact", label: "Contact", path: "/contact" }
@@ -58,17 +58,6 @@ export default function Header({ onScheduleCall }: HeaderProps) {
   const handleLinkClick = (item: typeof menuItems[0]) => {
     setIsMobileMenuOpen(false);
     
-    if (currentPath === "/") {
-      // Smooth scroll on homepage
-      const targetId = item.id === "contact" ? "final-cta" : item.id;
-      const el = document.getElementById(targetId);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-        return;
-      }
-    }
-    
-    // Navigate to dedicated page
     navigate(item.path);
   };
 
@@ -135,7 +124,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
         <div className="hidden lg:block">
           <button
             id="nav-schedule-btn"
-            onClick={onScheduleCall}
+            onClick={() => navigate("/website-generator")}
             className="
               flex items-center space-x-2 px-5 py-2.5 rounded-lg font-mono text-[11px] uppercase tracking-wider font-semibold
               bg-[#123B35] text-[#F4F5F1] hover:bg-[#B9D8CE] hover:text-[#061C1A]
@@ -143,7 +132,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
             "
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>Schedule a Call</span>
+            <span>Try Live Website Preview</span>
           </button>
         </div>
 
@@ -199,7 +188,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
               id="mobile-nav-schedule-btn"
               onClick={() => {
                 setIsMobileMenuOpen(false);
-                onScheduleCall();
+                navigate("/website-generator");
               }}
               className="
                 w-full flex items-center justify-center space-x-2 py-4 rounded-xl font-mono text-xs uppercase tracking-widest font-semibold
@@ -207,7 +196,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
               "
             >
               <Calendar className="w-4 h-4" />
-              <span>Schedule a Strategy Call</span>
+              <span>Try Live Website Preview</span>
             </button>
             
             <p className="text-[10px] text-center font-mono text-[#B8C6C1]/40 tracking-wider">

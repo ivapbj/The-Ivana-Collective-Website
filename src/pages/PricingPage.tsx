@@ -3,8 +3,37 @@ import SeoMeta from "../components/SeoMeta";
 import { BOOKING_CALENDAR_URL } from "../data";
 
 const EMAIL = "info@theivanacollective.com";
-const mailto = (service: string) =>
-  "mailto:" + EMAIL + "?subject=" + encodeURIComponent(service + " Inquiry — The Ivana Collective");
+const mailto = (service: string, body?: string) => {
+  const params = [
+    "subject=" + encodeURIComponent(service + " Inquiry — The Ivana Collective"),
+  ];
+  if (body) params.push("body=" + encodeURIComponent(body));
+  return "mailto:" + EMAIL + "?" + params.join("&");
+};
+const customDevelopmentQuoteBody = [
+  "Hello Ivana,",
+  "",
+  "I’d like a custom development quote. Here are my project details:",
+  "",
+  "Website template or type:",
+  "Business name:",
+  "Business category / industry:",
+  "Headline / tagline:",
+  "Business phone:",
+  "Describe your business:",
+  "Services or products:",
+  "Design direction:",
+  "Curated palette or colors:",
+  "Brand color:",
+  "Background color:",
+  "Text color:",
+  "Full name:",
+  "Email address:",
+  "Desired launch timeline:",
+  "Additional project requirements:",
+  "May The Ivana Collective contact me about this request? (Yes/No):",
+  "Optional marketing emails? (Yes/No):",
+].join("\n");
 
 const buttonPrimary =
   "inline-flex min-h-11 items-center justify-center rounded-lg bg-[#B9D8CE] px-5 py-3 text-center text-sm font-semibold text-[#061C1A] transition-colors hover:bg-[#F4F5F1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#B9D8CE]";
@@ -221,7 +250,8 @@ export default function PricingPage() {
           />
           <PriceCard
             name="E-commerce & Online Stores"
-            price="Custom quote"
+            price="$1,999+"
+            period="starting price"
             description="A tailored storefront that helps customers browse and place orders."
             features={["Product and category structure", "Checkout and payment setup scoped to your store"]}
             href={mailto("E-commerce Website")}
@@ -229,7 +259,8 @@ export default function PricingPage() {
           />
           <PriceCard
             name="Landing Pages"
-            price="Custom quote"
+            price="$250+"
+            period="starting price"
             description="A focused page for a campaign, service, launch, or lead-generation goal."
             features={["Clear message and next step", "Mobile-first layout"]}
             href={mailto("Landing Page")}
@@ -241,8 +272,8 @@ export default function PricingPage() {
             period="per page"
             description="Custom websites coded in HTML, CSS, JavaScript, and React."
             features={["Bespoke design and development", "Project scope confirmed before work begins"]}
-            href={mailto("Custom Website Development")}
-            cta="Discuss Custom Development"
+            href={mailto("Custom Website Development", customDevelopmentQuoteBody)}
+            cta="Email Me for a Custom Quote"
           />
         </div>
         <div className="mt-6 rounded-xl border border-white/10 p-5 sm:flex sm:items-center sm:justify-between sm:gap-6">

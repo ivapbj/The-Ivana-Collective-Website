@@ -172,15 +172,12 @@ export default function Header({ onScheduleCall }: HeaderProps) {
           "
         >
           <div className="flex flex-col gap-1">
-            <Link href="/#interactive-preview" onClick={(event) => {
-              if (!event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && event.button === 0) {
-                event.preventDefault();
-                setIsMobileMenuOpen(false);
-                navigate("/#interactive-preview");
-              }
+            <button type="button" onClick={() => {
+              setIsMobileMenuOpen(false);
+              navigate("/#interactive-preview");
             }} className="mb-2 flex min-h-11 items-center justify-center rounded-lg bg-[#F4F5F1] px-4 text-center font-mono text-xs font-semibold uppercase tracking-wider text-[#061C1A]">
               Build Your Website
-            </Link>
+            </button>
             {menuItems.map((item) => {
               const isPageActive = item.id === "hero"
                 ? (currentPath === "/" && (activeSection === "hero" || !menuItems.some(m => m.id === activeSection)))

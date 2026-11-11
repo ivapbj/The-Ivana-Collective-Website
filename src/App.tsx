@@ -276,7 +276,7 @@ function AppContent() {
           id="cookie-consent-bar"
           className="
             fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-[80] 
-            bg-[#0D2623] border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-col sm:flex-row items-center gap-4 text-left
+            bg-[#0D2623] border border-white/10 rounded-2xl p-3 sm:p-4 shadow-2xl flex items-center gap-3 text-left
             animate-in slide-in-from-bottom-8 duration-500
           "
         >
@@ -286,10 +286,10 @@ function AppContent() {
               We leverage cookies to benchmark custom SEO strategies and compile organic interface audits securely.
             </p>
           </div>
-          <div className="flex gap-2 w-full sm:w-auto flex-shrink-0 justify-end">
+          <div className="flex shrink-0 justify-end">
             <button 
               onClick={() => setShowCookieConsent(false)}
-              className="px-4 py-2 rounded bg-[#F4F5F1] text-[#061C1A] hover:bg-[#B9D8CE] font-mono text-[9px] uppercase tracking-wider font-semibold cursor-pointer transition-colors"
+              className="min-h-11 px-3 rounded bg-[#F4F5F1] text-[#061C1A] hover:bg-[#B9D8CE] font-mono text-[9px] uppercase tracking-wider font-semibold cursor-pointer transition-colors"
             >
               Accept
             </button>

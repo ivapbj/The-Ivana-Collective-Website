@@ -87,7 +87,7 @@ export default function StylePreviewSection({onScheduleCall}:{onScheduleCall:()=
     : 'Your quote request was submitted with the earlier design. Submit another request to include your latest edits.');
   } catch(e){setError(e instanceof Error?e.message:'Unable to save. Please retry.');}finally{setBusy(false);}
  }
- const input='min-w-0 w-full rounded-lg border border-white/20 bg-[#0d2623] p-3 text-white focus:outline-2 focus:outline-[#b9d8ce]';
+ const input='min-w-0 w-full rounded-lg border border-white/20 bg-[#0d2623] p-3 text-base text-white focus:outline-2 focus:outline-[#b9d8ce]';
  const textField=(name:keyof typeof initial,label:string,required=false,multiline=false)=><label className="block space-y-2" key={name}><span>{label}{required?' *':''}</span>{multiline?<textarea className={input} required={required} maxLength={3000} value={String(form[name])} onChange={e=>update(name,e.target.value)}/>:<input className={input} required={required} maxLength={200} type={name==='email'?'email':'text'} value={String(form[name])} onChange={e=>update(name,e.target.value)}/>}</label>;
  const preview=form;
  return <section id="interactive-preview" className="bg-[#061c1a] text-[#f4f5f1] px-5 py-20"><div className="max-w-7xl mx-auto space-y-10">

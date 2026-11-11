@@ -86,7 +86,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
       className={`
         fixed top-0 inset-x-0 z-50 transition-all duration-300
         ${isMobileMenuOpen
-          ? "py-4 bg-[#061C1A] border-b border-white/8 shadow-lg"
+          ? "py-2 bg-[#061C1A] border-b border-white/8 shadow-lg"
           : isScrolled 
           ? "py-4 backdrop-blur-[18px] bg-[#061C1A]/85 border-b border-white/8 shadow-lg" 
           : "py-6 bg-transparent border-b border-transparent"}
@@ -104,7 +104,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
         </button>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8" aria-label="Primary Navigation">
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-8" aria-label="Primary Navigation">
           {menuItems.map((item) => {
             const isPageActive = item.id === "hero"
               ? (currentPath === "/" && (activeSection === "hero" || !menuItems.some(m => m.id === activeSection)))
@@ -131,7 +131,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
         </nav>
 
         {/* Desktop CTA Call Button */}
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <button
             id="nav-schedule-btn"
             onClick={onScheduleCall}
@@ -150,8 +150,10 @@ export default function Header({ onScheduleCall }: HeaderProps) {
         <button
           id="mobile-menu-toggle"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden p-2 text-[#F4F5F1] hover:text-[#B9D8CE] transition-colors focus:outline-none"
+          className="lg:hidden min-h-11 min-w-11 grid place-items-center text-[#F4F5F1] hover:text-[#B9D8CE] transition-colors focus:outline-none"
           aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls={isMobileMenuOpen ? "mobile-navigation-overlay" : undefined}
         >
           {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
@@ -159,14 +161,15 @@ export default function Header({ onScheduleCall }: HeaderProps) {
 
       {/* Mobile Navigation Overlay */}
       {isMobileMenuOpen && (
-        <div 
+        <nav
+          aria-label="Mobile navigation"
           id="mobile-navigation-overlay"
           className="
-            absolute inset-x-0 top-full z-40 h-[calc(100dvh-4rem)] overflow-y-auto bg-[#061C1A] md:hidden
-            flex flex-col justify-between p-8 border-t border-white/5 animate-in fade-in duration-200
+            absolute inset-x-0 top-full z-40 h-[calc(100dvh-4rem)] overflow-y-auto bg-[#061C1A] lg:hidden
+            flex flex-col gap-6 p-5 sm:p-8 border-t border-white/5 animate-in fade-in duration-200
           "
         >
-          <div className="flex flex-col space-y-6 mt-6">
+          <div className="flex flex-col gap-1">
             {menuItems.map((item) => {
               const isPageActive = item.id === "hero"
                 ? (currentPath === "/" && (activeSection === "hero" || !menuItems.some(m => m.id === activeSection)))
@@ -177,7 +180,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
                   id={`mobile-nav-link-${item.id}`}
                   onClick={() => handleLinkClick(item)}
                   className="
-                    text-left font-serif text-3xl tracking-wide py-2 text-[#B8C6C1] hover:text-[#F4F5F1] 
+                    text-left font-serif text-2xl tracking-wide min-h-11 py-2 text-[#B8C6C1] hover:text-[#F4F5F1]
                     border-b border-white/5 transition-colors flex items-center justify-between group
                    font-light"
                 >
@@ -210,7 +213,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
               THE IVANA COLLECTIVE &copy; 2026
             </p>
           </div>
-        </div>
+        </nav>
       )}
     </header>
   );

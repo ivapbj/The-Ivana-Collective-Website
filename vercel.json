@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/work", "destination": "/index.html" }
+    { "source": "/:page(work|services|pricing|method|about|insights|contact)", "destination": "/index.html" },
+    { "source": "/services/:service(web-design|seo|content-growth)", "destination": "/index.html" }
   ]
 }

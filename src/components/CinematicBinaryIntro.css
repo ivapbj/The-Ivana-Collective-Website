@@ -20,14 +20,6 @@
 .binary-intro__stream i { font-style: normal; opacity: .35; }
 .binary-intro__stream i:nth-child(3n) { opacity: .8; }
 .binary-intro__stream i:nth-child(4n) { opacity: .6; }
-.binary-intro__projects { position: absolute; inset: 0; }
-.binary-intro__project {
-  position: absolute; top: 0; width: 220px; aspect-ratio: 16 / 10;
-  margin: 0; overflow: hidden; border: 1px solid rgba(220, 190, 130, .78); border-radius: 12px;
-  background: #071f1b; box-shadow: 0 12px 45px rgba(0, 0, 0, .42), 0 0 22px rgba(187, 221, 208, .16);
-  animation: project-rise linear both; will-change: transform, opacity;
-}
-.binary-intro__project img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .binary-intro__particles { position: absolute; inset: 0; }
 .binary-intro__particles span {
   position: absolute; color: #e4c98e; font: 600 9px/1 ui-monospace, monospace; opacity: 0;
@@ -45,31 +37,13 @@
 }
 @keyframes binary-rise { from { transform: translateY(0); } to { transform: translateY(-130vh); } }
 @keyframes binary-fall { from { transform: translateY(0); } to { transform: translateY(130vh); } }
-@keyframes project-rise {
-  0% { transform: translateY(100vh) scale(.94); opacity: 0; }
-  12%, 76% { opacity: 1; }
-  100% { transform: translateY(-25vh) scale(1); opacity: 0; }
-}
 @keyframes binary-intro-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes hint-pulse { 50% { opacity: .58; } }
 .home-grow-word.is-shimmering { color: #e4c98e; animation: grow-shimmer .9s ease-out both; }
 @keyframes grow-shimmer { 0% { text-shadow: 0 0 0 transparent; } 35% { text-shadow: 0 0 20px rgba(228, 201, 142, .75); } 100% { text-shadow: 0 0 0 transparent; } }
 @media (max-width: 640px) {
   .binary-intro__stream { font-size: 10px; gap: .2rem; }
-  .binary-intro__project { top: 0; width: clamp(156px, 46vw, 210px); border-radius: 9px; animation-name: project-rise-mobile; }
-  .binary-intro__project:nth-child(odd) { left: 4% !important; }
-  .binary-intro__project:nth-child(even) { left: auto !important; right: 4%; }
   .binary-intro__hint { font-size: 10px; }
-}
-@keyframes project-rise-mobile {
-  0% { transform: translateY(34svh) scale(.94); opacity: 0; }
-  12%, 76% { opacity: 1; }
-  100% { transform: translateY(-22svh) scale(1); opacity: 0; }
-}
-@media (min-width: 641px) and (max-width: 1100px) {
-  .binary-intro__project { width: 170px; }
-  .binary-intro__project:nth-child(odd) { left: 0 !important; }
-  .binary-intro__project:nth-child(even) { left: auto !important; right: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .binary-intro, .binary-intro *, .home-grow-word.is-shimmering { animation: none !important; transition: none !important; }

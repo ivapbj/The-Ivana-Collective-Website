@@ -3,13 +3,6 @@ import "./CinematicBinaryIntro.css";
 
 type Particle = { id: number; startX: number; startY: number; endX: number; endY: number; digit: string };
 
-const projects = [
-  { name: "LaBoy Properties", src: "/images/portfolio/laboy-properties.webp", position: "center 44%" },
-  { name: "Foreclosure Buy Homes", src: "/images/portfolio/foreclosure-buy-homes.webp", position: "center 38%" },
-  { name: "Legacy Economic Development", src: "/images/agency-economic-mockup.png", position: "center 42%" },
-  { name: "Posh Body Wellness Spa", src: "/images/posh-body-wellness-mockup.png", position: "center 35%" },
-  { name: "Dr. Sheds", src: "/images/drsheds-mockup.png", position: "center 48%" },
-];
 const SESSION_KEY = "tic-cinematic-binary-intro-seen";
 
 export default function CinematicBinaryIntro({ onComplete }: { onComplete: () => void }) {
@@ -109,9 +102,6 @@ export default function CinematicBinaryIntro({ onComplete }: { onComplete: () =>
   if (!visible) return null;
   return <div className="binary-intro" aria-hidden="true">
     <div className="binary-intro__streams">{Array.from({ length: 28 }, (_, column) => <span className="binary-intro__stream" key={column} data-direction={column % 4 === 0 ? "down" : "up"} style={{ left: `${column * (100 / 28)}%`, animationDelay: `${(column % 6) * -0.42}s`, animationDuration: `${3.2 + (column % 4) * 0.35}s` }}>{Array.from({ length: 80 }, (_, digit) => <i key={digit}>{(column * 3 + digit) % 2 ? "1" : "0"}</i>)}</span>)}</div>
-    <div className="binary-intro__projects">{projects.map((project, index) => <figure className="binary-intro__project" key={project.name} style={{ left: `${[13, 65, 25, 68, 38][index]}%`, animationDelay: `${index * 0.92}s`, animationDuration: "1.18s" }}>
-      <img src={project.src} alt="" style={{ objectPosition: project.position }} fetchPriority="high" />
-    </figure>)}</div>
     <div className={`binary-intro__particles${forming ? " is-forming" : ""}`}>{particles.map(particle => <span key={particle.id} style={{ left: particle.startX, top: particle.startY, "--end-x": `${particle.endX}px`, "--end-y": `${particle.endY}px` } as CSSProperties}>{particle.digit}</span>)}</div>
     <p className="binary-intro__hint">Click or tap anywhere to continue</p>
   </div>;

@@ -112,7 +112,7 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
       {/* Personal story, with original photographs placed alongside the story they illustrate */}
       <section className="mb-24 space-y-12 text-left" aria-labelledby="personal-story-title">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          <div className="lg:col-span-7 space-y-5">
+          <div className="lg:col-span-12 space-y-5">
             <span className="font-mono text-[10px] tracking-widest uppercase text-[#B9D8CE]">
               A LITTLE MORE ABOUT ME
             </span>
@@ -123,20 +123,6 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
               <p>Red lipstick. Chopping off my hair. Going on a hike through the mountains of New England.</p>
               <p>This is who I am. This is what I do. This is what I love.</p>
               <p>I’ve never believed that a person has to fit into just one box. I’m creative and technical, feminine and adventurous, practical and imaginative. And I think the same is true for the businesses I work with.</p>
-            </div>
-          </div>
-          <div className="lg:col-span-5">
-            <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-[#B9D8CE]/20 shadow-2xl max-w-md mx-auto">
-              <img
-                src="/images/about-founder-pink-dress.webp"
-                srcSet="/images/about-founder-pink-dress.webp 1x, /images/about-founder-pink-dress-2x.webp 2x"
-                alt="Ivana in a pink dress, expressing her feminine and creative side"
-                className="w-full h-full object-cover object-[35%_center]"
-                width="1152"
-                height="1536"
-                loading="lazy"
-                decoding="async"
-              />
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import BookingModal from "./components/BookingModal";
 import ProjectModal from "./components/ProjectModal";
 import BlogModal from "./components/BlogModal";
+import PageBackground from "./components/PageBackground";
 
 // Pages
 import Home from "./pages/Home";
@@ -162,15 +163,7 @@ function AppContent() {
 
   return (
     <div className="relative isolate min-h-screen selection:bg-[#B9D8CE]/20 selection:text-[#F4F5F1] text-[#F4F5F1]">
-      {/* Shared fixed backdrop keeps the forest treatment continuous on every route. */}
-      <div
-        aria-hidden="true"
-        className="fixed inset-0 -z-20 pointer-events-none bg-[#061c1a] bg-[url('/images/home-forest-ivana.webp')] bg-cover bg-center"
-      />
-      <div
-        aria-hidden="true"
-        className="fixed inset-0 -z-10 pointer-events-none bg-[linear-gradient(90deg,rgba(3,22,19,.72),rgba(3,22,19,.42)_58%,rgba(3,22,19,.48))]"
-      />
+      <PageBackground path={currentPath} />
       {/* Fine grain layout overlay */}
       <div className="fine-grain-overlay" />
 
@@ -178,7 +171,7 @@ function AppContent() {
       <Header onScheduleCall={handleScheduleGeneral} />
 
       {/* Conditional router screen */}
-      <main className="min-h-screen">
+      <main className="min-h-screen route-content"><div className="route-content__page">
         {(() => {
           switch (currentPath) {
             case "/":
@@ -230,7 +223,7 @@ function AppContent() {
               return <ConciseHome onScheduleCall={handleScheduleGeneral} />;
           }
         })()}
-      </main>
+      </div></main>
 
       {/* Footer component */}
       <Footer onScheduleCall={handleScheduleGeneral} />

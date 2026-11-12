@@ -4,6 +4,7 @@ import "./PageBackground.css";
 
 type PageBackgroundConfig = {
   src: string;
+  srcSet?: string;
   position: string;
   mobilePosition: string;
   overlay: string;
@@ -69,9 +70,10 @@ const backgrounds: Record<string, PageBackgroundConfig> = {
   },
   about: {
     src: "/images/about-founder-orchard.webp",
-    position: "50% 54%",
-    mobilePosition: "52% 48%",
-    overlay: "linear-gradient(180deg, rgba(4, 22, 18, .48), rgba(4, 22, 18, .58)), linear-gradient(90deg, rgba(4, 22, 18, .38), rgba(4, 22, 18, .16) 58%, rgba(4, 22, 18, .08))",
+    srcSet: "/images/about-founder-orchard.webp 1x, /images/about-founder-orchard-2x.webp 2x",
+    position: "50% 34%",
+    mobilePosition: "52% 42%",
+    overlay: "linear-gradient(180deg, rgba(4, 22, 18, .66), rgba(4, 22, 18, .72)), linear-gradient(90deg, rgba(4, 22, 18, .34), rgba(4, 22, 18, .16) 58%, rgba(4, 22, 18, .08))",
     title: "Ivana sitting in an orchard with a Jane Austen book",
   },
   contact: {
@@ -106,6 +108,7 @@ export default function PageBackground({ path }: { path: string }) {
         key={pageKey}
         className="page-background__image"
         src={background.src}
+        srcSet={background.srcSet}
         alt=""
         loading="eager"
         decoding="async"

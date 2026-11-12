@@ -10,19 +10,17 @@ type PortfolioProject = {
   url: string;
   image?: string;
   imageAlt?: string;
+  imageFit?: "cover" | "contain";
   unavailable?: boolean;
 };
 
-// Images in this list are captured from the live sites. A couple of sites block
-// automated capture, so they deliberately remain link-only instead of showing a made-up preview.
 const projects: PortfolioProject[] = [
-  { name: "Rebar & Rose", category: "E-commerce", description: "A bold online shop made for women who work hard and want gear that keeps up.", url: "https://rebarandrose.com", unavailable: true },
-  { name: "LaBoy Properties", category: "Real estate & vacation rentals", description: "A welcoming place for renters and guests to explore homes and book their stay.", url: "https://laboyproperties.com", image: "/images/portfolio/laboy-properties.webp", imageAlt: "LaBoy Properties homepage showing a home exterior" },
-  { name: "Foreclosure Buy Homes", category: "Real estate & auctions", description: "A clear, professional place for investors to find opportunities and get started.", url: "https://foreclosurebuyhomes.com", image: "/images/portfolio/foreclosure-buy-homes.webp", imageAlt: "Foreclosure Buy Homes homepage" },
-  { name: "The Field Club", category: "Membership & recreation", description: "A polished club website that makes programs, events, and membership information easy to find.", url: "https://field-club.com", unavailable: true },
-  { name: "Legacy Economic Development", category: "Community & nonprofit", description: "A resource hub that helps local entrepreneurs find programs, support, and next steps.", url: "https://legacyedc.org", image: "/images/agency-economic-mockup.png", imageAlt: "Legacy Economic Development homepage" },
-  { name: "Posh Body Wellness Spa", category: "Wellness & services", description: "A luxury wellness experience built to make services, shopping, and booking feel effortless.", url: "https://poshbwellnessspa.com", image: "/images/posh-body-wellness-mockup.png", imageAlt: "Posh Body Wellness Spa homepage" },
-  { name: "Dr. Sheds", category: "Construction", description: "A hardworking local-business website that puts custom work and customer trust front and center.", url: "https://www.drsheds.com/", image: "/images/drsheds-mockup.png", imageAlt: "Dr. Sheds website showing a custom shed" },
+  { name: "Rebar & Rose", category: "E-commerce", description: "A complete online shop for women’s construction apparel, built to make browsing collections, choosing sizes, and checking out simple.", url: "https://rebarandrose.com", unavailable: true },
+  { name: "LaBoy Properties", category: "Property management & vacation rentals", description: "A complete property-management system where renters can explore homes, apply, pay rent, and submit requests—making day-to-day operations easier for the real estate team.", url: "https://laboyproperties.com", image: "/images/portfolio/laboy-properties.webp", imageAlt: "Full LaBoy Properties homepage showing a residential rental home", imageFit: "contain" },
+  { name: "Foreclosure Buy Homes", category: "Custom real estate auction platform", description: "A custom investor system with controlled online auctions, bidder approval, and a Gemini-powered property analysis tool—all built around the foreclosure buying process.", url: "https://foreclosurebuyhomes.com", image: "/images/portfolio/foreclosure-buy-homes.webp", imageAlt: "Foreclosure Buy Homes homepage showing the investor auction platform" },
+  { name: "Legacy Economic Development", category: "Community & nonprofit", description: "A clear resource hub that helps local entrepreneurs find grants, workshops, and one-on-one business support without getting lost in the details.", url: "https://legacyedc.org", image: "/images/agency-economic-mockup.png", imageAlt: "Legacy Economic Development homepage" },
+  { name: "Posh Body Wellness Spa", category: "Wellness, booking & e-commerce", description: "A luxury wellness website that brings service booking, skincare shopping, and social content together in one polished client experience.", url: "https://poshbwellnessspa.com", image: "/images/posh-body-wellness-mockup.png", imageAlt: "Posh Body Wellness Spa homepage" },
+  { name: "Dr. Sheds", category: "Construction & local search", description: "A custom construction website designed to showcase finished sheds, build trust with local customers, and turn more searches into inquiries.", url: "https://www.drsheds.com/", image: "/images/drsheds-mockup.png", imageAlt: "Dr. Sheds website showing a custom shed" },
 ];
 
 export default function PortfolioShowcase({ onScheduleCall }: { onScheduleCall: () => void }) {
@@ -70,7 +68,7 @@ export default function PortfolioShowcase({ onScheduleCall }: { onScheduleCall: 
           <div className="portfolio-laptop">
             <div className="portfolio-laptop__camera" aria-hidden="true" />
             <div className={`portfolio-laptop__screen ${project.unavailable ? "portfolio-laptop__screen--unavailable" : ""}`}>
-              {project.image ? <img src={project.image} alt={project.imageAlt} loading="lazy" width="1440" height="1000" /> : <div className="portfolio-laptop__unavailable"><span>Live website</span><strong>Preview capture unavailable</strong><small>Open the project to view it live.</small></div>}
+              {project.image ? <img className={project.imageFit === "contain" ? "portfolio-laptop__image--full" : undefined} src={project.image} alt={project.imageAlt} loading="lazy" width="1440" height="1000" /> : <div className="portfolio-laptop__unavailable"><span>Live e-commerce website</span><strong>Rebar &amp; Rose</strong><small>Open the live shop to explore the collection.</small></div>}
             </div>
             <div className="portfolio-laptop__base" aria-hidden="true" />
           </div>

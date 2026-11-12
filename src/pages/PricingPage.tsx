@@ -2,39 +2,6 @@ import React from "react";
 import SeoMeta from "../components/SeoMeta";
 import { BOOKING_CALENDAR_URL } from "../data";
 
-const EMAIL = "info@theivanacollective.com";
-const mailto = (service: string, body?: string) => {
-  const params = [
-    "subject=" + encodeURIComponent(service + " Inquiry — The Ivana Collective"),
-  ];
-  if (body) params.push("body=" + encodeURIComponent(body));
-  return "mailto:" + EMAIL + "?" + params.join("&");
-};
-const customDevelopmentQuoteBody = [
-  "Hello Ivana,",
-  "",
-  "I’d like a custom development quote. Here are my project details:",
-  "",
-  "Website template or type:",
-  "Business name:",
-  "Business category / industry:",
-  "Headline / tagline:",
-  "Business phone:",
-  "Describe your business:",
-  "Services or products:",
-  "Design direction:",
-  "Curated palette or colors:",
-  "Brand color:",
-  "Background color:",
-  "Text color:",
-  "Full name:",
-  "Email address:",
-  "Desired launch timeline:",
-  "Additional project requirements:",
-  "May The Ivana Collective contact me about this request? (Yes/No):",
-  "Optional marketing emails? (Yes/No):",
-].join("\n");
-
 const buttonPrimary =
   "inline-flex min-h-11 items-center justify-center rounded-lg bg-[#B9D8CE] px-5 py-3 text-center text-sm font-semibold text-[#061C1A] transition-colors hover:bg-[#F4F5F1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#B9D8CE]";
 const buttonSecondary =
@@ -48,7 +15,7 @@ const socialPlans = [
     content: ["4 short videos each month", "8 branded posts each month"],
     note: "Choose three: Facebook, Instagram, TikTok, or Google Business Profile.",
     highlighted: false,
-    cta: "Start Growing My Brand",
+    cta: "Schedule a Call",
   },
   {
     name: "Growth",
@@ -57,7 +24,7 @@ const socialPlans = [
     content: ["5 short videos each month", "12 branded posts each month"],
     note: "Facebook, Instagram, TikTok, and Google Business Profile.",
     highlighted: true,
-    cta: "Choose Growth",
+    cta: "Schedule a Call",
   },
   {
     name: "Local Authority",
@@ -70,7 +37,7 @@ const socialPlans = [
     ],
     note: "Premium content cadence and visibility support.",
     highlighted: false,
-    cta: "Let’s Talk Social Media",
+    cta: "Schedule a Call",
   },
 ];
 
@@ -213,6 +180,8 @@ function PriceCard({
       </div>
       <a
         href={href}
+        target="_blank"
+        rel="noreferrer"
         className={(highlighted ? buttonPrimary : buttonSecondary) + " mt-7 w-full"}
       >
         {cta}
@@ -264,10 +233,10 @@ export default function PricingPage() {
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a className={buttonPrimary} href={BOOKING_CALENDAR_URL} target="_blank" rel="noreferrer">
-              Schedule a Free Consultation
+              Schedule a Website Call
             </a>
-            <a className={buttonSecondary} href="#website-design">
-              Explore Our Services
+            <a className={buttonSecondary} href={BOOKING_CALENDAR_URL} target="_blank" rel="noreferrer">
+              Schedule a Website Call
             </a>
           </div>
         </div>
@@ -292,8 +261,8 @@ export default function PricingPage() {
             price="$1,800+"
             description="A polished, mobile-friendly home for your services, story, and inquiries."
             features={["Service-focused page structure", "Clear contact and booking paths"]}
-            href={mailto("Website Design")}
-            cta="Start My Website"
+            href={BOOKING_CALENDAR_URL}
+            cta="Schedule a Call"
           />
           <PriceCard
             name="E-commerce & Online Stores"
@@ -301,8 +270,8 @@ export default function PricingPage() {
             period="starting price"
             description="A tailored storefront that helps customers browse and place orders."
             features={["Product and category structure", "Checkout and payment setup scoped to your store"]}
-            href={mailto("E-commerce Website")}
-            cta="Let’s Build Your Store"
+            href={BOOKING_CALENDAR_URL}
+            cta="Schedule a Call"
           />
           <PriceCard
             name="Landing Pages"
@@ -310,8 +279,8 @@ export default function PricingPage() {
             period="starting price"
             description="A focused page for a campaign, service, launch, or lead-generation goal."
             features={["Clear message and next step", "Mobile-first layout"]}
-            href={mailto("Landing Page")}
-            cta="Plan My Landing Page"
+            href={BOOKING_CALENDAR_URL}
+            cta="Schedule a Call"
           />
           <PriceCard
             name="Custom Development"
@@ -319,8 +288,8 @@ export default function PricingPage() {
             period="per page"
             description="Custom websites coded in HTML, CSS, JavaScript, and React."
             features={["Bespoke design and development", "Project scope confirmed before work begins"]}
-            href={mailto("Custom Website Development", customDevelopmentQuoteBody)}
-            cta="Email Me for a Custom Quote"
+            href={BOOKING_CALENDAR_URL}
+            cta="Schedule a Call"
           />
         </div>
         <div className="mt-6 rounded-xl border border-white/10 p-5 sm:flex sm:items-center sm:justify-between sm:gap-6">
@@ -332,9 +301,11 @@ export default function PricingPage() {
           </div>
           <a
             className={buttonSecondary + " mt-4 w-full shrink-0 sm:mt-0 sm:w-auto"}
-            href="/#interactive-preview"
+            href={BOOKING_CALENDAR_URL}
+            target="_blank"
+            rel="noreferrer"
           >
-            Preview Your Own Website
+            Schedule a Website Call
           </a>
         </div>
         <p className="mt-4 text-sm text-[#91AAA1]">
@@ -358,8 +329,8 @@ export default function PricingPage() {
             description="An ongoing care option for businesses that want help looking after their website."
             features={["Website hosting included"]}
             note="Your proposal will spell out the care, update, and support scope for your specific website."
-            href={mailto("Website Maintenance")}
-            cta="Protect My Website"
+            href={BOOKING_CALENDAR_URL}
+            cta="Schedule a Call"
             highlighted
           />
           <aside className="rounded-2xl border border-white/10 bg-[#0D2623]/35 p-6 sm:p-7">
@@ -368,8 +339,8 @@ export default function PricingPage() {
               Additional updates, technical help, and ongoing website care can be scoped to your
               platform and needs.
             </p>
-            <a className={buttonSecondary + " mt-6 w-full"} href={mailto("Website Care and Support")}>
-              Ask About Website Care
+            <a className={buttonSecondary + " mt-6 w-full"} href={BOOKING_CALENDAR_URL} target="_blank" rel="noreferrer">
+              Schedule a Call
             </a>
           </aside>
         </div>
@@ -432,7 +403,7 @@ export default function PricingPage() {
                   plan.note +
                   " Content counts are unique monthly assets adapted for selected channels, not separate assets for each platform."
                 }
-                href={mailto("Social Media Management — " + plan.name)}
+                href={BOOKING_CALENDAR_URL}
                 cta={plan.cta}
                 highlighted={plan.highlighted}
               />
@@ -483,8 +454,8 @@ export default function PricingPage() {
                 period="per month"
                 description="Monthly email marketing service."
                 note="Campaign volume, audience setup, and automation deliverables will be confirmed in your written proposal."
-                href={mailto("Email Marketing — " + plan.name)}
-                cta={plan.name === "Email Starter" ? "Start My Email Campaign" : "Discuss Email Automation"}
+                href={BOOKING_CALENDAR_URL}
+                cta="Schedule a Call"
                 highlighted={plan.name === "Email Growth"}
               />
             </div>
@@ -516,8 +487,8 @@ export default function PricingPage() {
           Business Profile publishing already covered by a social media package is not charged again
           as the same work under SEO.
         </p>
-        <a className={buttonPrimary + " mt-6"} href={mailto("SEO and Local Visibility")}>
-          Improve My Online Visibility
+        <a className={buttonPrimary + " mt-6"} href={BOOKING_CALENDAR_URL} target="_blank" rel="noreferrer">
+          Schedule a Call
         </a>
         <p className="mt-4 text-sm text-[#91AAA1]">
           <a className="underline decoration-[#7CA99B]/60 underline-offset-4 hover:text-[#F4F5F1]" href="/services/seo">
@@ -542,10 +513,10 @@ export default function PricingPage() {
           </div>
           <div className="flex flex-col gap-3 sm:flex-row lg:min-w-[380px] lg:flex-col">
             <a className={buttonPrimary} href={BOOKING_CALENDAR_URL} target="_blank" rel="noreferrer">
-              Let’s Build Something Great
+              Schedule a Website Call
             </a>
-            <a className={buttonSecondary} href={mailto("New Project Inquiry")}>
-              Email Us About Your Project
+            <a className={buttonSecondary} href={BOOKING_CALENDAR_URL} target="_blank" rel="noreferrer">
+              Schedule a Website Call
             </a>
           </div>
         </div>

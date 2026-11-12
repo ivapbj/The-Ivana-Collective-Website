@@ -19,7 +19,7 @@ export default function ConciseHome({ onScheduleCall }: { onScheduleCall: () => 
     <div className="home-forest" aria-hidden="true" />
     <div className="home-shade" aria-hidden="true" />
     <SeoMeta title="Websites, Google Help & Social Media Support" description="The Ivana Collective helps small businesses build a website, get found on Google, and stay active online." canonicalPath="/" />
-    <section id="hero" className="relative min-h-[72vh] flex items-center px-5 pt-28 pb-16 overflow-hidden">
+    <section id="hero" className="relative z-40 min-h-[72vh] flex items-center px-5 pt-28 pb-16 overflow-hidden">
       <div className="relative z-40 max-w-4xl mx-auto w-full">
         <p className="font-mono text-xs tracking-[.2em] uppercase text-[#B9D8CE]">The Ivana Collective</p>
         <h1 className="mt-5 max-w-2xl font-serif text-[clamp(3rem,7vw,6rem)] leading-[.98]">Websites built to <span id="home-grow-word" className={`home-grow-word${growComplete ? " is-shimmering" : ""}`}>grow</span> with your business.</h1>

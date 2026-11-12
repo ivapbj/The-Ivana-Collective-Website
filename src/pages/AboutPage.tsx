@@ -88,24 +88,6 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-white/5 pt-6 mt-4">
-            <div className="space-y-1.5 p-4 rounded-xl bg-[#061C1A]/60 border border-white/5">
-              <h4 className="font-serif text-base text-[#F4F5F1]">
-                <span>AI-Powered Functionality</span>
-              </h4>
-              <p className="text-xs text-[#E6EAE7] font-light leading-relaxed">
-                Applied AI tools, smart search discovery, and automated workflows tailored specifically for small business owners.
-              </p>
-            </div>
-            <div className="space-y-1.5 p-4 rounded-xl bg-[#061C1A]/60 border border-white/5">
-              <h4 className="font-serif text-base text-[#F4F5F1]">
-                <span>Authentic Brand Voice</span>
-              </h4>
-              <p className="text-xs text-[#E6EAE7] font-light leading-relaxed">
-                Tech that amplifies your genuine human voice, never replacing it with generic, sterile templates.
-              </p>
-            </div>
-          </div>
         </div>
       </div>
 

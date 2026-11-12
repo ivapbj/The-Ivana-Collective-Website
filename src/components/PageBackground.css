@@ -95,6 +95,25 @@
 .route-content__page .home-page > section {
   background-color: transparent !important;
   background-image: none !important;
+  color: #F4F5F1;
+}
+
+@media (max-width: 767px) {
+  .route-content__page .home-page > #hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    align-items: flex-end;
+    padding-top: 54svh;
+    padding-bottom: 2.5rem;
+  }
+
+  .route-content__page .home-page > #hero > div {
+    padding: 1.25rem;
+    border: 1px solid rgba(185, 216, 206, .14);
+    border-radius: 1.25rem;
+    background: rgba(4, 22, 18, .64);
+    backdrop-filter: blur(5px);
+  }
 }
 
 .work-page .work-copy,

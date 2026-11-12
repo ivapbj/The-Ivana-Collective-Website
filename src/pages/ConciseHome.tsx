@@ -20,7 +20,7 @@ export default function ConciseHome({ onScheduleCall }: { onScheduleCall: () => 
     <section id="hero" className="relative min-h-[72vh] flex items-center px-5 pt-28 pb-16 overflow-hidden">
       <div className="relative max-w-4xl mx-auto w-full">
         <p className="font-mono text-xs tracking-[.2em] uppercase text-[#B9D8CE]">The Ivana Collective</p>
-        <h1 className="mt-5 font-serif text-[clamp(3rem,7vw,6rem)] leading-[.98]">Websites built to grow with your business.</h1>
+        <h1 className="mt-5 max-w-2xl font-serif text-[clamp(3rem,7vw,6rem)] leading-[.98]">Websites built to grow with your business.</h1>
         <p className="mt-7 max-w-2xl text-lg leading-relaxed text-[#E0EBE5]">We help small businesses look professional online, show up when people search, and make it easy for customers to reach out.</p>
         <div className="mt-9 flex flex-col sm:flex-row gap-3">
           <Link href="/website-generator" className="inline-flex justify-center items-center gap-2 min-h-12 px-6 rounded-xl bg-[#B9D8CE] text-[#061C1A] font-semibold">Try Live Website Preview <ArrowRight size={17}/></Link>

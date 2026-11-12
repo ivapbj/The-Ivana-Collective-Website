@@ -137,3 +137,35 @@
   color: #245347;
 }
 
+/* The generator uses lowercase palette tokens; keep its workspace open to the photo
+   and give the editor and preview controls the same ivory surface treatment. */
+#interactive-preview {
+  background-color: transparent !important;
+}
+
+.route-content__page [class*="bg-[#0d2623]"],
+.route-content__page [class*="bg-[#123b35]"],
+.route-content__page :not(section)[class*="bg-[#061c1a]"] {
+  background-color: rgba(245, 243, 236, .96) !important;
+  color: #071F1B !important;
+  border-color: rgba(36, 83, 71, .18) !important;
+  box-shadow: 0 16px 44px rgba(3, 15, 12, .12);
+}
+
+.route-content__page [class*="bg-[#0d2623]"] [class*="text-white"],
+.route-content__page [class*="bg-[#0d2623]"] [class*="text-[#f4f5f1]"],
+.route-content__page [class*="bg-[#0d2623]"] [class*="text-[#b8c6c1]"],
+.route-content__page [class*="bg-[#123b35]"] [class*="text-white"],
+.route-content__page [class*="bg-[#123b35]"] [class*="text-[#f4f5f1]"],
+.route-content__page [class*="bg-[#123b35]"] [class*="text-[#b8c6c1]"],
+.route-content__page :not(section)[class*="bg-[#061c1a]"] [class*="text-white"],
+.route-content__page :not(section)[class*="bg-[#061c1a]"] [class*="text-[#f4f5f1]"],
+.route-content__page :not(section)[class*="bg-[#061c1a]"] [class*="text-[#b8c6c1]"] {
+  color: #183b32 !important;
+}
+
+.route-content__page [class*="bg-[#0d2623]"] [class*="border-white"],
+.route-content__page [class*="bg-[#123b35]"] [class*="border-white"],
+.route-content__page :not(section)[class*="bg-[#061c1a]"] [class*="border-white"] {
+  border-color: rgba(36, 83, 71, .18) !important;
+}

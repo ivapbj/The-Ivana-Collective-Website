@@ -1,4 +1,5 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import "./PageBackground.css";
 
 type PageBackgroundConfig = {
@@ -99,7 +100,7 @@ export default function PageBackground({ path }: { path: string }) {
   const pageKey = getPageKey(path);
   const background = backgrounds[pageKey];
 
-  return (
+  return createPortal(
     <div className="page-background" aria-hidden="true" data-page-background={pageKey}>
       <img
         key={pageKey}
@@ -115,7 +116,8 @@ export default function PageBackground({ path }: { path: string }) {
         } as React.CSSProperties}
       />
       <div className="page-background__shade" style={{ background: background.overlay }} />
-    </div>
+    </div>,
+    document.body,
   );
 }
 

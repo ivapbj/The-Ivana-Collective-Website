@@ -162,7 +162,7 @@ function AppContent() {
   };
 
   return (
-    <div className="relative isolate min-h-screen selection:bg-[#B9D8CE]/20 selection:text-[#F4F5F1] text-[#F4F5F1]">
+    <div className="relative isolate z-[1] min-h-screen selection:bg-[#B9D8CE]/20 selection:text-[#F4F5F1] text-[#F4F5F1]">
       <PageBackground path={currentPath} />
       {/* Fine grain layout overlay */}
       <div className="fine-grain-overlay" />

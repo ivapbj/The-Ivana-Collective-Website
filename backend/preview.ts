@@ -4,7 +4,10 @@ export const templates = ['Restaurant','Business / Services','Portfolio','E-comm
 const booking = 'https://calendar.app.google/KYrg1R1surXjfRbn7';
 const ownerEmail = 'info@theivanacollective.com';
 export function validate(body: any) {
-  if (!body || body.botField || body.contactConsent !== true || typeof body.marketingConsent !== 'boolean') throw Error('Please agree to be contacted about your website request.');
+  if (!body || body.botField || typeof body.marketingConsent !== 'boolean') throw Error('Invalid form data.');
+  const requestType = body.requestType || 'quote';
+  if (!['quote','email-preview'].includes(requestType)) throw Error('Invalid request type.');
+  if (requestType === 'quote' && body.contactConsent !== true) throw Error('Please agree to be contacted about your website request.');
   const fields = ['fullName','email','businessName','industry','description','services','phone','tagline','theme'];
   const clean: any = {};
   for (const field of fields) {
@@ -12,7 +15,8 @@ export function validate(body: any) {
     clean[field] = (body[field] || '').trim();
     if (clean[field].length > (field === 'description' || field === 'services' ? 3000 : 200)) throw Error('Please shorten your information.');
   }
-  if (!clean.fullName || !clean.businessName || !clean.industry || !clean.description || !clean.services || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean.email)) throw Error('Please complete your name, valid email and business details.');
+  if (requestType === 'quote' && (!clean.fullName || !clean.businessName || !clean.industry || !clean.description || !clean.services || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean.email))) throw Error('Please complete your name, valid email and business details.');
+  if (requestType === 'email-preview' && (!clean.fullName || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean.email) || body.contactConsent !== true)) throw Error('Enter your name and a valid email, then agree to receive the requested preview.');
   if (!templates.includes(body.template)) throw Error('Select a website template.');
   if (!Array.isArray(body.colors) || body.colors.length !== 3 || !body.colors.every((c: unknown) => typeof c === 'string' && /^#[a-f0-9]{6}$/i.test(c))) throw Error('Choose valid colors.');
   for (const key of ['logo','image']) {
@@ -27,8 +31,7 @@ export function validate(body: any) {
     const webp = bytes.subarray(0,4).toString() === 'RIFF' && bytes.subarray(8,12).toString() === 'WEBP';
     if (!(type === 'image/png' && png || type === 'image/jpeg' && jpeg || type === 'image/webp' && webp)) throw Error('Invalid image file.');
   }
-  if (body.requestType != null && body.requestType !== 'quote') throw Error('Invalid request type.');
-  if (body.requestType === 'quote') {
+  if (requestType === 'quote') {
     if (!['Within a month', 'In 1–3 months', 'In 3+ months', 'Just exploring'].includes(body.launchTimeline)) {
       throw Error('Choose your preferred launch timeline.');
     }
@@ -38,6 +41,12 @@ export function validate(body: any) {
     clean.requestType = 'quote';
     clean.launchTimeline = body.launchTimeline;
     clean.projectRequirements = body.projectRequirements.trim();
+  } else {
+    if (typeof body.previewImage !== 'string' || body.previewImage.length > 3000000 || !/^data:image\/jpeg;base64,[A-Za-z0-9+/]+={0,2}$/.test(body.previewImage)) throw Error('The preview image could not be prepared. Please try again.');
+    const bytes = Buffer.from(body.previewImage.split(',')[1], 'base64');
+    if (bytes.length < 4 || bytes[0] !== 255 || bytes[1] !== 216 || bytes[2] !== 255) throw Error('Invalid preview image.');
+    clean.previewImage = body.previewImage;
+    clean.requestType = 'email-preview';
   }
   return {...clean, email:clean.email.toLowerCase(), template:body.template, colors:body.colors, contactConsent:true, marketingConsent:body.marketingConsent, consentTextVersion:'website-preview-v4'};
 }
@@ -84,7 +93,7 @@ export async function handlePreview(request: Request) {
     if (request.method !== 'POST') return json(405,{error:'Method not allowed.'},{Allow:'GET, POST'});
     if (request.headers.get('origin') && request.headers.get('origin') !== url.origin) return json(403,{error:'Invalid request origin.'});
     const raw = await request.text();
-    if (raw.length > 1100000) return json(413,{error:'Images are too large.'});
+    if (raw.length > 3500000) return json(413,{error:'The preview image is too large. Try a smaller preview.'});
     let config: ReturnType<typeof validate>;
     try { config = validate(JSON.parse(raw)); } catch (e) { return json(400,{error:e instanceof Error ? e.message : 'Invalid request.'}); }
     const key = request.headers.get('idempotency-key') || '';
@@ -150,7 +159,14 @@ async function sendNotifications(row: Notification) {
     ['Logo provided',config.logo ? 'Yes' : 'No'], ['Hero image provided',config.image ? 'Yes' : 'No'],
     ['Marketing opt-in',config.marketingConsent ? 'Yes' : 'No'], ['Submitted (UTC)',row.created_at],
   ].filter(([,value])=>value);
-  const confirmation = 'Thank you for sharing your website plans. I’ll review your request and follow up about the next steps.';
+  const isEmailPreview = config.requestType === 'email-preview';
+  const confirmation = isEmailPreview
+    ? 'Here is the image of the website idea you requested. Your preview is only a starting point, and you can keep exploring and adjusting it on the website.'
+    : 'Thank you for sharing your website plans. I’ll review your request and follow up about the next steps.';
+  const previewAttachment = isEmailPreview ? [{
+    filename: `${config.businessName.replace(/[^a-z0-9-_]+/gi,'-').slice(0,60) || 'website'}-preview.jpg`,
+    content: config.previewImage.split(',')[1],
+  }] : undefined;
   const messages = [
     {
       from, to:ownerEmail, replyTo:config.email,
@@ -160,9 +176,10 @@ async function sendNotifications(row: Notification) {
     },
     {
       from, to:config.email, replyTo:ownerEmail,
-      subject:'We received your website request | The Ivana Collective',
-      text:`Hi ${config.fullName},\n\n${confirmation}\n\nSchedule a consultation: ${booking}\n\nIvana\nThe Ivana Collective`,
-      html:brandedEmail('We received your website request', `<p>Hi ${escapeHtml(config.fullName)},</p><p>${confirmation}</p><p><a href="${booking}">Schedule a consultation</a></p><p>Ivana<br>The Ivana Collective</p>`),
+      subject:isEmailPreview ? 'Your website preview image | The Ivana Collective' : 'We received your website request | The Ivana Collective',
+      text:`Hi ${config.fullName},\n\n${confirmation}${isEmailPreview?' The image is attached.':''}\n\nSchedule a consultation: ${booking}\n\nIvana\nThe Ivana Collective`,
+      html:brandedEmail(isEmailPreview ? 'Your website preview image' : 'We received your website request', `<p>Hi ${escapeHtml(config.fullName)},</p><p>${confirmation}${isEmailPreview?' The image is attached.':''}</p><p><a href="${booking}">Schedule a consultation</a></p><p>Ivana<br>The Ivana Collective</p>`),
+      ...(previewAttachment ? {attachments:previewAttachment} : {}),
     },
   ];
   const results = await Promise.allSettled(messages.map(async (message,index)=>{

@@ -20,7 +20,7 @@
 .work-laptop-lid{position:relative;background:linear-gradient(135deg,#414946,#101715 38%,#272f2d);padding:2.2% 2% 2.8%;border-radius:14px 14px 4px 4px;border:1px solid #7a8580;box-shadow:inset 0 0 0 2px #111817}
 .work-laptop-camera{position:absolute;top:1%;left:50%;width:5px;height:5px;background:#030505;border:1px solid #65716c;border-radius:50%;transform:translateX(-50%)}
 .work-laptop-screen{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;background:#101a17;overflow:hidden}
-.work-laptop-screen--wide{aspect-ratio:1366/599}
+.work-laptop-screen--wide{aspect-ratio:1351/568}
 .work-image-holder{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .work-missing-image{padding:1rem;color:#e1eee6;font:400 .85rem/1.5 Inter,Arial,sans-serif;text-align:center}
 .work-device-image{display:block;width:100%;height:100%;object-fit:contain;object-position:center}

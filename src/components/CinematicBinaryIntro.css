@@ -5,11 +5,11 @@
   overflow: hidden;
   pointer-events: none;
   color: #d9bd83;
-  background: radial-gradient(ellipse at 50% 85%, rgba(7, 31, 27, .12), rgba(4, 17, 15, .32));
+  background: transparent;
   isolation: isolate;
   animation: binary-intro-in .35s ease-out both;
 }
-.binary-intro__streams { position: absolute; inset: 0; overflow: hidden; opacity: .62; }
+.binary-intro__streams { display: none; }
 .binary-intro__stream {
   position: absolute; bottom: -115%; display: flex; width: calc(100% / 28); align-items: center; flex-direction: column; gap: .18rem;
   font: 500 clamp(10px, 1.08vw, 15px)/1 ui-monospace, monospace;
@@ -35,6 +35,7 @@
   color: rgba(245, 243, 236, .78); background: rgba(7, 31, 27, .7); font: 500 11px/1.2 system-ui, sans-serif; letter-spacing: .04em;
   white-space: nowrap; animation: hint-pulse 1.6s ease-in-out infinite;
 }
+.binary-intro__hint { display: none; }
 @keyframes binary-rise { from { transform: translateY(0); } to { transform: translateY(-130vh); } }
 @keyframes binary-fall { from { transform: translateY(0); } to { transform: translateY(130vh); } }
 @keyframes binary-intro-in { from { opacity: 0; } to { opacity: 1; } }

@@ -15,7 +15,7 @@ const backgrounds: Record<string, PageBackgroundConfig> = {
   home: {
     src: "/images/home-founder-woodland.webp",
     position: "50% center",
-    mobilePosition: "61% center",
+    mobilePosition: "72% center",
     overlay: "linear-gradient(90deg, rgba(4, 22, 18, .46) 0%, rgba(4, 22, 18, .24) 48%, rgba(4, 22, 18, .12) 100%), linear-gradient(180deg, rgba(4, 22, 18, .12), rgba(4, 22, 18, .24))",
     title: "Ivana coding at a laptop in a woodland setting with her dog",
   },

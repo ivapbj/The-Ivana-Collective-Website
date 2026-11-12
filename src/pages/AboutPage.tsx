@@ -166,9 +166,8 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
           <div className="lg:col-span-5">
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-[#B9D8CE]/20 shadow-2xl max-w-xl mx-auto">
               <img
-                src="/images/about-founder-casual.webp"
-                srcSet="/images/about-founder-casual.webp 1x, /images/about-founder-casual-2x.webp 2x"
-                alt="Ivana smiling in glasses in a casual portrait"
+                src="/images/founder.jpg"
+                alt="Ivana sharing a relaxed moment with her dog"
                 className="w-full h-full object-cover object-center"
                 width="1536"
                 height="1152"
@@ -191,34 +190,25 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-8 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-4 transition-all duration-300">
-            <div className="w-10 h-10 rounded-xl bg-[#123B35] flex items-center justify-center text-[#B9D8CE] font-mono text-sm font-bold">
-              01
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-3 transition-all duration-300">
             <h3 className="font-serif text-xl text-[#F4F5F1]">Get Found Online</h3>
-            <p className="text-xs text-[#E6EAE7] leading-relaxed font-light">
-              From hyper-local SEO and structured schema markup to Google Business Profile optimization and AI search crawling, we ensure potential clients discover your services when they are searching.
+            <p className="text-sm text-[#183B32] leading-relaxed font-light">
+              Local SEO and a well-built Google Business Profile help nearby customers find you when they search for the services you offer.
             </p>
           </div>
 
-          <div className="p-8 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-4 transition-all duration-300">
-            <div className="w-10 h-10 rounded-xl bg-[#123B35] flex items-center justify-center text-[#B9D8CE] font-mono text-sm font-bold">
-              02
-            </div>
+          <div className="p-6 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-3 transition-all duration-300">
             <h3 className="font-serif text-xl text-[#F4F5F1]">Delightful Client Experience</h3>
-            <p className="text-xs text-[#E6EAE7] leading-relaxed font-light">
-              Frictionless browsing, fast-loading mobile experiences, intuitive appointment booking, and easy e-commerce checkout so your visitors love interacting with your brand.
+            <p className="text-sm text-[#183B32] leading-relaxed font-light">
+              Clear navigation, simple booking, and easy checkout help customers get what they need without confusion or extra calls.
             </p>
           </div>
 
-          <div className="p-8 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-4 transition-all duration-300">
-            <div className="w-10 h-10 rounded-xl bg-[#123B35] flex items-center justify-center text-[#B9D8CE] font-mono text-sm font-bold">
-              03
-            </div>
+          <div className="p-6 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-3 transition-all duration-300">
             <h3 className="font-serif text-xl text-[#F4F5F1]">Your 24/7 Digital Helper</h3>
-            <p className="text-xs text-[#E6EAE7] leading-relaxed font-light">
-              Your website works around the clock answering questions, collecting inquiries, processing orders, and building trust while you focus on doing what you love most.
+            <p className="text-sm text-[#183B32] leading-relaxed font-light">
+              Your site can answer common questions, collect inquiries, take bookings, and accept orders while you focus on your customers.
             </p>
           </div>
         </div>

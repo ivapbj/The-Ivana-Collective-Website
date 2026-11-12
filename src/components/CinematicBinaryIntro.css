@@ -9,16 +9,17 @@
   isolation: isolate;
   animation: binary-intro-in .35s ease-out both;
 }
-.binary-intro__streams { position: absolute; inset: 0; overflow: hidden; opacity: .7; }
+.binary-intro__streams { position: absolute; inset: 0; overflow: hidden; opacity: .62; }
 .binary-intro__stream {
-  position: absolute; bottom: -115%; display: flex; flex-direction: column; gap: .5rem;
-  font: 600 clamp(12px, 1.35vw, 18px)/1.2 ui-monospace, monospace;
-  text-shadow: 0 0 12px rgba(220, 188, 125, .55);
-  animation: binary-rise linear infinite;
+  position: absolute; bottom: -115%; display: flex; width: calc(100% / 28); align-items: center; flex-direction: column; gap: .18rem;
+  font: 500 clamp(10px, 1.08vw, 15px)/1 ui-monospace, monospace;
+  text-shadow: 0 0 10px rgba(220, 188, 125, .5);
+  animation: binary-rise linear infinite; will-change: transform;
 }
+.binary-intro__stream[data-direction="down"] { top: -115%; bottom: auto; animation-name: binary-fall; }
 .binary-intro__stream i { font-style: normal; opacity: .35; }
 .binary-intro__stream i:nth-child(3n) { opacity: .8; }
-.binary-intro__stream i:nth-child(4n) { transform: rotate(12deg); }
+.binary-intro__stream i:nth-child(4n) { opacity: .6; }
 .binary-intro__projects { position: absolute; inset: 0; }
 .binary-intro__project {
   position: absolute; bottom: -38%; width: clamp(150px, 23vw, 285px); aspect-ratio: 16 / 10;
@@ -27,10 +28,6 @@
   animation: project-rise linear both; will-change: transform, opacity;
 }
 .binary-intro__project img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.binary-intro__project figcaption {
-  position: absolute; inset: auto 0 0; padding: 18px 9px 7px; color: #f5f3ec; font: 500 10px/1.2 system-ui, sans-serif;
-  background: linear-gradient(transparent, rgba(5, 21, 18, .78));
-}
 .binary-intro__particles { position: absolute; inset: 0; }
 .binary-intro__particles span {
   position: absolute; color: #e4c98e; font: 600 9px/1 ui-monospace, monospace; opacity: 0;
@@ -46,21 +43,25 @@
   color: rgba(245, 243, 236, .78); background: rgba(7, 31, 27, .7); font: 500 11px/1.2 system-ui, sans-serif; letter-spacing: .04em;
   white-space: nowrap; animation: hint-pulse 1.6s ease-in-out infinite;
 }
-@keyframes binary-rise { from { transform: translateY(0) rotate(-4deg); } to { transform: translateY(-210vh) rotate(8deg); } }
+@keyframes binary-rise { from { transform: translateY(0); } to { transform: translateY(-130vh); } }
+@keyframes binary-fall { from { transform: translateY(0); } to { transform: translateY(130vh); } }
 @keyframes project-rise {
-  0% { transform: translateY(0) rotate(-4deg) scale(.88); opacity: 0; }
+  0% { transform: translateY(0) scale(.9); opacity: 0; }
   12%, 72% { opacity: 1; }
-  100% { transform: translateY(-155vh) rotate(3deg) scale(1); opacity: 0; }
+  100% { transform: translateY(-155vh) scale(1); opacity: 0; }
 }
 @keyframes binary-intro-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes hint-pulse { 50% { opacity: .58; } }
 .home-grow-word.is-shimmering { color: #e4c98e; animation: grow-shimmer .9s ease-out both; }
 @keyframes grow-shimmer { 0% { text-shadow: 0 0 0 transparent; } 35% { text-shadow: 0 0 20px rgba(228, 201, 142, .75); } 100% { text-shadow: 0 0 0 transparent; } }
 @media (max-width: 640px) {
-  .binary-intro__stream { font-size: 12px; gap: .65rem; }
+  .binary-intro__stream { font-size: 10px; gap: .2rem; }
   .binary-intro__project { width: clamp(156px, 46vw, 210px); border-radius: 9px; }
-  .binary-intro__project figcaption { font-size: 9px; }
-  .binary-intro__project:nth-child(2n) { left: 51% !important; }
+  .binary-intro__project:nth-child(1) { left: 5% !important; }
+  .binary-intro__project:nth-child(2) { left: 50% !important; }
+  .binary-intro__project:nth-child(3) { left: 7% !important; }
+  .binary-intro__project:nth-child(4) { left: 50% !important; }
+  .binary-intro__project:nth-child(5) { left: 24% !important; }
   .binary-intro__hint { font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -169,3 +169,20 @@
 .route-content__page :not(section)[class*="bg-[#061c1a]"] [class*="border-white"] {
   border-color: rgba(36, 83, 71, .18) !important;
 }
+
+#interactive-preview fieldset > div > label {
+  background: rgba(245, 243, 236, .96);
+  border-color: rgba(36, 83, 71, .24) !important;
+  color: #071F1B;
+}
+
+#interactive-preview fieldset > div > label > div:not([class*="template-card-art"]) {
+  background: rgba(245, 243, 236, .98);
+  color: #183b32;
+}
+
+#interactive-preview fieldset > div > label > div:not([class*="template-card-art"]) p,
+#interactive-preview fieldset > div > label > div:not([class*="template-card-art"]) h3,
+#interactive-preview fieldset > div > label > div:not([class*="template-card-art"]) span {
+  color: #183b32 !important;
+}

@@ -234,7 +234,7 @@ export default function PricingPage() {
   ];
 
   return (
-    <div className="relative z-10 mx-auto max-w-7xl px-4 pb-20 pt-20 sm:px-6 md:pt-28 lg:px-8">
+    <div className="pricing-page relative z-10 mx-auto max-w-7xl px-4 pb-20 pt-20 sm:px-6 md:pt-28 lg:px-8">
       <SeoMeta
         title="Pricing for Websites, Social Media & SEO | The Ivana Collective"
         description="Explore transparent starting prices for website design, maintenance, social media management, email marketing, and local SEO."

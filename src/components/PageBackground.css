@@ -206,3 +206,35 @@
 .route-content__page .work-cta [class*="text-[#7CA99B]"] {
   color: #071F1B !important;
 }
+
+
+/* Pricing cards use ivory panels, so their sage body and accent text need a darker forest contrast. */
+.route-content__page .pricing-page [class*="bg-[#0D2623]"] [class*="text-[#D4DEDA]"],
+.route-content__page .pricing-page [class*="bg-[#123B35]"] [class*="text-[#D4DEDA]"],
+.route-content__page .pricing-page [class*="bg-[#061C1A]"] [class*="text-[#D4DEDA]"],
+.route-content__page .pricing-page [class*="bg-[#0d2623]"] [class*="text-[#d4deda]"],
+.route-content__page .pricing-page [class*="bg-[#123b35]"] [class*="text-[#d4deda]"],
+.route-content__page .pricing-page [class*="bg-[#061c1a]"] [class*="text-[#d4deda]"],
+.route-content__page .pricing-page [class*="bg-[#0D2623]"] [class*="text-[#91AAA1]"],
+.route-content__page .pricing-page [class*="bg-[#123B35]"] [class*="text-[#91AAA1]"],
+.route-content__page .pricing-page [class*="bg-[#061C1A]"] [class*="text-[#91AAA1]"],
+.route-content__page .pricing-page [class*="bg-[#0d2623]"] [class*="text-[#91aaa1]"],
+.route-content__page .pricing-page [class*="bg-[#123b35]"] [class*="text-[#91aaa1]"],
+.route-content__page .pricing-page [class*="bg-[#061c1a]"] [class*="text-[#91aaa1]"] {
+  color: #183B32 !important;
+}
+
+.route-content__page .pricing-page [class*="bg-[#0D2623]"] [class*="text-[#B9D8CE]"],
+.route-content__page .pricing-page [class*="bg-[#123B35]"] [class*="text-[#B9D8CE]"],
+.route-content__page .pricing-page [class*="bg-[#061C1A]"] [class*="text-[#B9D8CE]"],
+.route-content__page .pricing-page [class*="bg-[#0D2623]"] [class*="text-[#7CA99B]"],
+.route-content__page .pricing-page [class*="bg-[#123B35]"] [class*="text-[#7CA99B]"],
+.route-content__page .pricing-page [class*="bg-[#061C1A]"] [class*="text-[#7CA99B]"],
+.route-content__page .pricing-page [class*="bg-[#0d2623]"] [class*="text-[#b9d8ce]"],
+.route-content__page .pricing-page [class*="bg-[#123b35]"] [class*="text-[#b9d8ce]"],
+.route-content__page .pricing-page [class*="bg-[#061c1a]"] [class*="text-[#b9d8ce]"],
+.route-content__page .pricing-page [class*="bg-[#0d2623]"] [class*="text-[#7ca99b]"],
+.route-content__page .pricing-page [class*="bg-[#123b35]"] [class*="text-[#7ca99b]"],
+.route-content__page .pricing-page [class*="bg-[#061c1a]"] [class*="text-[#7ca99b]"] {
+  color: #245347 !important;
+}

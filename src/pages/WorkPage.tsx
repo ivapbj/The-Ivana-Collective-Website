@@ -27,11 +27,11 @@ function DeviceImage({ project }: { project: Project }) {
 
 function DeviceDisplay({ project }: { project: Project }) {
   return (
-    <div className="work-device-wrap">
+    <div className={`work-device-wrap ${project.id === "aunalux" ? "work-device-wrap--landscape" : ""}`}>
       <div className="work-laptop" aria-label={`Desktop image of ${project.client}`}>
         <div className="work-laptop-lid">
           <div className="work-laptop-camera" />
-          <div className="work-laptop-screen">
+          <div className={`work-laptop-screen ${project.id === "aunalux" ? "work-laptop-screen--wide" : ""}`}>
             <DeviceImage project={project} />
           </div>
         </div>

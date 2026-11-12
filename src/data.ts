@@ -113,8 +113,8 @@ export const PROJECTS_DATA: Project[] = [
       "Fluid mobile-first product & cart checkout",
       "Seasonal catalog layout"
     ],
-    imageName: "aunalux_mockup",
-    imageUrl: "/images/aunalux-mockup.png",
+    imageName: "aunalux_contact_screenshot",
+    imageUrl: "/images/portfolio/aunalux-contact.webp",
     websiteUrl: "https://aunalux.com/",
     accentColor: "#C98A9B"
   },

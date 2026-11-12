@@ -10,6 +10,7 @@ interface ProjectImageProps {
 export const ProjectImage: React.FC<ProjectImageProps> = ({ project, className, style }) => {
   const candidateFallbacks: Record<string, string[]> = {
     "aunalux": [
+      "/images/portfolio/aunalux-contact.webp",
       "/images/aunalux-mockup.png",
       "/images/aunalux-mockup.jpeg",
       "/images/aunalux-mockup.jpg",

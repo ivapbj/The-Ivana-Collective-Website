@@ -2,6 +2,7 @@ import React from "react";
 import SeoMeta from "../components/SeoMeta";
 import { ArrowRight, Sparkles, Award, ShieldCheck, Cpu, Code2, HeartHandshake, CheckCircle2, ArrowUpRight } from "lucide-react";
 import { BOOKING_CALENDAR_URL } from "../data";
+import { Link } from "../context/NavigationContext";
 
 interface AboutPageProps {
   onScheduleCall?: () => void;
@@ -111,6 +112,91 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
           </div>
         </div>
       </div>
+
+      {/* Personal story, with original photographs placed alongside the story they illustrate */}
+      <section className="mb-24 space-y-12 text-left" aria-labelledby="personal-story-title">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="lg:col-span-7 space-y-5">
+            <span className="font-mono text-[10px] tracking-widest uppercase text-[#7CA99B]">
+              A LITTLE MORE ABOUT ME
+            </span>
+            <h2 id="personal-story-title" className="font-serif text-3xl md:text-4xl text-[#F4F5F1]">
+              More Than One Thing. Always Evolving.
+            </h2>
+            <div className="space-y-4 text-xs md:text-sm text-[#B8C6C1] font-light leading-relaxed">
+              <p>Red lipstick. Chopping off my hair. Going on a hike through the mountains of New England.</p>
+              <p>This is who I am. This is what I do. This is what I love.</p>
+              <p>I’ve never believed that a person has to fit into just one box. I’m creative and technical, feminine and adventurous, practical and imaginative. And I think the same is true for the businesses I work with.</p>
+            </div>
+          </div>
+          <div className="lg:col-span-5">
+            <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-[#B9D8CE]/20 shadow-2xl max-w-md mx-auto">
+              <img
+                src="/images/about-founder-pink-dress.webp"
+                alt="Ivana in a pink dress, expressing her feminine and creative side"
+                className="w-full h-full object-cover object-[35%_center]"
+                width="900"
+                height="1200"
+                loading="lazy"
+                decoding="async"
+                sizes="(min-width: 1024px) 34vw, (min-width: 640px) 60vw, 90vw"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="lg:col-span-5 lg:order-1">
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-[#B9D8CE]/20 shadow-2xl max-w-xl mx-auto">
+              <img
+                src="/images/about-founder-hiking.webp"
+                alt="Ivana hiking among the mountains and forests of New England"
+                className="w-full h-full object-cover object-center"
+                width="1200"
+                height="900"
+                loading="lazy"
+                decoding="async"
+                sizes="(min-width: 1024px) 34vw, (min-width: 640px) 60vw, 90vw"
+              />
+            </div>
+          </div>
+          <div className="lg:col-span-7 space-y-4 text-xs md:text-sm text-[#B8C6C1] font-light leading-relaxed lg:order-2">
+            <p>Living in New England has taught me to appreciate change. Every season brings something different, and every stage of life gives us an opportunity to grow.</p>
+            <p>Businesses are no different. They’re multifaceted, constantly evolving, and shaped by the people behind them. A business can be professional and playful, established and innovative, structured and creative—all at once.</p>
+            <p>That’s why I don’t believe in creating websites that force every business into the same mold.</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="lg:col-span-7 space-y-5">
+            <div className="space-y-4 text-xs md:text-sm text-[#B8C6C1] font-light leading-relaxed">
+              <p>I take the time to understand who you are, what makes your business different, and where you want to go. Then I bring those pieces together to create something that feels authentic, works beautifully, and grows with you.</p>
+              <p>Because your business isn’t one-dimensional. Your website shouldn’t be either.</p>
+            </div>
+            <Link
+              href="/work"
+              className="inline-flex items-center justify-center space-x-2.5 px-8 py-4 rounded-xl font-mono text-xs uppercase tracking-wider font-semibold bg-[#B9D8CE] text-[#061C1A] hover:bg-[#F4F5F1] hover:shadow-lg hover:shadow-[#B9D8CE]/10 transition-all duration-200 cursor-pointer shadow-md group"
+            >
+              <span>View My Work</span>
+              <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true" />
+            </Link>
+          </div>
+          <div className="lg:col-span-5">
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-[#B9D8CE]/20 shadow-2xl max-w-xl mx-auto">
+              <img
+                src="/images/about-founder-casual.webp"
+                alt="Ivana smiling in glasses in a casual portrait"
+                className="w-full h-full object-cover object-center"
+                width="1200"
+                height="900"
+                loading="lazy"
+                decoding="async"
+                sizes="(min-width: 1024px) 34vw, (min-width: 640px) 60vw, 90vw"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* How I Help Your Business */}
       <div className="mb-24 text-left">

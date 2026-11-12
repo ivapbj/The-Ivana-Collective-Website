@@ -68,11 +68,11 @@ const backgrounds: Record<string, PageBackgroundConfig> = {
     title: "A website idea taking shape on screens",
   },
   about: {
-    src: "/images/about-cinematic.webp",
-    position: "70% center",
-    mobilePosition: "68% center",
-    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .74), rgba(4, 22, 18, .42) 58%, rgba(4, 22, 18, .2))",
-    title: "The founder in a warm creative studio",
+    src: "/images/about-founder-orchard.webp",
+    position: "50% 54%",
+    mobilePosition: "52% 48%",
+    overlay: "linear-gradient(180deg, rgba(4, 22, 18, .48), rgba(4, 22, 18, .58)), linear-gradient(90deg, rgba(4, 22, 18, .38), rgba(4, 22, 18, .16) 58%, rgba(4, 22, 18, .08))",
+    title: "Ivana sitting in an orchard with a Jane Austen book",
   },
   contact: {
     src: "/images/contact-cinematic.webp",

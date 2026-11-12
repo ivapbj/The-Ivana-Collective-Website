@@ -1,7 +1,7 @@
 .page-background {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   width: 100%;
   height: 100vh;
   height: 100dvh;
@@ -95,7 +95,7 @@
 .route-content__page .home-page > section {
   background-color: transparent !important;
   background-image: none !important;
-  color: #F4F5F1;
+  color: #F4F5F1 !important;
 }
 
 @media (max-width: 767px) {

@@ -71,7 +71,7 @@ export default function SeoMeta({ title, description, canonicalPath, schema, bre
       url: `${SITE_URL}/`,
       logo: `${SITE_URL}/apple-touch-icon.png`,
       image: SOCIAL_IMAGE,
-      description: "Web design, search engine optimization, and social media management for small businesses.",
+      description: "Custom website development, business systems, website maintenance, SEO and digital marketing for businesses nationwide.",
       founder: {
         "@type": "Person",
         name: "Ivana Carrillo",

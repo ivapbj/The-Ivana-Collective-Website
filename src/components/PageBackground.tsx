@@ -83,6 +83,22 @@ const backgrounds: Record<string, PageBackgroundConfig> = {
     overlay: "linear-gradient(90deg, rgba(4, 22, 18, .76), rgba(4, 22, 18, .48) 64%, rgba(4, 22, 18, .3))",
     title: "A welcoming workspace ready for collaboration",
   },
+  caseRebarRose: {
+    src: "/images/case-studies/IMG_1436.jpeg", position: "center top", mobilePosition: "54% top",
+    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .67) 60%, rgba(4, 22, 18, .5))", title: "Rebar and Rose original website screenshot",
+  },
+  caseLaboy: {
+    src: "/images/case-studies/IMG_1437.jpeg", position: "center top", mobilePosition: "52% top",
+    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .67) 60%, rgba(4, 22, 18, .5))", title: "LaBoy Properties original website screenshot",
+  },
+  caseLlanos: {
+    src: "/images/case-studies/IMG_1435.jpeg", position: "center top", mobilePosition: "52% top",
+    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .67) 60%, rgba(4, 22, 18, .5))", title: "Llanos Electrolysis original website screenshot",
+  },
+  caseForeclosure: {
+    src: "/images/case-studies/IMG_1438.jpeg", position: "center top", mobilePosition: "55% top",
+    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .9), rgba(4, 22, 18, .68) 60%, rgba(4, 22, 18, .5))", title: "ForeclosureBuyHomes original website screenshot",
+  },
 };
 
 function getPageKey(path: string) {
@@ -94,6 +110,10 @@ function getPageKey(path: string) {
   if (path === "/work" || path === "/portfolio") return "work";
   if (path === "/about") return "about";
   if (path === "/contact") return "contact";
+  if (path === "/case-studies/rebar-and-rose") return "caseRebarRose";
+  if (path === "/case-studies/laboy-properties") return "caseLaboy";
+  if (path === "/case-studies/llanos-electrolysis") return "caseLlanos";
+  if (path === "/case-studies/foreclosurebuyhomes") return "caseForeclosure";
   if (path.startsWith("/services") || path.startsWith("/industries/")) return "services";
   return "home";
 }

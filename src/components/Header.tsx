@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, Calendar } from "lucide-react";
+import { Menu, X, Calendar, ChevronDown } from "lucide-react";
 import { useNavigation } from "../context/NavigationContext";
 
 interface HeaderProps {
@@ -10,6 +10,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
+  const [isPortfolioOpen, setIsPortfolioOpen] = useState(false);
   const { currentPath, navigate } = useNavigation();
 
   // Monitor scroll for header styling & active section highlighting (only on homepage)
@@ -49,7 +50,6 @@ export default function Header({ onScheduleCall }: HeaderProps) {
   const menuItems = [
     { id: "hero", label: "Home", path: "/" },
     { id: "services", label: "Services", path: "/services" },
-    { id: "work", label: "Portfolio", path: "/work" },
     { id: "pricing", label: "Pricing", path: "/pricing" },
     { id: "about", label: "About", path: "/about" },
     { id: "contact", label: "Contact", path: "/contact" }
@@ -118,6 +118,14 @@ export default function Header({ onScheduleCall }: HeaderProps) {
               </button>
             );
           })}
+          <div className="relative">
+            <button type="button" onClick={() => setIsPortfolioOpen(value => !value)} aria-expanded={isPortfolioOpen} aria-haspopup="menu" className="relative flex items-center gap-1 py-1 font-mono text-[11px] tracking-widest uppercase text-[#B8C6C1] hover:text-[#B9D8CE] transition-colors focus:outline-none">
+              Portfolio <ChevronDown className="h-3 w-3" aria-hidden="true" />
+            </button>
+            {isPortfolioOpen && <div role="menu" className="absolute top-full left-0 mt-3 min-w-60 rounded-lg border border-white/10 bg-[#061C1A]/95 p-2 shadow-xl backdrop-blur">
+              {[{label:"Selected Work",path:"/work"},{label:"Rebar & Rose",path:"/case-studies/rebar-and-rose"},{label:"LaBoy Properties",path:"/case-studies/laboy-properties"},{label:"Llanos Electrolysis",path:"/case-studies/llanos-electrolysis"},{label:"ForeclosureBuyHomes",path:"/case-studies/foreclosurebuyhomes"}].map(item => <button key={item.path} role="menuitem" className="block w-full rounded px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-[#DCE9E3] hover:bg-white/10" onClick={() => { setIsPortfolioOpen(false); handleLinkClick({ id: "portfolio", ...item }); }}>{item.label}</button>)}
+            </div>}
+          </div>
         </nav>
 
         {/* Desktop CTA Call Button */}
@@ -181,6 +189,10 @@ export default function Header({ onScheduleCall }: HeaderProps) {
                 </button>
               );
             })}
+            <div className="border-b border-white/5 py-2">
+              <p className="font-mono text-[10px] tracking-widest text-[#7CA99B] uppercase">Portfolio</p>
+              {[{label:"Selected Work",path:"/work"},{label:"Rebar & Rose",path:"/case-studies/rebar-and-rose"},{label:"LaBoy Properties",path:"/case-studies/laboy-properties"},{label:"Llanos Electrolysis",path:"/case-studies/llanos-electrolysis"},{label:"ForeclosureBuyHomes",path:"/case-studies/foreclosurebuyhomes"}].map(item => <button key={item.path} onClick={() => handleLinkClick({ id: "portfolio", ...item })} className="block w-full py-2 text-left font-serif text-xl text-[#B8C6C1] hover:text-[#F4F5F1]">{item.label}</button>)}
+            </div>
           </div>
 
           <div className="flex flex-col space-y-4">

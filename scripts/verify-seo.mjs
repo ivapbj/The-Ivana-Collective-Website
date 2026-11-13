@@ -34,12 +34,17 @@ for (const route of routes) {
   assert.ok(!canonicalSet.has(canonical), `Duplicate canonical: ${route.path}`);
   titleSet.add(titles[0][1]);
   canonicalSet.add(canonical);
-  assert.ok(sitemap.includes(`<loc>${canonical}</loc>`), `Missing sitemap URL: ${route.path}`);
+  if (route.noindex) {
+    assert.ok(/<meta name="robots" content="noindex, nofollow"/.test(html), `Missing noindex safeguard: ${route.path}`);
+    assert.ok(!sitemap.includes(`<loc>${canonical}</loc>`), `Private route exposed in sitemap: ${route.path}`);
+  } else {
+    assert.ok(sitemap.includes(`<loc>${canonical}</loc>`), `Missing sitemap URL: ${route.path}`);
+  }
   console.log(`PASS: ${route.path}`);
 }
 
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)];
-assert.equal(urls.length, routes.length, "Sitemap URL count does not match canonical route registry");
+assert.equal(urls.length, routes.filter(route => !route.noindex).length, "Sitemap URL count does not match public route registry");
 const missing = await readFile("dist/404.html", "utf8");
 assert.ok(/<meta name="robots" content="noindex, follow"/.test(missing), "404 must be noindex");
 assert.ok(!/<link rel="canonical"/.test(missing), "404 must not canonicalize to homepage");

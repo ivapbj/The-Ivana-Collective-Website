@@ -18,12 +18,7 @@ export default function WebDesign({ onScheduleCall }: WebDesignProps) {
       "name": "The Ivana Collective"
     },
     "description": "Bespoke editorial website design combined with lightning-fast technical performance, tailored specifically for local businesses, premium boutique agencies, and wellness brands.",
-    "areaServed": "US",
-    "offers": {
-      "@type": "Offer",
-      "priceCurrency": "USD",
-      "price": "4500.00"
-    }
+    "areaServed": "US"
   };
 
   const breadcrumbs = [

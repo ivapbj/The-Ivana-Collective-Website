@@ -86,16 +86,19 @@ export default function Footer({ onScheduleCall }: FooterProps) {
                 { label: "Website Design", id: "services", path: "/services" },
                 { label: "Google & Local Search Help", id: "services", path: "/services" },
                 { label: "Website Updates & Care", id: "services", path: "/services" },
+                { label: "Property Management Websites", id: "property", path: "/industries/property-management" },
+                { label: "Custom Auction Platforms", id: "auctions", path: "/industries/auction-platforms" },
                 { label: "Social Media Help", id: "services", path: "/services" },
                 { label: "Content & Email Support", id: "services", path: "/services" }
               ].map((link, idx) => (
                 <li key={idx}>
-                  <button
-                    onClick={() => handleLinkClick(link.id, link.path)}
+                  <a
+                    href={link.path}
+                    onClick={(event) => { event.preventDefault(); handleLinkClick(link.id, link.path); }}
                     className="text-sm text-[#B8C6C1] hover:text-[#B9D8CE] transition-colors focus:outline-none cursor-pointer"
                   >
                     {link.label}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -115,12 +118,13 @@ export default function Footer({ onScheduleCall }: FooterProps) {
                 { label: "Get in Touch", id: "contact", path: "/contact" }
               ].map((link, idx) => (
                 <li key={idx}>
-                  <button
-                    onClick={() => handleLinkClick(link.id, link.path)}
+                  <a
+                    href={link.path}
+                    onClick={(event) => { event.preventDefault(); handleLinkClick(link.id, link.path); }}
                     className="text-sm text-[#B8C6C1] hover:text-[#B9D8CE] transition-colors focus:outline-none cursor-pointer"
                   >
                     {link.label}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>

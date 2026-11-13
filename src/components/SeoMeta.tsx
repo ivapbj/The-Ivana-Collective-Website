@@ -113,6 +113,22 @@ export default function SeoMeta({ title, description, canonicalPath, schema, bre
             "@type": "Offer",
             itemOffered: {
               "@type": "Service",
+              name: "Custom Business Systems and Integrations",
+              serviceType: "Custom Web Application Development"
+            }
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Ongoing Website Maintenance and Support",
+              serviceType: "Website Maintenance"
+            }
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
               name: "Social Media Management and Content Strategy",
               serviceType: "Social Media Management"
             }

@@ -47,6 +47,14 @@
     {
       "source": "/website-generator",
       "destination": "/website-generator/index.html"
+    },
+    {
+      "source": "/industries/property-management",
+      "destination": "/industries/property-management/index.html"
+    },
+    {
+      "source": "/industries/auction-platforms",
+      "destination": "/industries/auction-platforms/index.html"
     }
   ]
 }

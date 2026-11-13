@@ -71,6 +71,22 @@
     {
       "source": "/services/business-automation",
       "destination": "/services/business-automation/index.html"
+    },
+    {
+      "source": "/services/wordpress-development",
+      "destination": "/services/wordpress-development/index.html"
+    },
+    {
+      "source": "/services/woocommerce-development",
+      "destination": "/services/woocommerce-development/index.html"
+    },
+    {
+      "source": "/services/ecommerce-websites",
+      "destination": "/services/ecommerce-websites/index.html"
+    },
+    {
+      "source": "/industries/beauty-wellness",
+      "destination": "/industries/beauty-wellness/index.html"
     }
   ]
 }

@@ -22,6 +22,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import IndustrySolutionsPage from "./pages/IndustrySolutionsPage";
 import OngoingServicesPage from "./pages/OngoingServicesPage";
 import SystemsServicesPage from "./pages/SystemsServicesPage";
+import CommerceWellnessPage from "./pages/CommerceWellnessPage";
 
 // Navigation
 import { NavigationProvider, useNavigation } from "./context/NavigationContext";
@@ -198,6 +199,14 @@ function AppContent() {
               return <SystemsServicesPage offering="custom-business-systems" onScheduleCall={handleScheduleGeneral} />;
             case "/services/business-automation":
               return <SystemsServicesPage offering="business-automation" onScheduleCall={handleScheduleGeneral} />;
+            case "/services/wordpress-development":
+              return <CommerceWellnessPage topic="wordpress-development" onScheduleCall={handleScheduleGeneral} />;
+            case "/services/woocommerce-development":
+              return <CommerceWellnessPage topic="woocommerce-development" onScheduleCall={handleScheduleGeneral} />;
+            case "/services/ecommerce-websites":
+              return <CommerceWellnessPage topic="ecommerce-websites" onScheduleCall={handleScheduleGeneral} />;
+            case "/industries/beauty-wellness":
+              return <CommerceWellnessPage topic="beauty-wellness-websites" onScheduleCall={handleScheduleGeneral} />;
             case "/industries/property-management":
               return <IndustrySolutionsPage industry="property-management" onScheduleCall={handleScheduleGeneral} />;
             case "/industries/auction-platforms":

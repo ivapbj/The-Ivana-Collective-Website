@@ -55,6 +55,14 @@
     {
       "source": "/industries/auction-platforms",
       "destination": "/industries/auction-platforms/index.html"
+    },
+    {
+      "source": "/services/website-redesign",
+      "destination": "/services/website-redesign/index.html"
+    },
+    {
+      "source": "/services/website-maintenance",
+      "destination": "/services/website-maintenance/index.html"
     }
   ]
 }

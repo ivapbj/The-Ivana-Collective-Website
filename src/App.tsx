@@ -20,6 +20,7 @@ import ConciseHome from "./pages/ConciseHome";
 import WebsiteGeneratorPage from "./pages/WebsiteGeneratorPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import IndustrySolutionsPage from "./pages/IndustrySolutionsPage";
+import OngoingServicesPage from "./pages/OngoingServicesPage";
 
 // Navigation
 import { NavigationProvider, useNavigation } from "./context/NavigationContext";
@@ -188,6 +189,10 @@ function AppContent() {
               return <SeoService onScheduleCall={handleScheduleGeneral} />;
             case "/services/content-growth":
               return <ContentGrowth onScheduleCall={handleScheduleGeneral} />;
+            case "/services/website-redesign":
+              return <OngoingServicesPage offering="website-redesign" onScheduleCall={handleScheduleGeneral} />;
+            case "/services/website-maintenance":
+              return <OngoingServicesPage offering="website-maintenance" onScheduleCall={handleScheduleGeneral} />;
             case "/industries/property-management":
               return <IndustrySolutionsPage industry="property-management" onScheduleCall={handleScheduleGeneral} />;
             case "/industries/auction-platforms":

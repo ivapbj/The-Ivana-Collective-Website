@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import "./PageBackground.css";
 
@@ -97,12 +97,15 @@ function getPageKey(path: string) {
 }
 
 export default function PageBackground({ path }: { path: string }) {
+  // Match the server's empty portal during hydration; mount fixed imagery afterward.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
   const pageKey = getPageKey(path);
   const background = backgrounds[pageKey];
 
   // Portals are client-only. During server rendering, the fixed background
   // mounts into document.body after hydration without changing page markup.
-  if (typeof document === "undefined") return null;
+  if (!mounted || typeof document === "undefined") return null;
 
   return createPortal(
     <div className="page-background" aria-hidden="true" data-page-background={pageKey}>

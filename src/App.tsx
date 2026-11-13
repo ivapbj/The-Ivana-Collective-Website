@@ -21,6 +21,7 @@ import WebsiteGeneratorPage from "./pages/WebsiteGeneratorPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import IndustrySolutionsPage from "./pages/IndustrySolutionsPage";
 import OngoingServicesPage from "./pages/OngoingServicesPage";
+import SystemsServicesPage from "./pages/SystemsServicesPage";
 
 // Navigation
 import { NavigationProvider, useNavigation } from "./context/NavigationContext";
@@ -193,6 +194,10 @@ function AppContent() {
               return <OngoingServicesPage offering="website-redesign" onScheduleCall={handleScheduleGeneral} />;
             case "/services/website-maintenance":
               return <OngoingServicesPage offering="website-maintenance" onScheduleCall={handleScheduleGeneral} />;
+            case "/services/custom-business-systems":
+              return <SystemsServicesPage offering="custom-business-systems" onScheduleCall={handleScheduleGeneral} />;
+            case "/services/business-automation":
+              return <SystemsServicesPage offering="business-automation" onScheduleCall={handleScheduleGeneral} />;
             case "/industries/property-management":
               return <IndustrySolutionsPage industry="property-management" onScheduleCall={handleScheduleGeneral} />;
             case "/industries/auction-platforms":

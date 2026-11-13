@@ -87,6 +87,8 @@ export default function Footer({ onScheduleCall }: FooterProps) {
                 { label: "Google & Local Search Help", id: "services", path: "/services" },
                 { label: "Website Updates & Care", id: "maintenance", path: "/services/website-maintenance" },
                 { label: "Website Redesign", id: "redesign", path: "/services/website-redesign" },
+                { label: "Custom Business Systems", id: "custom-systems", path: "/services/custom-business-systems" },
+                { label: "Business Automation", id: "business-automation", path: "/services/business-automation" },
                 { label: "Property Management Websites", id: "property", path: "/industries/property-management" },
                 { label: "Custom Auction Platforms", id: "auctions", path: "/industries/auction-platforms" },
                 { label: "Social Media Help", id: "services", path: "/services" },

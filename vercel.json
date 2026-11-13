@@ -63,6 +63,14 @@
     {
       "source": "/services/website-maintenance",
       "destination": "/services/website-maintenance/index.html"
+    },
+    {
+      "source": "/services/custom-business-systems",
+      "destination": "/services/custom-business-systems/index.html"
+    },
+    {
+      "source": "/services/business-automation",
+      "destination": "/services/business-automation/index.html"
     }
   ]
 }

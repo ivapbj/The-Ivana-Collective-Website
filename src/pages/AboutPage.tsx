@@ -135,7 +135,6 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
           <div className="lg:col-span-7 space-y-5">
             <div className="space-y-4 text-xs md:text-sm text-[#E6EAE7] font-light leading-relaxed">
               <p>I take the time to understand who you are, what makes your business different, and where you want to go. Then I bring those pieces together to create something that feels authentic, works beautifully, and grows with you.</p>
-              <p>Because your business isn’t one-dimensional. Your website shouldn’t be either.</p>
             </div>
             <Link
               href="/work"
@@ -175,21 +174,21 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="p-6 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-3 transition-all duration-300">
             <h3 className="font-serif text-xl text-[#F4F5F1]">Get Found Online</h3>
-            <p className="text-sm text-[#E6EAE7] leading-relaxed font-light">
+            <p className="text-sm text-[#183B32] leading-relaxed font-light">
               Local SEO and a well-built Google Business Profile help nearby customers find you when they search for the services you offer.
             </p>
           </div>
 
           <div className="p-6 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-3 transition-all duration-300">
             <h3 className="font-serif text-xl text-[#F4F5F1]">Delightful Client Experience</h3>
-            <p className="text-sm text-[#E6EAE7] leading-relaxed font-light">
+            <p className="text-sm text-[#183B32] leading-relaxed font-light">
               Clear navigation, simple booking, and easy checkout help customers get what they need without confusion or extra calls.
             </p>
           </div>
 
           <div className="p-6 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-3 transition-all duration-300">
             <h3 className="font-serif text-xl text-[#F4F5F1]">Your 24/7 Digital Helper</h3>
-            <p className="text-sm text-[#E6EAE7] leading-relaxed font-light">
+            <p className="text-sm text-[#183B32] leading-relaxed font-light">
               Your site can answer common questions, collect inquiries, take bookings, and accept orders while you focus on your customers.
             </p>
           </div>

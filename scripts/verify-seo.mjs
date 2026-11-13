@@ -3,7 +3,6 @@ import { readFile } from "node:fs/promises";
 import { routes } from "./seo-routes.mjs";
 
 const origin = "https://theivanacollective.com";
-const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const titleSet = new Set();
 const canonicalSet = new Set();
 const sitemap = await readFile("dist/sitemap.xml", "utf8");

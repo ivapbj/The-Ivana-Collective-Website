@@ -100,6 +100,10 @@ export default function PageBackground({ path }: { path: string }) {
   const pageKey = getPageKey(path);
   const background = backgrounds[pageKey];
 
+  // Portals are client-only. During server rendering, the fixed background
+  // mounts into document.body after hydration without changing page markup.
+  if (typeof document === "undefined") return null;
+
   return createPortal(
     <div className="page-background" aria-hidden="true" data-page-background={pageKey}>
       <img

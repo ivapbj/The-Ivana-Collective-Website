@@ -92,7 +92,7 @@ function getPageKey(path: string) {
   if (path === "/work" || path === "/portfolio") return "work";
   if (path === "/about") return "about";
   if (path === "/contact") return "contact";
-  if (path.startsWith("/services")) return "services";
+  if (path.startsWith("/services") || path.startsWith("/industries/")) return "services";
   return "home";
 }
 

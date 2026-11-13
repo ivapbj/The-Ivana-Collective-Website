@@ -18,6 +18,7 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import ConciseHome from "./pages/ConciseHome";
 import WebsiteGeneratorPage from "./pages/WebsiteGeneratorPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 // Navigation
 import { NavigationProvider, useNavigation } from "./context/NavigationContext";
@@ -199,8 +200,6 @@ function AppContent() {
               return <PricingPage onScheduleCall={handleScheduleGeneral} />;
             case "/about":
               return <AboutPage onScheduleCall={handleScheduleGeneral} />;
-            case "/insights":
-              return <PricingPage onScheduleCall={handleScheduleGeneral} />;
             case "/contact":
               return (
                 <ContactPage
@@ -220,7 +219,7 @@ function AppContent() {
                 />
               );
             default:
-              return <ConciseHome onScheduleCall={handleScheduleGeneral} />;
+              return <NotFoundPage />;
           }
         })()}
       </div></main>

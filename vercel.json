@@ -1,6 +1,24 @@
 {
+  "redirects": [
+    {
+      "source": "/portfolio",
+      "destination": "/work",
+      "permanent": true
+    },
+    {
+      "source": "/method",
+      "destination": "/pricing",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    { "source": "/:page(work|portfolio|services|pricing|method|about|insights|contact|website-generator)", "destination": "/index.html" },
-    { "source": "/services/:service(web-design|seo|content-growth)", "destination": "/index.html" }
+    {
+      "source": "/:page(work|services|pricing|about|contact|website-generator)",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/services/:service(web-design|seo|content-growth)",
+      "destination": "/index.html"
+    }
   ]
 }

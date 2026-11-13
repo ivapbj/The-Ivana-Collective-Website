@@ -1,0 +1,12 @@
+export const routes = [
+  {path:"/",title:"Websites, Google Help & Social Media Support | The Ivana Collective",description:"Custom websites, business systems and ongoing digital support for businesses nationwide. Based in New England.",kind:"WebPage"},
+  {path:"/services",title:"Website, Google & Social Media Help | The Ivana Collective",description:"Explore custom website development, SEO, business systems and ongoing support for businesses across the United States.",kind:"WebPage"},
+  {path:"/services/web-design",title:"Luxury Editorial Web Design & Development | The Ivana Collective",description:"Custom responsive website design and development for growing businesses nationwide, with New England roots.",kind:"Service",service:"Custom Website Design and Development"},
+  {path:"/services/seo",title:"Bespoke SEO, Google Maps & AI Search Optimization | The Ivana Collective",description:"Technical SEO, local visibility and search optimization services for businesses seeking more qualified customers.",kind:"Service",service:"Search Engine Optimization"},
+  {path:"/services/content-growth",title:"Social Media Management & Content Strategy | The Ivana Collective",description:"Strategic social media management, branded content and consistent digital marketing for small businesses.",kind:"Service",service:"Social Media and Content Management"},
+  {path:"/work",title:"Selected Work & Case Studies | The Ivana Collective",description:"Explore custom websites, e-commerce stores, and business systems developed for real clients.",kind:"CollectionPage"},
+  {path:"/pricing",title:"Website Design & Digital Services Pricing | The Ivana Collective",description:"Explore website development, social media and digital marketing packages for growing businesses.",kind:"WebPage"},
+  {path:"/about",title:"About Ivana | Full-Stack Web Developer & AI Specialist | The Ivana Collective",description:"Meet the founder of The Ivana Collective, a New England-based full-stack developer building practical business websites and custom tools.",kind:"AboutPage"},
+  {path:"/contact",title:"Contact The Ivana Collective",description:"Contact The Ivana Collective to discuss web development, custom systems, maintenance and SEO for your business.",kind:"ContactPage"},
+  {path:"/website-generator",title:"Try Your Website Idea | The Ivana Collective",description:"Choose a website style and preview a personalized direction for your business.",kind:"WebPage"}
+];

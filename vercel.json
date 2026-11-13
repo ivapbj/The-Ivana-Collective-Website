@@ -1,6 +1,52 @@
 {
+  "redirects": [
+    {
+      "source": "/portfolio",
+      "destination": "/work",
+      "permanent": true
+    },
+    {
+      "source": "/method",
+      "destination": "/pricing",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    { "source": "/:page(work|portfolio|services|pricing|method|about|insights|contact|website-generator)", "destination": "/index.html" },
-    { "source": "/services/:service(web-design|seo|content-growth)", "destination": "/index.html" }
+    {
+      "source": "/services",
+      "destination": "/services/index.html"
+    },
+    {
+      "source": "/services/web-design",
+      "destination": "/services/web-design/index.html"
+    },
+    {
+      "source": "/services/seo",
+      "destination": "/services/seo/index.html"
+    },
+    {
+      "source": "/services/content-growth",
+      "destination": "/services/content-growth/index.html"
+    },
+    {
+      "source": "/pricing",
+      "destination": "/pricing/index.html"
+    },
+    {
+      "source": "/work",
+      "destination": "/work/index.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about/index.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact/index.html"
+    },
+    {
+      "source": "/website-generator",
+      "destination": "/website-generator/index.html"
+    }
   ]
 }

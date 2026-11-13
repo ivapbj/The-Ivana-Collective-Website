@@ -8,9 +8,9 @@ interface NavigationContextType {
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
 
-export function NavigationProvider({ children }: { children: React.ReactNode }) {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
-  const [currentHash, setCurrentHash] = useState(window.location.hash);
+export function NavigationProvider({ children, initialPath = "/" }: { children: React.ReactNode; initialPath?: string }) {
+  const [currentPath, setCurrentPath] = useState(typeof window !== "undefined" ? window.location.pathname : initialPath);
+  const [currentHash, setCurrentHash] = useState(typeof window !== "undefined" ? window.location.hash : "");
 
   useEffect(() => {
     const handleLocationChange = () => {

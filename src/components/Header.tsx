@@ -49,7 +49,7 @@ export default function Header({ onScheduleCall }: HeaderProps) {
   const menuItems = [
     { id: "hero", label: "Home", path: "/" },
     { id: "services", label: "Services", path: "/services" },
-    { id: "work", label: "Portfolio", path: "/portfolio" },
+    { id: "work", label: "Portfolio", path: "/work" },
     { id: "pricing", label: "Pricing", path: "/pricing" },
     { id: "about", label: "About", path: "/about" },
     { id: "contact", label: "Contact", path: "/contact" }

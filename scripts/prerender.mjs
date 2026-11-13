@@ -54,7 +54,8 @@ for (const route of routes) {
 const entries=routes.map(r=>"  <url><loc>"+site+r.path+"</loc></url>").join("\n");
 await writeFile("dist/sitemap.xml",'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+entries+'\n</urlset>\n');
 const notFound=template.replace(/<title>[^<]*<\/title>/,'<title>Page Not Found | The Ivana Collective</title>')
-  .replace("</head>",'<meta name="robots" content="noindex, follow" /></head>')
+  .replace(/<meta name="robots" content="[^"]*" \/>/, '<meta name="robots" content="noindex, follow" />')
+  .replace(/<link rel="canonical" href="[^"]*" \/>/, '')
   .replace('<div id="root"></div>','<div id="root"><main><h1>Page not found</h1><a href="/">Return home</a></main></div>');
 await writeFile("dist/404.html",notFound);
 console.log("Prerendered "+routes.length+" routes.");

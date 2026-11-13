@@ -19,6 +19,7 @@ import ContactPage from "./pages/ContactPage";
 import ConciseHome from "./pages/ConciseHome";
 import WebsiteGeneratorPage from "./pages/WebsiteGeneratorPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import IndustrySolutionsPage from "./pages/IndustrySolutionsPage";
 
 // Navigation
 import { NavigationProvider, useNavigation } from "./context/NavigationContext";
@@ -187,6 +188,10 @@ function AppContent() {
               return <SeoService onScheduleCall={handleScheduleGeneral} />;
             case "/services/content-growth":
               return <ContentGrowth onScheduleCall={handleScheduleGeneral} />;
+            case "/industries/property-management":
+              return <IndustrySolutionsPage industry="property-management" onScheduleCall={handleScheduleGeneral} />;
+            case "/industries/auction-platforms":
+              return <IndustrySolutionsPage industry="auction-platforms" onScheduleCall={handleScheduleGeneral} />;
             case "/work":
             case "/portfolio":
               return (

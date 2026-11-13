@@ -275,9 +275,9 @@ function AppContent() {
   );
 }
 
-export default function App() {
+export default function App({ initialPath = "/" }: { initialPath?: string }) {
   return (
-    <NavigationProvider>
+    <NavigationProvider initialPath={initialPath}>
       <AppContent />
     </NavigationProvider>
   );

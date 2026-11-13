@@ -45,7 +45,7 @@ function headFor(route) {
 
 for (const route of routes) {
   const markup=mod.render(route.path);
-  if(!markup || !/<h1[\\s>]/i.test(markup)) throw Error("Missing SSR H1: "+route.path);
+  if(!markup || !markup.includes("<h1")) throw Error("Missing SSR H1: "+route.path);
   const html=headFor(route).replace('<div id="root"></div>','<div id="root">'+markup+'</div>');
   const target=route.path==="/"?"dist/index.html":"dist"+route.path+"/index.html";
   await mkdir(dirname(target),{recursive:true});

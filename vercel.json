@@ -87,6 +87,18 @@
     {
       "source": "/industries/beauty-wellness",
       "destination": "/industries/beauty-wellness/index.html"
+    },
+    {
+      "source": "/locations/massachusetts",
+      "destination": "/locations/massachusetts/index.html"
+    },
+    {
+      "source": "/locations/connecticut",
+      "destination": "/locations/connecticut/index.html"
+    },
+    {
+      "source": "/locations/new-england",
+      "destination": "/locations/new-england/index.html"
     }
   ]
 }

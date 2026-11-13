@@ -1,7 +1,8 @@
 import React from "react";
 import SeoMeta from "../components/SeoMeta";
-import { ArrowRight, Sparkles, Award, ShieldCheck, Cpu, Code2, HeartHandshake, CheckCircle2, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { BOOKING_CALENDAR_URL } from "../data";
+import { Link } from "../context/NavigationContext";
 
 interface AboutPageProps {
   onScheduleCall?: () => void;
@@ -32,15 +33,14 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
 
       {/* Header section */}
       <div className="max-w-4xl text-left space-y-4 mb-16">
-        <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#7CA99B] flex items-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-[#B9D8CE]" />
+        <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#B9D8CE] flex items-center gap-2">
           ABOUT THE FOUNDER & DEVELOPER
         </span>
         <h1 className="font-serif text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.05] text-[#F4F5F1] font-normal tracking-tight">
           Hi, I&apos;m Ivana. <br />
           <span className="text-[#B9D8CE]">Full-Stack Web Developer & AI Specialist.</span>
         </h1>
-        <p className="text-sm md:text-base text-[#B8C6C1] leading-relaxed font-light max-w-3xl">
+        <p className="text-sm md:text-base text-[#E6EAE7] leading-relaxed font-light max-w-3xl">
           Crafting custom digital tools that keep your voice authentic while turning your website into an active helper in your business.
         </p>
       </div>
@@ -60,7 +60,7 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
               <p className="font-mono text-[10px] tracking-wider uppercase text-[#B9D8CE] font-semibold">
                 Ivana · Full-Stack Developer
               </p>
-              <p className="text-[11px] text-[#B8C6C1] font-light">
+              <p className="text-[11px] text-[#E6EAE7] font-light">
                 Founder, The Ivana Collective
               </p>
             </div>
@@ -69,7 +69,6 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
 
         <div className="lg:col-span-7 space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#123B35] border border-[#B9D8CE]/30 text-[#B9D8CE] font-mono text-[10px] uppercase tracking-wider">
-            <Code2 className="w-3.5 h-3.5" />
             <span>My Journey & Philosophy</span>
           </div>
 
@@ -77,7 +76,7 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
             Turning your website from a static business card into a functioning business engine.
           </h2>
 
-          <div className="space-y-4 text-xs md:text-sm text-[#B8C6C1] font-light leading-relaxed">
+          <div className="space-y-4 text-xs md:text-sm text-[#E6EAE7] font-light leading-relaxed">
             <p>
               Like most of us during the pandemic, I realized I needed a change. In my mid-30s, I made the bold decision to go back to school for software engineering.
             </p>
@@ -89,33 +88,83 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-white/5 pt-6 mt-4">
-            <div className="space-y-1.5 p-4 rounded-xl bg-[#061C1A]/60 border border-white/5">
-              <h4 className="font-serif text-base text-[#F4F5F1] flex items-center gap-2">
-                <Cpu className="w-4 h-4 text-[#B9D8CE]" />
-                <span>AI-Powered Functionality</span>
-              </h4>
-              <p className="text-xs text-[#B8C6C1] font-light leading-relaxed">
-                Applied AI tools, smart search discovery, and automated workflows tailored specifically for small business owners.
-              </p>
-            </div>
-            <div className="space-y-1.5 p-4 rounded-xl bg-[#061C1A]/60 border border-white/5">
-              <h4 className="font-serif text-base text-[#F4F5F1] flex items-center gap-2">
-                <HeartHandshake className="w-4 h-4 text-[#B9D8CE]" />
-                <span>Authentic Brand Voice</span>
-              </h4>
-              <p className="text-xs text-[#B8C6C1] font-light leading-relaxed">
-                Tech that amplifies your genuine human voice, never replacing it with generic, sterile templates.
-              </p>
+        </div>
+      </div>
+
+      {/* Personal story, with original photographs placed alongside the story they illustrate */}
+      <section className="mb-24 space-y-12 text-left" aria-labelledby="personal-story-title">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="lg:col-span-12 space-y-5">
+            <span className="font-mono text-[10px] tracking-widest uppercase text-[#B9D8CE]">
+              A LITTLE MORE ABOUT ME
+            </span>
+            <h2 id="personal-story-title" className="font-serif text-3xl md:text-4xl text-[#F4F5F1]">
+              More Than One Thing. Always Evolving.
+            </h2>
+            <div className="space-y-4 text-xs md:text-sm text-[#E6EAE7] font-light leading-relaxed">
+              <p>Red lipstick. Chopping off my hair. Going on a hike through the mountains of New England.</p>
+              <p>This is who I am. This is what I do. This is what I love.</p>
+              <p>I&apos;m a versatile woman in New England, and that versatility shapes how I approach every business I work with. People aren&apos;t just one thing, and neither are businesses.</p>
             </div>
           </div>
         </div>
-      </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="lg:col-span-5 lg:order-1">
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-[#B9D8CE]/20 shadow-2xl max-w-xl mx-auto">
+              <img
+                src="/images/about-founder-hiking.webp"
+                srcSet="/images/about-founder-hiking.webp 1536w, /images/about-founder-hiking-2x.webp 3072w"
+                sizes="(min-width: 1024px) 40vw, 100vw"
+                alt="Ivana hiking among the mountains and forests of New England"
+                className="w-full h-full object-cover object-center"
+                width="1536"
+                height="1152"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
+          <div className="lg:col-span-7 space-y-4 text-xs md:text-sm text-[#E6EAE7] font-light leading-relaxed lg:order-2">
+            <p>Living in New England has taught me to appreciate change. Every season brings something different, and every stage of life gives us an opportunity to grow.</p>
+            <p>Every business has its own personality, its own challenges, and its own ambitions. I believe its website should reflect that individuality, rather than force it into a generic template.</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="lg:col-span-7 space-y-5">
+            <div className="space-y-4 text-xs md:text-sm text-[#E6EAE7] font-light leading-relaxed">
+              <p>I take the time to understand who you are, what makes your business different, and where you want to go. Then I bring those pieces together to create something that feels authentic, works beautifully, and grows with you.</p>
+              <p>Because your business isn’t one-dimensional. Your website shouldn’t be either.</p>
+            </div>
+            <Link
+              href="/work"
+              className="inline-flex items-center justify-center space-x-2.5 px-8 py-4 rounded-xl font-mono text-xs uppercase tracking-wider font-semibold bg-[#B9D8CE] text-[#061C1A] hover:bg-[#F4F5F1] hover:shadow-lg hover:shadow-[#B9D8CE]/10 transition-all duration-200 cursor-pointer shadow-md group"
+            >
+              <span>View My Work</span>
+              <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true" />
+            </Link>
+          </div>
+          <div className="lg:col-span-5">
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-[#B9D8CE]/20 shadow-2xl max-w-xl mx-auto">
+              <img
+                src="/images/founder.jpg"
+                alt="Ivana sharing a relaxed moment with her dog"
+                className="w-full h-full object-cover object-center"
+                width="3480"
+                height="2610"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* How I Help Your Business */}
       <div className="mb-24 text-left">
         <div className="max-w-2xl mb-12 space-y-3">
-          <span className="font-mono text-[10px] tracking-widest uppercase text-[#7CA99B]">
+          <span className="font-mono text-[10px] tracking-widest uppercase text-[#B9D8CE]">
             WHAT WE ACCOMPLISH TOGETHER
           </span>
           <h2 className="font-serif text-3xl md:text-4xl text-[#F4F5F1]">
@@ -123,34 +172,25 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-8 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-4 transition-all duration-300">
-            <div className="w-10 h-10 rounded-xl bg-[#123B35] flex items-center justify-center text-[#B9D8CE] font-mono text-sm font-bold">
-              01
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-3 transition-all duration-300">
             <h3 className="font-serif text-xl text-[#F4F5F1]">Get Found Online</h3>
-            <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-              From hyper-local SEO and structured schema markup to Google Business Profile optimization and AI search crawling, we ensure potential clients discover your services when they are searching.
+            <p className="text-sm text-[#E6EAE7] leading-relaxed font-light">
+              Local SEO and a well-built Google Business Profile help nearby customers find you when they search for the services you offer.
             </p>
           </div>
 
-          <div className="p-8 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-4 transition-all duration-300">
-            <div className="w-10 h-10 rounded-xl bg-[#123B35] flex items-center justify-center text-[#B9D8CE] font-mono text-sm font-bold">
-              02
-            </div>
+          <div className="p-6 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-3 transition-all duration-300">
             <h3 className="font-serif text-xl text-[#F4F5F1]">Delightful Client Experience</h3>
-            <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-              Frictionless browsing, fast-loading mobile experiences, intuitive appointment booking, and easy e-commerce checkout so your visitors love interacting with your brand.
+            <p className="text-sm text-[#E6EAE7] leading-relaxed font-light">
+              Clear navigation, simple booking, and easy checkout help customers get what they need without confusion or extra calls.
             </p>
           </div>
 
-          <div className="p-8 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-4 transition-all duration-300">
-            <div className="w-10 h-10 rounded-xl bg-[#123B35] flex items-center justify-center text-[#B9D8CE] font-mono text-sm font-bold">
-              03
-            </div>
+          <div className="p-6 bg-[#0D2623]/60 border border-white/8 hover:border-[#B9D8CE]/30 rounded-3xl space-y-3 transition-all duration-300">
             <h3 className="font-serif text-xl text-[#F4F5F1]">Your 24/7 Digital Helper</h3>
-            <p className="text-xs text-[#B8C6C1] leading-relaxed font-light">
-              Your website works around the clock answering questions, collecting inquiries, processing orders, and building trust while you focus on doing what you love most.
+            <p className="text-sm text-[#E6EAE7] leading-relaxed font-light">
+              Your site can answer common questions, collect inquiries, take bookings, and accept orders while you focus on your customers.
             </p>
           </div>
         </div>
@@ -162,13 +202,13 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
         
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-8 space-y-4">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-[#7CA99B]">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-[#B9D8CE]">
               DIRECT COLLABORATION
             </span>
             <h2 className="font-serif text-2xl md:text-3xl text-[#F4F5F1] font-normal">
               Ready to create a functioning business tool for your brand?
             </h2>
-            <p className="text-xs md:text-sm text-[#B8C6C1] leading-relaxed font-light">
+            <p className="text-xs md:text-sm text-[#E6EAE7] leading-relaxed font-light">
               Book a free consultation call. We&apos;ll discuss your vision, audit your current visibility, and map out the exact digital tools to help your business grow.
             </p>
           </div>

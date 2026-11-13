@@ -147,11 +147,11 @@ export default function AboutPage({ onScheduleCall }: AboutPageProps) {
           <div className="lg:col-span-5">
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-[#B9D8CE]/20 shadow-2xl max-w-xl mx-auto">
               <img
-                src="/images/founder.jpg"
-                alt="Ivana sharing a relaxed moment with her dog"
-                className="w-full h-full object-cover object-center"
-                width="3480"
-                height="2610"
+                src="/images/about-founder-cocktail.jpeg"
+                alt="Ivana in a white outfit holding a citrus cocktail"
+                className="w-full h-full object-cover object-[center_35%]"
+                width="1152"
+                height="1536"
                 loading="lazy"
                 decoding="async"
               />

@@ -78,7 +78,7 @@ export default function WordPressComparisonGuide({ onScheduleCall }: { onSchedul
         <div className="mt-9 rounded-3xl border border-[#B9D8CE]/25 bg-[#123B35]/75 p-7 md:p-9">
           <h3 className="font-serif text-2xl text-[#F4F5F1]">Not sure about the answers? That's okay.</h3>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#E0EBE5]">You don't have to figure out the technology on your own. Tell me a little about your business, and we'll talk through what your website needs.</p>
-          <button type="button" onClick={onScheduleCall} className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#B9D8CE] px-6 font-semibold text-[#061C1A] hover:bg-[#F4F5F1]">Schedule a Free Consultation <ArrowRight size={17}/></button>
+          <button type="button" onClick={onScheduleCall} className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#B9D8CE] px-6 font-semibold text-[#061C1A] hover:bg-[#F4F5F1]">Schedule a Consultation <ArrowRight size={17}/></button>
         </div>
       </section>
       <section aria-label="Related services" className="mb-12 flex flex-wrap gap-6">

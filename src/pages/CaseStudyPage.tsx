@@ -6,7 +6,7 @@ import "./CaseStudyPage.css";
 type Study = {
   slug: string; name: string; industry: string; title: string; description: string; background: string;
   challenge: string; solution: string; features: string[]; technologies: string[];
-  gallery: Array<[string, string]>; services: Array<[string, string]>;
+  outcome: string; heroImage?: [string, string]; gallery: Array<[string, string]>; services: Array<[string, string]>;
 };
 
 const image = (name: string) => `/images/case-studies/${name}`;
@@ -18,21 +18,24 @@ const studies: Record<string, Study> = {
     description: "A private case-study review of Rebar & Rose, a WooCommerce workwear storefront with product variations, shopping flows and customer contact paths.",
     background: "IMG_1436.jpeg",
     challenge: "Translate a distinctive construction-workwear identity into a store that makes products, options and customer next steps easy to understand.",
-    solution: "The build organizes the product catalog and category browsing around real workwear, presents color and size selections on product pages, gives shoppers cart feedback, and keeps the contact path visible. Payment, shipping and any future integrations are intentionally not represented as completed here unless independently verified.",
+    solution: "This was a brand-led WooCommerce implementation, not a generic product grid. The storefront brings the workwear collection, category browsing, variation selection, cart feedback and customer contact path into one consistent shopping experience that feels as considered as the brand itself.",
+    outcome: "For product-based businesses, the goal is a store that makes it easier to understand what is being sold, choose the right option and move confidently to the next step—while giving the owner a manageable product structure behind the scenes.",
     features: ["Catalog and category browsing", "Color and size variations", "Cart feedback", "Customer contact pathway"],
     technologies: ["WordPress", "WooCommerce", "Elementor", "Responsive storefront"],
+    heroImage: ["Shop the collection", "IMG_1439.png"],
     gallery: [["Shop collections", "IMG_1439.png"], ["Products and categories", "IMG_1440.png"], ["Product options", "IMG_1442.jpeg"], ["Cart confirmation", "IMG_1443.jpeg"], ["Customer contact", "IMG_1441.jpeg"]],
     services: [["WooCommerce development", "/services/woocommerce-development"], ["E-commerce websites", "/services/ecommerce-websites"]]
   },
   "laboy-properties": {
     slug: "laboy-properties", name: "LaBoy Properties", industry: "Property management / rentals",
-    title: "A clearer way to explore, apply and book.",
-    description: "A private case-study review of LaBoy Properties, a property-management website connecting rental discovery, property details and tenant next steps.",
+    title: "A property system built to give managers time back.",
+    description: "A private case-study review of LaBoy Properties: a custom property-management and booking experience connecting rental discovery, applications, availability and tenant next steps.",
     background: "IMG_1437.jpeg",
-    challenge: "Make residential-rental and vacation-stay journeys easier to navigate while giving each property enough context for an informed next step.",
-    solution: "The site organizes available properties with filters, detailed listing pages, property galleries, amenities, application calls to action and an availability-calendar experience for short stays. The featured 1 Crystal Way listing is in Palm Coast, Florida. The case study does not claim booking or occupancy results.",
-    features: ["Rental discovery and filters", "Listing detail and galleries", "Availability calendar", "Application and booking calls to action"],
-    technologies: ["WordPress", "Elementor", "Innago tenant portal links", "Responsive navigation"],
+    challenge: "Marie needed more than a brochure site. Residential rentals and vacation stays needed a clear way to be discovered, evaluated and acted on—without pushing every renter question and admin task back into a manual process.",
+    solution: "The work created a custom property-management and booking experience: filterable available properties, detailed listing pages, galleries, amenities, availability and calls to apply or book. Custom functionality supports the rental workflow and connects renters to Innago for tenant-facing steps. The featured 1 Crystal Way listing is in Palm Coast, Florida.",
+    outcome: "This is the kind of connected system that helps property managers reduce repetitive admin, give applicants and renters a clearer path, and support rent collection, applications and maintenance-request workflows through the right connected tools—without representing every workflow as fully automated.",
+    features: ["Custom property discovery", "Booking and availability experience", "Application pathways", "Connected tenant workflows"],
+    technologies: ["WordPress", "Elementor", "Custom functionality", "Innago-connected tenant tools"],
     gallery: [["Available properties", "IMG_1444.jpeg"], ["Property detail", "IMG_1446.jpeg"], ["Availability calendar", "IMG_1449.jpeg"], ["Mobile navigation", "IMG_1450.jpeg"], ["Amenities and apply", "IMG_1452.jpeg"]],
     services: [["Property management websites", "/industries/property-management"], ["Custom website design", "/services/web-design"]]
   },
@@ -42,7 +45,8 @@ const studies: Record<string, Study> = {
     description: "A private case-study review of Llanos Electrolysis, combining editorial service design, local content structure and clear appointment paths.",
     background: "IMG_1435.jpeg",
     challenge: "Present specialized electrolysis, skin and nail services in a calm, understandable experience while helping visitors find the relevant service and consultation path.",
-    solution: "The redesign uses individual service pages, clear content hierarchy, appointment calls to action, mobile-first presentation and location-focused content. It documents the work completed without making claims about treatment outcomes, search rankings or business results.",
+    solution: "The redesign uses individual service pages, clear content hierarchy, appointment calls to action, mobile-first presentation and location-focused content. Each service is given a more understandable path from first question to consultation, without making medical-outcome, ranking or business-result claims.",
+    outcome: "For wellness businesses with several specialized services, a clearer content system can make the site feel easier to trust and easier to use—especially from a phone.",
     features: ["Specialized service pages", "Consultation and appointment paths", "Location-focused content", "Mobile-first hierarchy"],
     technologies: ["WordPress", "Elementor", "Rank Math SEO", "Structured service content"],
     gallery: [["Specialized electrolysis service", "IMG_1455.jpeg"], ["Skin and nail treatments", "IMG_1456.jpeg"], ["Seasonal spa services", "IMG_1454.jpeg"]],
@@ -55,6 +59,7 @@ const studies: Record<string, Study> = {
     background: "IMG_1438.jpeg",
     challenge: "Organize property discovery and distinct investor or homeowner pathways for a specialized real-estate workflow without exposing private account or transaction information.",
     solution: "The implementation provides regional property discovery, investor registration and approval concepts, gated research access and separate information paths. Gemini-powered investor analysis is integrated. Auction and post-auction workflows change over time, so this review does not characterize unverified or planned transaction features as live.",
+    outcome: "This demonstrates what happens when a business needs more than pages: the website can become a structured front end for specialized roles, guided access and custom operational workflows.",
     features: ["Regional property discovery", "Investor registration concepts", "Gated analysis", "Separate investor and homeowner journeys"],
     technologies: ["WordPress", "WooCommerce", "YITH Auctions", "Gemini API integration"],
     gallery: [["Investor market analysis", "IMG_1461.jpeg"], ["Property discovery by region", "IMG_1459.jpeg"], ["Registration to bid", "IMG_1458.jpeg"], ["Investor and homeowner journeys", "IMG_1457.jpeg"]],
@@ -77,6 +82,7 @@ export default function CaseStudyPage({ slug, onScheduleCall }: { slug: string; 
       <h1>{study.title}</h1>
       <p className="case-study-lead">{study.description.replace("A private case-study review of ", "")}</p>
       <button className="case-study-button" onClick={onScheduleCall}>Discuss a similar project <span aria-hidden="true">↗</span></button>
+      {study.heroImage && <figure className="case-study-hero-shot"><img src={image(study.heroImage[1])} alt={`Original ${study.name} website screenshot: ${study.heroImage[0]}`} /><figcaption>{study.heroImage[0]}</figcaption></figure>}
     </section>
     <section className="case-study-surface">
       <div className="case-study-grid">
@@ -84,6 +90,7 @@ export default function CaseStudyPage({ slug, onScheduleCall }: { slug: string; 
         <div><p className="case-study-label">The solution</p><p>{study.solution}</p><div className="case-study-pills">{study.features.map(item => <span key={item}>{item}</span>)}</div></div>
       </div>
       <div className="case-study-stack"><p className="case-study-label">Platforms and implementation</p>{study.technologies.map(item => <span key={item}>{item}</span>)}</div>
+      <section className="case-study-outcome"><p className="case-study-label">Why this matters</p><h2>Built around the business, not a template.</h2><p>{study.outcome}</p><button className="case-study-text-button" onClick={onScheduleCall}>Talk about a similar system <span aria-hidden="true">↗</span></button></section>
       <div className="case-study-gallery-heading"><p className="case-study-label">Original website screenshots</p><h2>Explore the experience.</h2><p>These unmodified client screenshots are included only for private review.</p></div>
       <div className="case-study-gallery">{study.gallery.map(([label, file], i) => <figure key={file} className={i === 0 ? "case-study-gallery__feature" : ""}><img src={image(file)} alt={`Original ${study.name} website screenshot: ${label}`} loading={i > 1 ? "lazy" : "eager"} decoding="async" /><figcaption>{label}</figcaption></figure>)}</div>
       <aside className="case-study-note">Client publication permission is still pending. This route is intentionally noindex and excluded from the production sitemap.</aside>

@@ -9,11 +9,6 @@
       "source": "/method",
       "destination": "/pricing",
       "permanent": true
-    },
-    {
-      "source": "/guides/wordpress-vs-custom-website",
-      "destination": "/",
-      "permanent": true
     }
   ],
   "rewrites": [
@@ -112,6 +107,10 @@
     {
       "source": "/locations/western-ma-wordpress-developer",
       "destination": "/locations/western-ma-wordpress-developer/index.html"
+    },
+    {
+      "source": "/guides/wordpress-vs-custom-website",
+      "destination": "/guides/wordpress-vs-custom-website/index.html"
     }
   ]
 }

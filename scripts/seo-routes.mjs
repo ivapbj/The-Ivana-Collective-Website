@@ -1,5 +1,5 @@
 export const routes = [
-  {path:"/",title:"Websites, Google Help & Social Media Support | The Ivana Collective",description:"Custom websites, business systems and ongoing digital support for businesses nationwide. Based in New England.",kind:"WebPage"},
+  {path:"/",title:"Web Design, WordPress & Custom Business Systems | The Ivana Collective",description:"Custom websites, WordPress development and business automation from a Western Massachusetts-based studio serving clients nationwide. Explore your website options and try a live preview.",kind:"WebPage"},
   {path:"/services",title:"Website, Google & Social Media Help | The Ivana Collective",description:"Explore custom website development, SEO, business systems and ongoing support for businesses across the United States.",kind:"WebPage"},
   {path:"/services/web-design",title:"Luxury Editorial Web Design & Development | The Ivana Collective",description:"Custom responsive website design and development for growing businesses nationwide, with New England roots.",kind:"Service",service:"Custom Website Design and Development"},
   {path:"/services/seo",title:"Bespoke SEO, Google Maps & AI Search Optimization | The Ivana Collective",description:"Technical SEO, local visibility and search optimization services for businesses seeking more qualified customers.",kind:"Service",service:"Search Engine Optimization"},

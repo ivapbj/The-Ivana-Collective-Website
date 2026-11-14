@@ -111,6 +111,22 @@
     {
       "source": "/guides/wordpress-vs-custom-website",
       "destination": "/guides/wordpress-vs-custom-website/index.html"
+    },
+    {
+      "source": "/locations/wilbraham-ma-web-design",
+      "destination": "/locations/wilbraham-ma-web-design/index.html"
+    },
+    {
+      "source": "/locations/east-longmeadow-ma-web-design",
+      "destination": "/locations/east-longmeadow-ma-web-design/index.html"
+    },
+    {
+      "source": "/locations/longmeadow-ma-web-design",
+      "destination": "/locations/longmeadow-ma-web-design/index.html"
+    },
+    {
+      "source": "/locations/enfield-ct-web-design",
+      "destination": "/locations/enfield-ct-web-design/index.html"
     }
   ]
 }

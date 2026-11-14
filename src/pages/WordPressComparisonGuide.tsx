@@ -4,10 +4,10 @@ import SeoMeta from "../components/SeoMeta";
 import StylePreviewSection from "../components/StylePreviewSection";
 import { Link } from "../context/NavigationContext";
 
-export default function WordPressComparisonGuide({ onScheduleCall }: { onScheduleCall: () => void }) {
-  const title="WordPress or Custom Website? A Small Business Guide";
-  const description="Compare WordPress, WooCommerce, custom React development and integrations for your business. Understand editing, costs, maintenance, SEO and when to choose each.";
-  const path="/guides/wordpress-vs-custom-website";
+export default function WordPressComparisonGuide({ onScheduleCall, isHomepage = false }: { onScheduleCall: () => void; isHomepage?: boolean }) {
+  const title=isHomepage ? "Web Design, WordPress & Custom Business Systems | The Ivana Collective" : "WordPress or Custom Website? A Small Business Guide";
+  const description=isHomepage ? "Custom websites, WordPress development and business automation from a Western Massachusetts-based studio serving clients nationwide. Explore your website options and try a live preview." : "Compare WordPress, WooCommerce, custom React development and integrations for your business. Understand editing, costs, maintenance, SEO and when to choose each.";
+  const path=isHomepage ? "/" : "/guides/wordpress-vs-custom-website";
   const sections=[
     {
       heading:"Choose WordPress when ongoing content editing is central",

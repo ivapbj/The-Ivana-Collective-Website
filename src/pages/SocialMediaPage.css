@@ -1,0 +1,23 @@
+.social-media-page .social-package-card {
+  background-color: #F5F2E9 !important;
+  color: #102C25 !important;
+}
+.social-media-page .social-package-card h3,
+.social-media-page .social-package-card strong,
+.social-media-page .social-package-card div > p:not([class]),
+.social-media-page .social-package-card p,
+.social-media-page .social-package-card li {
+  color: #19372F !important;
+}
+.social-media-page .social-package-card a {
+  color: #103F34 !important;
+  border-color: #103F34;
+}
+.social-media-page .social-package-card a:hover,
+.social-media-page .social-package-card a:focus-visible {
+  background-color: #103F34 !important;
+  color: #FFFFFF !important;
+}
+.social-media-page .social-package-card svg {
+  color: #103F34 !important;
+}

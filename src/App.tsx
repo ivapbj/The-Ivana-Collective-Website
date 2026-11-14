@@ -25,6 +25,7 @@ import SystemsServicesPage from "./pages/SystemsServicesPage";
 import CommerceWellnessPage from "./pages/CommerceWellnessPage";
 import RegionalServicePage from "./pages/RegionalServicePage";
 import LocalIntentPage from "./pages/LocalIntentPage";
+import TownWebDesignPage from "./pages/TownWebDesignPage";
 import WordPressComparisonGuide from "./pages/WordPressComparisonGuide";
 import CaseStudyPage from "./pages/CaseStudyPage";
 
@@ -221,6 +222,14 @@ function AppContent() {
               return <LocalIntentPage focus="springfield-web-design" onScheduleCall={handleScheduleGeneral} />;
             case "/locations/western-ma-wordpress-developer":
               return <LocalIntentPage focus="western-ma-wordpress" onScheduleCall={handleScheduleGeneral} />;
+            case "/locations/wilbraham-ma-web-design":
+              return <TownWebDesignPage town="wilbraham" onScheduleCall={handleScheduleGeneral} />;
+            case "/locations/east-longmeadow-ma-web-design":
+              return <TownWebDesignPage town="east-longmeadow" onScheduleCall={handleScheduleGeneral} />;
+            case "/locations/longmeadow-ma-web-design":
+              return <TownWebDesignPage town="longmeadow" onScheduleCall={handleScheduleGeneral} />;
+            case "/locations/enfield-ct-web-design":
+              return <TownWebDesignPage town="enfield" onScheduleCall={handleScheduleGeneral} />;
             case "/guides/wordpress-vs-custom-website":
               return <WordPressComparisonGuide onScheduleCall={handleScheduleGeneral} />;
             case "/industries/property-management":

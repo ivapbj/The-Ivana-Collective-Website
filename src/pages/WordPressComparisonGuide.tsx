@@ -26,11 +26,11 @@ export default function WordPressComparisonGuide({ onScheduleCall }: { onSchedul
     }
   ];
   const checklist=[
-    ["Who edits content?","A nontechnical staff member editing weekly may benefit from a CMS; occasional changes can work with a managed development arrangement."],
-    ["What customer actions matter?","Map the inquiry, booking, purchase or application steps before choosing the platform."],
-    ["What is the lifetime cost?","Include hosting, software, updates, payment processing, support and future integrations—not just the launch price."],
-    ["How sensitive is the data?","Customer, tenant and payment workflows demand suitable providers, access controls and security review."],
-    ["What happens after launch?","Choose an approach your team can realistically update, monitor, back up and improve."]
+    ["Do you want to make changes to your website yourself?","For example, would you like to add photos, update prices, or change your services without having to contact a developer?"],
+    ["What do you want visitors to be able to do on your website?","Should customers book appointments, request quotes, buy products, fill out applications, or simply contact you?"],
+    ["What is your budget now—and for keeping the website running?","Think about the initial build as well as hosting, updates, and any monthly tools or services. We'll help you understand the options."],
+    ["Will your website collect customer information?","Will people enter contact details, make payments, or submit applications? That helps us choose secure, appropriate tools."],
+    ["How much help would you like after your website launches?","Would you prefer to manage updates yourself, or have someone you can call when you need changes, maintenance, or help with a problem?"]
   ];
   const schema={"@context":"https://schema.org","@type":"Article",headline:title,description,
     author:{"@type":"Organization",name:"The Ivana Collective"}};
@@ -75,6 +75,11 @@ export default function WordPressComparisonGuide({ onScheduleCall }: { onSchedul
         <div className="space-y-4">{checklist.map(([question,answer],i)=><div key={question} className="rounded-2xl border border-white/10 bg-[#0D2623]/70 p-6">
           <h3 className="font-serif text-xl text-[#F4F5F1]">{i+1}. {question}</h3><p className="mt-2 text-base leading-relaxed text-[#B8C6C1]">{answer}</p>
         </div>)}</div>
+        <div className="mt-9 rounded-3xl border border-[#B9D8CE]/25 bg-[#123B35]/75 p-7 md:p-9">
+          <h3 className="font-serif text-2xl text-[#F4F5F1]">Not sure about the answers? That's okay.</h3>
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#E0EBE5]">You don't have to figure out the technology on your own. Tell me a little about your business, and we'll talk through what your website needs.</p>
+          <button type="button" onClick={onScheduleCall} className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#B9D8CE] px-6 font-semibold text-[#061C1A] hover:bg-[#F4F5F1]">Schedule a Free Consultation <ArrowRight size={17}/></button>
+        </div>
       </section>
       <section aria-label="Related services" className="mb-12 flex flex-wrap gap-6">
         <Link href="/services/wordpress-development" className="text-[#B9D8CE] underline underline-offset-4">WordPress development</Link>

@@ -6,7 +6,7 @@ import "./CaseStudyPage.css";
 type Study = {
   slug: string; name: string; industry: string; title: string; description: string; background: string;
   challenge: string; solution: string; features: string[]; technologies: string[];
-  outcome: string; heroImage?: [string, string]; gallery: Array<[string, string]>; services: Array<[string, string]>;
+  outcome: string; heroImages: Array<[string, string]>; gallery: Array<[string, string]>; services: Array<[string, string]>;
 };
 
 const image = (name: string) => `/images/case-studies/${name}`;
@@ -22,8 +22,8 @@ const studies: Record<string, Study> = {
     outcome: "For product-based businesses, the goal is a store that makes it easier to understand what is being sold, choose the right option and move confidently to the next step—while giving the owner a manageable product structure behind the scenes.",
     features: ["Catalog and category browsing", "Color and size variations", "Cart feedback", "Customer contact pathway"],
     technologies: ["WordPress", "WooCommerce", "Elementor", "Responsive storefront"],
-    heroImage: ["Shop the collection", "IMG_1439.png"],
-    gallery: [["Shop collections", "IMG_1439.png"], ["Products and categories", "IMG_1440.png"], ["Product options", "IMG_1442.jpeg"], ["Cart confirmation", "IMG_1443.jpeg"], ["Customer contact", "IMG_1441.jpeg"]],
+    heroImages: [["Shop the collection", "crops/rebar-shop-all.webp"], ["Browse the collection", "crops/rebar-categories.webp"]],
+    gallery: [["Shop collections", "crops/rebar-shop-all.webp"], ["Products and categories", "crops/rebar-categories.webp"], ["Product options", "crops/rebar-options.webp"], ["Cart confirmation", "crops/rebar-cart.webp"], ["Customer contact", "crops/rebar-contact.webp"]],
     services: [["WooCommerce development", "/services/woocommerce-development"], ["E-commerce websites", "/services/ecommerce-websites"]]
   },
   "laboy-properties": {
@@ -36,6 +36,7 @@ const studies: Record<string, Study> = {
     outcome: "This is the kind of connected system that helps property managers reduce repetitive admin, give applicants and renters a clearer path, and support rent collection, applications and maintenance-request workflows through the right connected tools—without representing every workflow as fully automated.",
     features: ["Custom property discovery", "Booking and availability experience", "Application pathways", "Connected tenant workflows"],
     technologies: ["WordPress", "Elementor", "Custom functionality", "Innago-connected tenant tools"],
+    heroImages: [["Available properties", "IMG_1444.jpeg"], ["Property detail", "IMG_1446.jpeg"]],
     gallery: [["Available properties", "IMG_1444.jpeg"], ["Property detail", "IMG_1446.jpeg"], ["Availability calendar", "IMG_1449.jpeg"], ["Mobile navigation", "IMG_1450.jpeg"], ["Amenities and apply", "IMG_1452.jpeg"]],
     services: [["Property management websites", "/industries/property-management"], ["Custom website design", "/services/web-design"]]
   },
@@ -49,6 +50,7 @@ const studies: Record<string, Study> = {
     outcome: "For wellness businesses with several specialized services, a clearer content system can make the site feel easier to trust and easier to use—especially from a phone.",
     features: ["Specialized service pages", "Consultation and appointment paths", "Location-focused content", "Mobile-first hierarchy"],
     technologies: ["WordPress", "Elementor", "Rank Math SEO", "Structured service content"],
+    heroImages: [["Specialized electrolysis service", "IMG_1455.jpeg"], ["Skin and nail treatments", "IMG_1456.jpeg"]],
     gallery: [["Specialized electrolysis service", "IMG_1455.jpeg"], ["Skin and nail treatments", "IMG_1456.jpeg"], ["Seasonal spa services", "IMG_1454.jpeg"]],
     services: [["Beauty and wellness websites", "/industries/beauty-wellness"], ["Website redesign", "/services/website-redesign"]]
   },
@@ -62,6 +64,7 @@ const studies: Record<string, Study> = {
     outcome: "This demonstrates what happens when a business needs more than pages: the website can become a structured front end for specialized roles, guided access and custom operational workflows.",
     features: ["Regional property discovery", "Investor registration concepts", "Gated analysis", "Separate investor and homeowner journeys"],
     technologies: ["WordPress", "WooCommerce", "YITH Auctions", "Gemini API integration"],
+    heroImages: [["Investor market analysis", "IMG_1461.jpeg"], ["Property discovery by region", "IMG_1459.jpeg"]],
     gallery: [["Investor market analysis", "IMG_1461.jpeg"], ["Property discovery by region", "IMG_1459.jpeg"], ["Registration to bid", "IMG_1458.jpeg"], ["Investor and homeowner journeys", "IMG_1457.jpeg"]],
     services: [["Custom auction platforms", "/industries/auction-platforms"], ["Custom business systems", "/services/custom-business-systems"]]
   }
@@ -82,7 +85,12 @@ export default function CaseStudyPage({ slug, onScheduleCall }: { slug: string; 
       <h1>{study.title}</h1>
       <p className="case-study-lead">{study.description.replace("A private case-study review of ", "")}</p>
       <button className="case-study-button" onClick={onScheduleCall}>Discuss a similar project <span aria-hidden="true">↗</span></button>
-      {study.heroImage && <figure className="case-study-hero-shot"><img src={image(study.heroImage[1])} alt={`Original ${study.name} website screenshot: ${study.heroImage[0]}`} /><figcaption>{study.heroImage[0]}</figcaption></figure>}
+      <div className="case-study-hero-media" aria-label={`${study.name} project previews`}>
+        {study.heroImages.map(([label, file], index) => <figure key={file} className={`case-study-hero-shot case-study-hero-shot--${index + 1}`}>
+          <img src={image(file)} alt={`Original ${study.name} website screenshot: ${label}`} fetchPriority={index === 0 ? "high" : "auto"} />
+          <figcaption>{label}</figcaption>
+        </figure>)}
+      </div>
     </section>
     <section className="case-study-surface">
       <div className="case-study-grid">

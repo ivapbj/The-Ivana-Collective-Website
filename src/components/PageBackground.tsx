@@ -84,20 +84,20 @@ const backgrounds: Record<string, PageBackgroundConfig> = {
     title: "A welcoming workspace ready for collaboration",
   },
   caseRebarRose: {
-    src: "/images/case-studies/IMG_1436.jpeg", position: "center top", mobilePosition: "54% top",
-    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .67) 60%, rgba(4, 22, 18, .5))", title: "Rebar and Rose original website screenshot",
+    src: "/images/work-forest-reference.jpeg", position: "center", mobilePosition: "55% center",
+    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .68) 60%, rgba(4, 22, 18, .5))", title: "Forest background for the Rebar and Rose case study",
   },
   caseLaboy: {
     src: "/images/work-forest-reference.jpeg", position: "center", mobilePosition: "55% center",
     overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .68) 60%, rgba(4, 22, 18, .5))", title: "Forest background for the LaBoy Properties case study",
   },
   caseLlanos: {
-    src: "/images/case-studies/IMG_1435.jpeg", position: "center top", mobilePosition: "52% top",
-    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .67) 60%, rgba(4, 22, 18, .5))", title: "Llanos Electrolysis original website screenshot",
+    src: "/images/work-forest-reference.jpeg", position: "center", mobilePosition: "55% center",
+    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .68) 60%, rgba(4, 22, 18, .5))", title: "Forest background for the Llanos Electrolysis case study",
   },
   caseForeclosure: {
-    src: "/images/case-studies/IMG_1438.jpeg", position: "center top", mobilePosition: "55% top",
-    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .9), rgba(4, 22, 18, .68) 60%, rgba(4, 22, 18, .5))", title: "ForeclosureBuyHomes original website screenshot",
+    src: "/images/work-forest-reference.jpeg", position: "center", mobilePosition: "55% center",
+    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .68) 60%, rgba(4, 22, 18, .5))", title: "Forest background for the ForeclosureBuyHomes case study",
   },
 };
 

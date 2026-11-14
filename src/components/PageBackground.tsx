@@ -13,11 +13,12 @@ type PageBackgroundConfig = {
 
 const backgrounds: Record<string, PageBackgroundConfig> = {
   home: {
-    src: "/images/home-cinematic.webp",
-    position: "70% center",
-    mobilePosition: "70% center",
-    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .78) 0%, rgba(4, 22, 18, .48) 48%, rgba(4, 22, 18, .18) 100%)",
-    title: "Founder working in a forest-inspired creative studio",
+    src: "/images/about-founder-orchard.webp",
+    srcSet: "/images/about-founder-orchard.webp 864w, /images/about-founder-orchard-2x.webp 1728w",
+    position: "50% 34%",
+    mobilePosition: "52% 42%",
+    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .76) 0%, rgba(4, 22, 18, .54) 48%, rgba(4, 22, 18, .30) 100%)",
+    title: "Ivana in an orchard beneath the apple trees",
   },
   services: {
     src: "/images/services-cinematic.webp",

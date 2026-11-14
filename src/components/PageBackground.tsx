@@ -102,6 +102,7 @@ const backgrounds: Record<string, PageBackgroundConfig> = {
 };
 
 function getPageKey(path: string) {
+  if (path === "/") return "about";
   if (path === "/website-generator") return "preview";
   if (path === "/services/web-design") return "webDesign";
   if (path === "/services/seo") return "seo";

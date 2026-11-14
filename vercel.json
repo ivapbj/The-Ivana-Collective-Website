@@ -99,6 +99,18 @@
     {
       "source": "/locations/new-england",
       "destination": "/locations/new-england/index.html"
+    },
+    {
+      "source": "/locations/springfield-ma-web-design",
+      "destination": "/locations/springfield-ma-web-design/index.html"
+    },
+    {
+      "source": "/locations/western-ma-wordpress-developer",
+      "destination": "/locations/western-ma-wordpress-developer/index.html"
+    },
+    {
+      "source": "/guides/wordpress-vs-custom-website",
+      "destination": "/guides/wordpress-vs-custom-website/index.html"
     }
   ]
 }

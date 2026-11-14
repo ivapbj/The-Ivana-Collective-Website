@@ -184,7 +184,7 @@ function AppContent() {
         {(() => {
           switch (currentPath) {
             case "/":
-              return <WordPressComparisonGuide isHomepage onScheduleCall={handleScheduleGeneral} />;
+              return <ConciseHome onScheduleCall={handleScheduleGeneral} />;
             case "/website-generator":
               return <WebsiteGeneratorPage onScheduleCall={handleScheduleGeneral} />;
             case "/services":
@@ -222,7 +222,7 @@ function AppContent() {
             case "/locations/western-ma-wordpress-developer":
               return <LocalIntentPage focus="western-ma-wordpress" onScheduleCall={handleScheduleGeneral} />;
             case "/guides/wordpress-vs-custom-website":
-              return <WordPressComparisonGuide isHomepage onScheduleCall={handleScheduleGeneral} />;
+              return <WordPressComparisonGuide onScheduleCall={handleScheduleGeneral} />;
             case "/industries/property-management":
               return <IndustrySolutionsPage industry="property-management" onScheduleCall={handleScheduleGeneral} />;
             case "/industries/auction-platforms":

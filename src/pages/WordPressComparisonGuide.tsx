@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import SeoMeta from "../components/SeoMeta";
+import StylePreviewSection from "../components/StylePreviewSection";
 import { Link } from "../context/NavigationContext";
 
 export default function WordPressComparisonGuide({ onScheduleCall }: { onScheduleCall: () => void }) {
@@ -46,6 +47,7 @@ export default function WordPressComparisonGuide({ onScheduleCall }: { onSchedul
           <button type="button" onClick={onScheduleCall} className="inline-flex min-h-12 items-center gap-2 rounded-xl border border-[#B9D8CE] bg-[#061C1A]/70 px-6 font-semibold text-[#F4F5F1]">Discuss Your Website <ArrowRight size={17}/></button>
         </div>
       </header>
+      <StylePreviewSection onScheduleCall={onScheduleCall} />
       <section aria-labelledby="comparison" className="mt-14 rounded-3xl border border-[#B9D8CE]/20 bg-[#123B35]/70 p-7 md:p-10">
         <h2 id="comparison" className="mb-6 font-serif text-3xl text-[#F4F5F1]">Quick comparison</h2>
         <div className="overflow-x-auto">

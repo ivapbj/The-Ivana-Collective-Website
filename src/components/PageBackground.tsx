@@ -106,7 +106,7 @@ function getPageKey(path: string) {
   if (path === "/website-generator") return "preview";
   if (path === "/services/web-design") return "webDesign";
   if (path === "/services/seo") return "seo";
-  if (path === "/services/content-growth") return "growth";
+  if (path === "/services/content-growth" || path === "/services/social-media") return "growth";
   if (path === "/pricing" || path === "/method" || path === "/insights") return "pricing";
   if (path === "/work" || path === "/portfolio") return "work";
   if (path === "/about") return "about";

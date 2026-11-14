@@ -10,9 +10,9 @@ const plans = [
     name: "Social Starter",
     price: "$149",
     platforms: "Facebook, Instagram & TikTok",
-    videos: null,
+    videos: "1 short video",
     posts: "8 branded static posts",
-    description: "Professional branded posts that keep your business visible without a large monthly budget.",
+    description: "Affordable branded posts and a short video to keep your business visible every month.",
     features: ["Simple monthly content plan", "Captions and calls to action", "Scheduling and publishing", "Monthly performance summary"],
     featured: false,
   },
@@ -20,7 +20,7 @@ const plans = [
     name: "Social Growth",
     price: "$279",
     platforms: "Facebook, Instagram & TikTok",
-    videos: "2 short videos",
+    videos: "3 short videos",
     posts: "8 branded static posts",
     description: "Build trust with a mix of polished posts and short videos made from your footage.",
     features: ["Monthly content plan", "Captions and calls to action", "Scheduling and publishing", "Monthly performance summary"],
@@ -30,7 +30,7 @@ const plans = [
     name: "Social Plus",
     price: "$429",
     platforms: "Facebook, Instagram & TikTok",
-    videos: "4 short videos",
+    videos: "5 short videos",
     posts: "12 branded static posts",
     description: "A higher-frequency mix of posts and videos to help your brand show up regularly.",
     features: ["Monthly content plan", "Captions and calls to action", "Scheduling and publishing", "Monthly performance summary"],
@@ -145,7 +145,7 @@ export default function SocialMediaPage({ onScheduleCall }: { onScheduleCall: ()
                 <strong className="font-serif text-5xl font-medium">{plan.price}</strong><span className="mb-2 text-sm text-[#263D36]">/ month</span>
               </div>
               <p className="mt-6 font-semibold text-[#103F34]">{plan.platforms}</p>
-              <div className="mt-4 grid gap-2 text-base font-medium"><p>{plan.videos ? `${plan.videos} / month` : "Static posts only · no videos"}</p><p>{plan.posts} / month</p></div>
+              <div className="mt-4 grid gap-2 text-base font-medium"><p>{plan.videos} / month</p><p>{plan.posts} / month</p></div>
               <ul className="mt-6 flex-1 space-y-3 border-t border-[#A7B4AA] pt-6">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3 text-sm leading-6 text-[#23372E]"><Check className="mt-1 h-4 w-4 shrink-0 text-[#103F34]" aria-hidden="true" />{feature}</li>
@@ -155,7 +155,7 @@ export default function SocialMediaPage({ onScheduleCall }: { onScheduleCall: ()
             </article>
           ))}
         </div>
-        <p className="mt-5 text-sm leading-6 text-[#D4DEDA]">Content counts are unique monthly assets, not separate assets per platform. Static posts are prioritized for Facebook and Instagram; TikTok publishing is used for suitable video content. All original photos and video footage must be provided by the client. Paid ads, on-site filming, daily inbox management, and additional services are not included.</p>
+        <p className="mt-5 text-sm leading-6 text-[#D4DEDA]">Content counts are unique monthly assets, not separate assets per platform. Static posts are prioritized for Facebook and Instagram; your included short videos can also be published on TikTok. All original photos and video footage must be provided by the client. Paid ads, on-site filming, daily inbox management, and additional services are not included.</p>
       </section>
 
       <section className="my-16 rounded-3xl border border-[#B9D8CE]/30 bg-[#0B2823]/95 p-7 sm:p-10">
@@ -201,7 +201,7 @@ export default function SocialMediaPage({ onScheduleCall }: { onScheduleCall: ()
           <div className="rounded-2xl border border-white/10 bg-[#071F1B] p-6">
             <h3 className="font-serif text-2xl">Need extra content?</h3>
             <ul className="mt-5 space-y-4 text-sm leading-6 text-[#E1E9E4]">
-              <li><strong>Extra weekly short video:</strong> +$199/month</li>
+              <li><strong>One additional short video:</strong> $49 per video, using footage you email to me</li>
               <li><strong>Extra weekly branded post:</strong> +$99/month</li>
               
             </ul>

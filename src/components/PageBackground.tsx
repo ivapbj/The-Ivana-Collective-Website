@@ -102,6 +102,7 @@ const backgrounds: Record<string, PageBackgroundConfig> = {
 };
 
 function getPageKey(path: string) {
+  if (path === "/") return "about";
   if (path === "/website-generator") return "preview";
   if (path === "/services/web-design") return "webDesign";
   if (path === "/services/seo") return "seo";
@@ -110,11 +111,13 @@ function getPageKey(path: string) {
   if (path === "/work" || path === "/portfolio") return "work";
   if (path === "/about") return "about";
   if (path === "/contact") return "contact";
+  // These three SEO pages reuse the actual About-page orchard photograph and fixed treatment.
+  if (path === "/locations/springfield-ma-web-design" || path === "/locations/western-ma-wordpress-developer" || path === "/guides/wordpress-vs-custom-website") return "about";
   if (path === "/case-studies/rebar-and-rose") return "caseRebarRose";
   if (path === "/case-studies/laboy-properties") return "caseLaboy";
   if (path === "/case-studies/llanos-electrolysis") return "caseLlanos";
   if (path === "/case-studies/foreclosurebuyhomes") return "caseForeclosure";
-  if (path.startsWith("/services") || path.startsWith("/industries/")) return "services";
+  if (path.startsWith("/services") || path.startsWith("/industries/") || path.startsWith("/locations/") || path.startsWith("/guides/")) return "services";
   return "home";
 }
 

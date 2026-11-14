@@ -111,6 +111,8 @@ function getPageKey(path: string) {
   if (path === "/work" || path === "/portfolio") return "work";
   if (path === "/about") return "about";
   if (path === "/contact") return "contact";
+  // Town-specific SEO pages use the same real orchard photo and fixed treatment as About.
+  if (["/locations/wilbraham-ma-web-design", "/locations/east-longmeadow-ma-web-design", "/locations/longmeadow-ma-web-design", "/locations/enfield-ct-web-design"].includes(path)) return "about";
   // These three SEO pages reuse the actual About-page orchard photograph and fixed treatment.
   if (path === "/locations/springfield-ma-web-design" || path === "/locations/western-ma-wordpress-developer" || path === "/guides/wordpress-vs-custom-website") return "about";
   if (path === "/case-studies/rebar-and-rose") return "caseRebarRose";

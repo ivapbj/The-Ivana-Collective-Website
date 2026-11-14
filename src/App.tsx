@@ -184,7 +184,7 @@ function AppContent() {
         {(() => {
           switch (currentPath) {
             case "/":
-              return <ConciseHome onScheduleCall={handleScheduleGeneral} />;
+              return <WordPressComparisonGuide onScheduleCall={handleScheduleGeneral} />;
             case "/website-generator":
               return <WebsiteGeneratorPage onScheduleCall={handleScheduleGeneral} />;
             case "/services":

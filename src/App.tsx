@@ -24,6 +24,8 @@ import OngoingServicesPage from "./pages/OngoingServicesPage";
 import SystemsServicesPage from "./pages/SystemsServicesPage";
 import CommerceWellnessPage from "./pages/CommerceWellnessPage";
 import RegionalServicePage from "./pages/RegionalServicePage";
+import LocalIntentPage from "./pages/LocalIntentPage";
+import WordPressComparisonGuide from "./pages/WordPressComparisonGuide";
 import CaseStudyPage from "./pages/CaseStudyPage";
 
 // Navigation
@@ -215,6 +217,12 @@ function AppContent() {
               return <RegionalServicePage region="connecticut" onScheduleCall={handleScheduleGeneral} />;
             case "/locations/new-england":
               return <RegionalServicePage region="new-england" onScheduleCall={handleScheduleGeneral} />;
+            case "/locations/springfield-ma-web-design":
+              return <LocalIntentPage focus="springfield-web-design" onScheduleCall={handleScheduleGeneral} />;
+            case "/locations/western-ma-wordpress-developer":
+              return <LocalIntentPage focus="western-ma-wordpress" onScheduleCall={handleScheduleGeneral} />;
+            case "/guides/wordpress-vs-custom-website":
+              return <WordPressComparisonGuide onScheduleCall={handleScheduleGeneral} />;
             case "/industries/property-management":
               return <IndustrySolutionsPage industry="property-management" onScheduleCall={handleScheduleGeneral} />;
             case "/industries/auction-platforms":

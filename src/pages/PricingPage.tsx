@@ -11,9 +11,9 @@ const socialPlans = [
   {
     name: "Social Starter",
     price: "$149",
-    platforms: "Facebook, Instagram & TikTok (suitable formats)",
-    content: ["8 branded static posts each month", "No videos included"],
-    note: "Best for Facebook and Instagram static content; content suitable for TikTok is published when available.",
+    platforms: "Facebook, Instagram & TikTok",
+    content: ["8 branded static posts each month", "1 short video each month"],
+    note: "Branded static posts for Facebook and Instagram, plus one short video suitable for TikTok.",
     highlighted: false,
     cta: "Schedule a Call",
   },
@@ -21,7 +21,7 @@ const socialPlans = [
     name: "Social Growth",
     price: "$279",
     platforms: "Facebook, Instagram & TikTok",
-    content: ["8 branded static posts each month", "2 short videos each month"],
+    content: ["8 branded static posts each month", "3 short videos each month"],
     note: "We edit client-provided footage and adapt content for each channel.",
     highlighted: true,
     cta: "Schedule a Call",
@@ -30,7 +30,7 @@ const socialPlans = [
     name: "Social Plus",
     price: "$429",
     platforms: "Facebook, Instagram & TikTok",
-    content: ["12 branded static posts each month", "4 short videos each month"],
+    content: ["12 branded static posts each month", "5 short videos each month"],
     note: "A higher-frequency publishing plan using your own photos and footage.",
     highlighted: false,
     cta: "Schedule a Call",
@@ -407,6 +407,7 @@ export default function PricingPage() {
             </div>
           ))}
         </div>
+        <p className="mt-5 text-sm leading-6 text-[#D4DEDA]">Add one extra short video for $49 per video (edited from the footage you email to me). For example, one extra video every month adds $49/month to your plan. All monthly plans require a three-month commitment.</p>
         <div className="mt-6 rounded-xl border border-white/10 p-5">
           <h3 className="font-serif text-xl text-[#F4F5F1]">One-time platform setup</h3>
           <p className="mt-1 text-sm leading-6 text-[#B8C6C1]">

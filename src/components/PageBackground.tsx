@@ -88,8 +88,8 @@ const backgrounds: Record<string, PageBackgroundConfig> = {
     overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .67) 60%, rgba(4, 22, 18, .5))", title: "Rebar and Rose original website screenshot",
   },
   caseLaboy: {
-    src: "/images/case-studies/IMG_1437.jpeg", position: "center top", mobilePosition: "52% top",
-    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .67) 60%, rgba(4, 22, 18, .5))", title: "LaBoy Properties original website screenshot",
+    src: "/images/work-forest-reference.jpeg", position: "center", mobilePosition: "55% center",
+    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .68) 60%, rgba(4, 22, 18, .5))", title: "Forest background for the LaBoy Properties case study",
   },
   caseLlanos: {
     src: "/images/case-studies/IMG_1435.jpeg", position: "center top", mobilePosition: "52% top",

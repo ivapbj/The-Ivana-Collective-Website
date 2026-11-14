@@ -114,7 +114,7 @@ function getPageKey(path: string) {
   if (path === "/case-studies/laboy-properties") return "caseLaboy";
   if (path === "/case-studies/llanos-electrolysis") return "caseLlanos";
   if (path === "/case-studies/foreclosurebuyhomes") return "caseForeclosure";
-  if (path.startsWith("/services") || path.startsWith("/industries/")) return "services";
+  if (path.startsWith("/services") || path.startsWith("/industries/") || path.startsWith("/locations/") || path.startsWith("/guides/")) return "services";
   return "home";
 }
 

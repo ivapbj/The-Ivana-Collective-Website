@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import SeoMeta from "../components/SeoMeta";
+import StylePreviewSection from "../components/StylePreviewSection";
 import { Link } from "../context/NavigationContext";
 
 /**
@@ -105,6 +106,7 @@ export default function LocalIntentPage({ focus, onScheduleCall }: Props) {
           <Link href="/work" className="inline-flex min-h-12 items-center rounded-xl border border-white/40 px-6 font-semibold text-[#F4F5F1]">See Selected Work</Link>
         </div>
       </header>
+      <StylePreviewSection onScheduleCall={onScheduleCall} />
       <section className="my-12 rounded-3xl border border-[#B9D8CE]/20 bg-[#123B35]/70 p-8 md:p-12">
         <h2 className="mb-4 font-serif text-3xl text-[#F4F5F1]">{p.problemHeading}</h2>
         <p className="max-w-4xl text-base leading-relaxed text-[#E0EBE5]">{p.problem}</p>

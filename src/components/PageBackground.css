@@ -137,6 +137,26 @@
   color: #245347;
 }
 
+/* Portfolio cards use an ivory surface. Keep every badge and secondary action
+   in the dark-forest palette rather than inheriting the pale text intended for
+   the page's dark background. */
+.work-page .work-copy .work-tags span {
+  color: #173b31;
+  background: #e7f0eb;
+  border-color: #5d8072;
+}
+
+.work-page .work-copy .work-action-secondary {
+  color: #173b31;
+  background: #f5f3ec;
+  border-color: #245347;
+}
+
+.work-page .work-copy .work-action-secondary:hover {
+  color: #071f1b;
+  background: #dcebe3;
+}
+
 /* The generator uses lowercase palette tokens; keep its workspace open to the photo
    and give the editor and preview controls the same ivory surface treatment. */
 #interactive-preview {

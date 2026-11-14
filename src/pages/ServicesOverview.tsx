@@ -148,7 +148,7 @@ export default function ServicesOverview({ onScheduleCall }: ServicesOverviewPro
               We help turn what you already do into useful posts, updates, and emails that keep your business visible and point people back to your website.
             </p>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              {["Social posts that match your brand", "Simple email updates", "Reuse the content you already have", "Helpful website articles when they make sense"].map((item, idx) => (
+              {["Instagram, Facebook & TikTok", "Short videos and branded posts", "Scheduled publishing", "Clear monthly reports"].map((item, idx) => (
                 <li key={idx} className="flex items-center space-x-2 text-xs text-[#B8C6C1] font-light">
                   <Check className="w-3.5 h-3.5 text-[#B9D8CE]" />
                   <span>{item}</span>
@@ -157,7 +157,7 @@ export default function ServicesOverview({ onScheduleCall }: ServicesOverviewPro
             </ul>
             <div className="pt-4 flex flex-col sm:flex-row gap-4">
               <Link 
-                href="/services/content-growth"
+                href="/services/social-media"
                 className="inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-lg bg-[#123B35] border border-[#B9D8CE]/20 text-xs font-mono text-[#F4F5F1] uppercase tracking-wider font-semibold hover:bg-[#B9D8CE] hover:text-[#061C1A] transition-all"
               >
                 <span>Explore Content & Growth</span>

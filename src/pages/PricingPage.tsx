@@ -9,33 +9,29 @@ const buttonSecondary =
 
 const socialPlans = [
   {
-    name: "Starter",
-    price: "$449",
-    platforms: "Facebook, Instagram & TikTok",
-    content: ["4 short videos each month", "8 branded posts each month"],
-    note: "Branded content adapted and cross-posted across three social platforms.",
+    name: "Social Starter",
+    price: "$149",
+    platforms: "Facebook, Instagram & TikTok (suitable formats)",
+    content: ["8 branded static posts each month", "No videos included"],
+    note: "Best for Facebook and Instagram static content; content suitable for TikTok is published when available.",
     highlighted: false,
     cta: "Schedule a Call",
   },
   {
-    name: "Growth",
-    price: "$649",
+    name: "Social Growth",
+    price: "$279",
     platforms: "Facebook, Instagram & TikTok",
-    content: ["5 short videos each month", "12 branded posts each month"],
-    note: "Content adapted and cross-posted across Facebook, Instagram, and TikTok.",
+    content: ["8 branded static posts each month", "2 short videos each month"],
+    note: "We edit client-provided footage and adapt content for each channel.",
     highlighted: true,
     cta: "Schedule a Call",
   },
   {
-    name: "Local Authority",
-    price: "$949",
+    name: "Social Plus",
+    price: "$429",
     platforms: "Facebook, Instagram & TikTok",
-    content: [
-      "10 short videos each month",
-      "18 branded posts each month",
-      "Mobile-friendly Link Hub mini-site while the package is active",
-    ],
-    note: "Premium content cadence and visibility support.",
+    content: ["12 branded static posts each month", "4 short videos each month"],
+    note: "A higher-frequency publishing plan using your own photos and footage.",
     highlighted: false,
     cta: "Schedule a Call",
   },
@@ -308,6 +304,7 @@ export default function PricingPage() {
             Schedule a Website Call
           </a>
         </div>
+        <p className="mt-4 text-sm leading-6 text-[#D4DEDA]">All social media monthly plans use original photos or clips you take and email to me after receiving my shot-list instructions. On-site filming is not included. One consolidated revision round per content batch is included. A one-time $99 Mini Pack offers five branded static posts with captions, delivered for self-publishing without management or a contract.</p>
         <p className="mt-4 text-sm text-[#91AAA1]">
           <a className="underline decoration-[#7CA99B]/60 underline-offset-4 hover:text-[#F4F5F1]" href="/services/web-design">
             Explore website design services
@@ -377,9 +374,8 @@ export default function PricingPage() {
               Commit to 6 Months. We’ll Waive Your Setup Fee.
             </h3>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-[#B8C6C1]">
-              Choose an eligible six-month social media agreement and we’ll waive the setup fee for
-              the marketing accounts included in that package. Monthly service fees still apply;
-              shorter agreements use the standard setup fees listed below.
+              Monthly management plans require a minimum three-month commitment. Choose six months and we’ll waive
+              your Facebook, Instagram and TikTok setup fees ($349 total). Google Business Profile setup is separate.
             </p>
           </div>
           <span className="mt-4 inline-block shrink-0 rounded-full border border-[#B9D8CE]/20 px-3 py-1 font-mono text-[10px] uppercase tracking-wide text-[#B9D8CE] sm:mt-1">
@@ -396,7 +392,8 @@ export default function PricingPage() {
                 description={plan.platforms}
                 features={[
                   ...plan.content,
-                  "Content planning, captions, scheduling, and monthly review",
+                  "Content planning, captions, scheduling, and monthly summary",
+                  "I send you a shot list; you take photos or video clips and email them to me",
                   "Branded graphics with clear calls to action",
                 ]}
                 note={
@@ -413,8 +410,8 @@ export default function PricingPage() {
         <div className="mt-6 rounded-xl border border-white/10 p-5">
           <h3 className="font-serif text-xl text-[#F4F5F1]">One-time platform setup</h3>
           <p className="mt-1 text-sm leading-6 text-[#B8C6C1]">
-            Setup and profile optimization can also be purchased separately. The six-month waiver
-            applies to eligible package setup fees.
+            Setup and profile optimization can be purchased separately. The six-month waiver applies to Facebook,
+            Instagram and TikTok setup with an eligible monthly management plan, not Google Business Profile.
           </p>
           <ul className="mt-4 grid gap-2 text-sm text-[#D4DEDA] sm:grid-cols-2 lg:grid-cols-5">
             {socialSetup.map(([platform, price]) => (
@@ -426,8 +423,8 @@ export default function PricingPage() {
           </ul>
         </div>
         <p className="mt-4 text-sm text-[#91AAA1]">
-          <a className="underline decoration-[#7CA99B]/60 underline-offset-4 hover:text-[#F4F5F1]" href="/services/content-growth">
-            Explore content and social media services
+          <a className="underline decoration-[#7CA99B]/60 underline-offset-4 hover:text-[#F4F5F1]" href="/services/social-media">
+            See social media packages, filming instructions and the $99 Mini Pack
           </a>
         </p>
       </section>

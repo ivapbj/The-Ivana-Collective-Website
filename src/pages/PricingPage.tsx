@@ -42,11 +42,11 @@ const socialPlans = [
 ];
 
 const socialSetup = [
-  ["Instagram", "$149"],
-  ["Facebook", "$99"],
-  ["TikTok", "$149"],
-  ["Google Business Profile", "$249"],
-  ["All-three setup total", "$397"],
+  ["Instagram", "$125"],
+  ["Facebook", "$125"],
+  ["TikTok", "$99"],
+  ["Google Business Profile (separate)", "$150"],
+  ["Three social platforms total", "$349"],
 ];
 
 const emailPlans = [

@@ -11,11 +11,12 @@ interface SeoMetaProps {
   canonicalPath: string;
   schema?: Record<string, any>;
   breadcrumbs?: BreadcrumbItem[];
+  noIndex?: boolean;
 }
 
 const SITE_URL = "https://theivanacollective.com";
-const SOCIAL_IMAGE = `${SITE_URL}/images/ivana-collective-social-preview.jpg`;
-const SOCIAL_IMAGE_ALT = "The Ivana Collective web design, SEO and social media management studio";
+const SOCIAL_IMAGE = `${SITE_URL}/images/ic-site-preview.png`;
+const SOCIAL_IMAGE_ALT = "The Ivana Collective monogram";
 
 function upsertMeta(attribute: "name" | "property", key: string, content: string) {
   let meta = document.querySelector(`meta[${attribute}="${key}"]`);
@@ -27,16 +28,16 @@ function upsertMeta(attribute: "name" | "property", key: string, content: string
   meta.setAttribute("content", content);
 }
 
-export default function SeoMeta({ title, description, canonicalPath, schema, breadcrumbs }: SeoMetaProps) {
+export default function SeoMeta({ title, description, canonicalPath, schema, breadcrumbs, noIndex = false }: SeoMetaProps) {
   useEffect(() => {
-    const fullTitle = title.includes("The Ivana Collective")
+    const fullTitle = canonicalPath === "/" || title.includes("The Ivana Collective")
       ? title
       : `${title} | The Ivana Collective`;
     const canonicalUrl = `${SITE_URL}${canonicalPath === "/" ? "/" : canonicalPath}`;
 
     document.title = fullTitle;
     upsertMeta("name", "description", description);
-    upsertMeta("name", "robots", "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1");
+    upsertMeta("name", "robots", noIndex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1");
 
     let canonicalLink = document.querySelector('link[rel="canonical"]');
     if (!canonicalLink) {
@@ -178,7 +179,7 @@ export default function SeoMeta({ title, description, canonicalPath, schema, bre
     return () => {
       document.getElementById("structured-data-schema")?.remove();
     };
-  }, [title, description, canonicalPath, schema, breadcrumbs]);
+  }, [title, description, canonicalPath, schema, breadcrumbs, noIndex]);
 
   return null;
 }

@@ -28,6 +28,7 @@ function headFor(route) {
     description:route.description,"og:title":route.title,"og:description":route.description,
     "og:url":url,"twitter:title":route.title,"twitter:description":route.description
   })) html=setMeta(html,k,v);
+  if(route.noindex) html=html.replace(/<meta name="robots" content="[^"]*"/,'<meta name="robots" content="noindex, nofollow"');
   const match=html.match(/<script id="structured-data-schema" type="application\/ld\+json">([\s\S]*?)<\/script>/);
   if(match){
     const previous=JSON.parse(match[1]);
@@ -51,7 +52,7 @@ for (const route of routes) {
   await mkdir(dirname(target),{recursive:true});
   await writeFile(target,html);
 }
-const entries=routes.map(r=>"  <url><loc>"+site+r.path+"</loc></url>").join("\n");
+const entries=routes.filter(r=>!r.noindex).map(r=>"  <url><loc>"+site+r.path+"</loc></url>").join("\n");
 await writeFile("dist/sitemap.xml",'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+entries+'\n</urlset>\n');
 const notFound=template.replace(/<title>[^<]*<\/title>/,'<title>Page Not Found | The Ivana Collective</title>')
   .replace(/<meta name="robots" content="[^"]*" \/>/, '<meta name="robots" content="noindex, follow" />')

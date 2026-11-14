@@ -83,6 +83,22 @@ const backgrounds: Record<string, PageBackgroundConfig> = {
     overlay: "linear-gradient(90deg, rgba(4, 22, 18, .76), rgba(4, 22, 18, .48) 64%, rgba(4, 22, 18, .3))",
     title: "A welcoming workspace ready for collaboration",
   },
+  caseRebarRose: {
+    src: "/images/work-forest-reference.jpeg", position: "center", mobilePosition: "55% center",
+    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .68) 60%, rgba(4, 22, 18, .5))", title: "Forest background for the Rebar and Rose case study",
+  },
+  caseLaboy: {
+    src: "/images/work-forest-reference.jpeg", position: "center", mobilePosition: "55% center",
+    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .68) 60%, rgba(4, 22, 18, .5))", title: "Forest background for the LaBoy Properties case study",
+  },
+  caseLlanos: {
+    src: "/images/work-forest-reference.jpeg", position: "center", mobilePosition: "55% center",
+    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .68) 60%, rgba(4, 22, 18, .5))", title: "Forest background for the Llanos Electrolysis case study",
+  },
+  caseForeclosure: {
+    src: "/images/work-forest-reference.jpeg", position: "center", mobilePosition: "55% center",
+    overlay: "linear-gradient(90deg, rgba(4, 22, 18, .88), rgba(4, 22, 18, .68) 60%, rgba(4, 22, 18, .5))", title: "Forest background for the ForeclosureBuyHomes case study",
+  },
 };
 
 function getPageKey(path: string) {
@@ -94,6 +110,10 @@ function getPageKey(path: string) {
   if (path === "/work" || path === "/portfolio") return "work";
   if (path === "/about") return "about";
   if (path === "/contact") return "contact";
+  if (path === "/case-studies/rebar-and-rose") return "caseRebarRose";
+  if (path === "/case-studies/laboy-properties") return "caseLaboy";
+  if (path === "/case-studies/llanos-electrolysis") return "caseLlanos";
+  if (path === "/case-studies/foreclosurebuyhomes") return "caseForeclosure";
   if (path.startsWith("/services") || path.startsWith("/industries/")) return "services";
   return "home";
 }

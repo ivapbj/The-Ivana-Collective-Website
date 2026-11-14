@@ -24,6 +24,7 @@ import OngoingServicesPage from "./pages/OngoingServicesPage";
 import SystemsServicesPage from "./pages/SystemsServicesPage";
 import CommerceWellnessPage from "./pages/CommerceWellnessPage";
 import RegionalServicePage from "./pages/RegionalServicePage";
+import CaseStudyPage from "./pages/CaseStudyPage";
 
 // Navigation
 import { NavigationProvider, useNavigation } from "./context/NavigationContext";
@@ -249,6 +250,14 @@ function AppContent() {
                   onContactSubmit={handleContactSubmit}
                 />
               );
+            case "/case-studies/rebar-and-rose":
+              return <CaseStudyPage slug="rebar-and-rose" onScheduleCall={handleScheduleGeneral} />;
+            case "/case-studies/laboy-properties":
+              return <CaseStudyPage slug="laboy-properties" onScheduleCall={handleScheduleGeneral} />;
+            case "/case-studies/llanos-electrolysis":
+              return <CaseStudyPage slug="llanos-electrolysis" onScheduleCall={handleScheduleGeneral} />;
+            case "/case-studies/foreclosurebuyhomes":
+              return <CaseStudyPage slug="foreclosurebuyhomes" onScheduleCall={handleScheduleGeneral} />;
             default:
               return <NotFoundPage />;
           }

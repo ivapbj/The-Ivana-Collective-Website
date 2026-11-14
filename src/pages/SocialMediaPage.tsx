@@ -7,33 +7,33 @@ import { ArrowRight, Check, ChevronRight, Instagram, Facebook, Video } from "luc
 
 const plans = [
   {
-    name: "Essential Visibility",
-    price: "$449",
+    name: "Social Starter",
+    price: "$149",
     platforms: "Facebook, Instagram & TikTok",
-    videos: "4 short videos",
-    posts: "8 branded posts",
-    description: "A consistent, professional presence for businesses ready to stop posting at random.",
-    features: ["Monthly content calendar", "Branded graphics, captions & calls to action", "Scheduling and publishing", "Monthly performance recap"],
+    videos: null,
+    posts: "8 branded static posts",
+    description: "Professional branded posts that keep your business visible without a large monthly budget.",
+    features: ["Simple monthly content plan", "Captions and calls to action", "Scheduling and publishing", "Monthly performance summary"],
     featured: false,
   },
   {
-    name: "Growth Visibility",
-    price: "$649",
+    name: "Social Growth",
+    price: "$279",
     platforms: "Facebook, Instagram & TikTok",
-    videos: "5 short videos",
-    posts: "12 branded posts",
-    description: "More opportunities to get noticed and stay top of mind across every core channel.",
-    features: ["Monthly content calendar", "Branded graphics, captions & calls to action", "Scheduling and publishing", "Monthly performance recap"],
+    videos: "2 short videos",
+    posts: "8 branded static posts",
+    description: "Build trust with a mix of polished posts and short videos made from your footage.",
+    features: ["Monthly content plan", "Captions and calls to action", "Scheduling and publishing", "Monthly performance summary"],
     featured: true,
   },
   {
-    name: "Local Authority",
-    price: "$949",
+    name: "Social Plus",
+    price: "$429",
     platforms: "Facebook, Instagram & TikTok",
-    videos: "10 short videos",
-    posts: "18 branded posts",
-    description: "For businesses that want a stronger, more frequent presence without managing it themselves.",
-    features: ["Monthly content calendar", "Branded graphics, captions & calls to action", "Scheduling and publishing", "Monthly performance recap", "Complimentary mobile-friendly Link Hub mini-site while your plan is active"],
+    videos: "4 short videos",
+    posts: "12 branded static posts",
+    description: "A higher-frequency mix of posts and videos to help your brand show up regularly.",
+    features: ["Monthly content plan", "Captions and calls to action", "Scheduling and publishing", "Monthly performance summary"],
     featured: false,
   },
 ];
@@ -49,9 +49,9 @@ const setupFees = [
 const faqs = [
   ["Do I have to post the content myself?", "No. We plan, prepare, schedule, and publish approved content across Facebook, Instagram and TikTok."],
   ["Are the videos and posts created separately for every platform?", "The monthly counts are unique content pieces. We adapt and cross-post them across Facebook, Instagram and TikTok rather than counting the same piece three times."],
-  ["What do you need from me?", "We start with your goals, brand information, and access to any existing photos or video clips. We will discuss what source material is needed for your content plan."],
+  ["Do I need to take the photos and videos?", "Yes. I send you an easy shot list with clear instructions on what to photograph or record using your phone. You take the photos and video clips at your business and email the original files to me. I handle the editing, branding, captions, and scheduling included in your package. On-site filming is not included."],
   ["Do you guarantee followers, leads, or sales?", "No agency can responsibly guarantee specific results. We focus on consistent quality, relevant messaging, strategic publishing, and transparent reporting."],
-  ["Is there a commitment?", "Packages have a three-month initial commitment. Choose a six-month agreement and setup fees for Facebook, Instagram and TikTok are waived. Google Business Profile setup remains a separate service."],
+  ["Is there a commitment?", "Monthly management plans require a minimum three-month agreement. With a six-month agreement, the one-time Facebook, Instagram and TikTok setup fees are waived. Google Business Profile setup is a separately priced service."],
 ];
 
 export default function SocialMediaPage({ onScheduleCall }: { onScheduleCall: () => void }) {
@@ -79,7 +79,7 @@ export default function SocialMediaPage({ onScheduleCall }: { onScheduleCall: ()
     <div className="social-media-page relative z-10 mx-auto max-w-7xl px-4 pb-24 pt-24 text-[#F4F5F1] sm:px-6 md:pt-32 lg:px-8">
       <SeoMeta
         title="Social Media Management Packages & Pricing | The Ivana Collective"
-        description="Social media management for small businesses in Western MA and Northern CT. Explore Instagram, Facebook, TikTok packages starting at $449/month."
+        description="Affordable social media management for Western MA and Northern CT small businesses. Branded posts, client-shot video editing, and publishing plans from $149/month."
         canonicalPath="/services/social-media"
         schema={schema}
         breadcrumbs={breadcrumbs}
@@ -95,7 +95,7 @@ export default function SocialMediaPage({ onScheduleCall }: { onScheduleCall: ()
             Show up consistently. <span className="text-[#B9D8CE]">Grow with intention.</span>
           </h1>
           <p className="mt-7 max-w-2xl text-base leading-8 text-[#D4DEDA] sm:text-lg">
-            Your business deserves more than an occasional post. We create branded videos, scroll-stopping posts, and clear messages—then schedule them across the channels your customers use. You stay focused on running your business.
+            Affordable social media help using real photos and videos from your business. I’ll show you what to shoot, you’ll email the files to me, and I’ll turn them into branded posts, edited videos, captions, and scheduled content.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a href="#packages" className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-[#B9D8CE] px-6 py-3 text-sm font-bold text-[#061C1A] hover:bg-white">Explore packages <ArrowRight size={16} /></a>
@@ -145,7 +145,7 @@ export default function SocialMediaPage({ onScheduleCall }: { onScheduleCall: ()
                 <strong className="font-serif text-5xl font-medium">{plan.price}</strong><span className="mb-2 text-sm text-[#263D36]">/ month</span>
               </div>
               <p className="mt-6 font-semibold text-[#103F34]">{plan.platforms}</p>
-              <div className="mt-4 grid gap-2 text-base font-medium"><p>{plan.videos} / month</p><p>{plan.posts} / month</p></div>
+              <div className="mt-4 grid gap-2 text-base font-medium"><p>{plan.videos ? `${plan.videos} / month` : "Static posts only · no videos"}</p><p>{plan.posts} / month</p></div>
               <ul className="mt-6 flex-1 space-y-3 border-t border-[#A7B4AA] pt-6">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3 text-sm leading-6 text-[#23372E]"><Check className="mt-1 h-4 w-4 shrink-0 text-[#103F34]" aria-hidden="true" />{feature}</li>
@@ -155,9 +155,25 @@ export default function SocialMediaPage({ onScheduleCall }: { onScheduleCall: ()
             </article>
           ))}
         </div>
-        <p className="mt-5 text-sm leading-6 text-[#D4DEDA]">Content counts represent unique assets each month, adapted and cross-posted across the included platforms. Paid advertising spend, on-site filming, and additional services are not included unless agreed separately.</p>
+        <p className="mt-5 text-sm leading-6 text-[#D4DEDA]">Content counts are unique monthly assets, not separate assets per platform. Static posts are prioritized for Facebook and Instagram; TikTok publishing is used for suitable video content. All original photos and video footage must be provided by the client. Paid ads, on-site filming, daily inbox management, and additional services are not included.</p>
       </section>
 
+      <section className="my-16 rounded-3xl border border-[#B9D8CE]/30 bg-[#0B2823]/95 p-7 sm:p-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#B9D8CE]">Your content, made easy</p>
+        <h2 className="mt-3 font-serif text-3xl sm:text-4xl">You capture the moments. I'll turn them into content.</h2>
+        <ol className="mt-6 grid gap-4 md:grid-cols-3">
+          <li className="rounded-xl border border-white/15 bg-[#071F1B] p-5"><strong className="text-[#B9D8CE]">1. Receive your shot list</strong><p className="mt-2 text-sm leading-7 text-[#E1E9E4]">I email you simple, specific instructions showing what photos and video clips to take with your phone.</p></li>
+          <li className="rounded-xl border border-white/15 bg-[#071F1B] p-5"><strong className="text-[#B9D8CE]">2. Shoot and email your files</strong><p className="mt-2 text-sm leading-7 text-[#E1E9E4]">You record at your business and email your original photos and video clips to me. No professional camera needed.</p></li>
+          <li className="rounded-xl border border-white/15 bg-[#071F1B] p-5"><strong className="text-[#B9D8CE]">3. I create and schedule</strong><p className="mt-2 text-sm leading-7 text-[#E1E9E4]">I turn your material into the posts, edited videos, captions, and scheduled content included in your plan.</p></li>
+        </ol>
+        <p className="mt-5 text-sm leading-7 text-[#D4DEDA]">I prioritize authentic images and video of your business. AI may assist with production where appropriate, but synthetic imagery is not a replacement for your real business. One consolidated revision round per content batch is included.</p>
+      </section>
+      <section className="mb-12 rounded-3xl border border-white/20 bg-[#0B2823]/95 p-7 sm:p-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#B9D8CE]">Need a one-time option?</p>
+        <h2 className="mt-3 font-serif text-3xl sm:text-4xl">Branded Content Mini Pack — $99</h2>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-[#E1E9E4]">Five branded static posts with captions using your emailed photos and business information. Delivered ready for you to publish. No scheduling, account management, videos, or monthly commitment.</p>
+        <a href={BOOKING_CALENDAR_URL} target="_blank" rel="noreferrer" className="mt-6 inline-flex min-h-12 items-center justify-center rounded-lg bg-[#B9D8CE] px-6 py-3 text-sm font-bold text-[#061C1A] hover:bg-white">Ask about the Mini Pack</a>
+      </section>
       <section className="mb-12 rounded-3xl border border-[#B9D8CE]/30 bg-[#0B2823]/95 p-7 sm:p-10">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#B9D8CE]">Google Business Profile</p>
         <h2 className="mt-3 font-serif text-3xl sm:text-4xl">Help customers find you on Google.</h2>
@@ -171,7 +187,7 @@ export default function SocialMediaPage({ onScheduleCall }: { onScheduleCall: ()
       <section className="my-20 rounded-3xl border border-[#B9D8CE]/30 bg-[#0B2823]/90 p-7 sm:p-10">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#B9D8CE]">Six-month partnership offer</p>
         <h2 className="mt-3 max-w-3xl font-serif text-3xl sm:text-4xl">Commit to six months. We'll waive your account setup fees.</h2>
-        <p className="mt-4 max-w-3xl text-base leading-7 text-[#D4DEDA]">Our regular plans have a three-month initial commitment. When you choose six months, Facebook, Instagram and TikTok setup fees are waived. Google Business Profile setup is quoted separately.</p>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-[#D4DEDA]">Monthly packages have a minimum three-month commitment. Choose a six-month agreement and I’ll waive the one-time Facebook, Instagram and TikTok setup fees ($349 total). Google Business Profile setup is a separate service.</p>
         <div className="mt-8 grid gap-8 md:grid-cols-2">
           <div>
             <h3 className="text-lg font-semibold">One-time account setup prices</h3>

@@ -101,7 +101,8 @@ export default function LocalIntentPage({ focus, onScheduleCall }: Props) {
         <p className="max-w-3xl text-base leading-relaxed text-[#E0EBE5] md:text-lg">{p.intro}</p>
         <div className="flex flex-wrap gap-3 pt-2">
           <button type="button" onClick={onScheduleCall} className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#B9D8CE] px-6 font-semibold text-[#061C1A] hover:bg-[#F4F5F1]">Discuss Your Website <ArrowRight size={17}/></button>
-          <Link href="/work" className="inline-flex min-h-12 items-center rounded-xl border border-[#B9D8CE] px-6 font-semibold text-[#F4F5F1]">See Selected Work</Link>
+          <Link href="/website-generator" className="inline-flex min-h-12 items-center gap-2 rounded-xl border-2 border-[#B9D8CE] bg-[#061C1A]/70 px-6 font-semibold text-[#F4F5F1] hover:bg-[#123B35]">Try a Website Preview <ArrowRight size={17}/></Link>
+          <Link href="/work" className="inline-flex min-h-12 items-center rounded-xl border border-white/40 px-6 font-semibold text-[#F4F5F1]">See Selected Work</Link>
         </div>
       </header>
       <section className="my-12 rounded-3xl border border-[#B9D8CE]/20 bg-[#123B35]/70 p-8 md:p-12">
@@ -137,7 +138,10 @@ export default function LocalIntentPage({ focus, onScheduleCall }: Props) {
       <section className="rounded-3xl border border-[#B9D8CE]/20 bg-[#0D2623] p-8 md:p-12">
         <h2 className="font-serif text-3xl text-[#F4F5F1]">Let's make the website work for your business.</h2>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#B8C6C1]">Tell me what's working, what's frustrating, and what you'd like to make easier for customers or your team.</p>
-        <button type="button" onClick={onScheduleCall} className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#B9D8CE] px-6 font-semibold text-[#061C1A]">Schedule a Consultation <ArrowRight size={17}/></button>
+        <div className="mt-7 flex flex-wrap gap-3">
+          <Link href="/website-generator" className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#B9D8CE] px-6 font-semibold text-[#061C1A] hover:bg-[#F4F5F1]">Try Your Website Preview <ArrowRight size={17}/></Link>
+          <button type="button" onClick={onScheduleCall} className="inline-flex min-h-12 items-center gap-2 rounded-xl border border-[#B9D8CE] px-6 font-semibold text-[#F4F5F1]">Schedule a Consultation <ArrowRight size={17}/></button>
+        </div>
       </section>
     </div>
   );

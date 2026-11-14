@@ -11,25 +11,25 @@ const socialPlans = [
   {
     name: "Starter",
     price: "$449",
-    platforms: "Choose 3 platforms",
+    platforms: "Facebook, Instagram & TikTok",
     content: ["4 short videos each month", "8 branded posts each month"],
-    note: "Choose three: Facebook, Instagram, TikTok, or Google Business Profile.",
+    note: "Branded content adapted and cross-posted across three social platforms.",
     highlighted: false,
     cta: "Schedule a Call",
   },
   {
     name: "Growth",
     price: "$649",
-    platforms: "All 4 platforms",
+    platforms: "Facebook, Instagram & TikTok",
     content: ["5 short videos each month", "12 branded posts each month"],
-    note: "Facebook, Instagram, TikTok, and Google Business Profile.",
+    note: "Content adapted and cross-posted across Facebook, Instagram, and TikTok.",
     highlighted: true,
     cta: "Schedule a Call",
   },
   {
     name: "Local Authority",
     price: "$949",
-    platforms: "All 4 platforms",
+    platforms: "Facebook, Instagram & TikTok",
     content: [
       "10 short videos each month",
       "18 branded posts each month",
@@ -46,7 +46,7 @@ const socialSetup = [
   ["Facebook", "$99"],
   ["TikTok", "$149"],
   ["Google Business Profile", "$249"],
-  ["All-four setup bundle", "$499"],
+  ["All-three setup total", "$397"],
 ];
 
 const emailPlans = [

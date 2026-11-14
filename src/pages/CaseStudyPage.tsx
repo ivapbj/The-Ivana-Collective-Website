@@ -23,7 +23,7 @@ const studies: Record<string, Study> = {
     features: ["Catalog and category browsing", "Color and size variations", "Cart feedback", "Customer contact pathway"],
     technologies: ["WordPress", "WooCommerce", "Elementor", "Responsive storefront"],
     heroImages: [["Shop the collection", "crops/rebar-shop-all.webp"], ["Browse the collection", "crops/rebar-categories.webp"]],
-    gallery: [["Shop collections", "crops/rebar-shop-all.webp"], ["Products and categories", "crops/rebar-categories.webp"], ["Product options", "crops/rebar-options.webp"], ["Cart confirmation", "crops/rebar-cart.webp"], ["Customer contact", "crops/rebar-contact.webp"]],
+    gallery: [["Shop collections", "crops/rebar-shop-all.webp"], ["Products and categories", "crops/rebar-categories.webp"], ["Product options", "crops/rebar-options.webp"], ["Customer contact", "crops/rebar-contact.webp"]],
     services: [["WooCommerce development", "/services/woocommerce-development"], ["E-commerce websites", "/services/ecommerce-websites"]]
   },
   "laboy-properties": {

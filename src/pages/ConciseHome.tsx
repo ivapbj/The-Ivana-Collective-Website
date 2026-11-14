@@ -18,7 +18,7 @@ export default function ConciseHome({ onScheduleCall }: { onScheduleCall: () => 
   return <div className="home-page">
     <div className="home-forest" aria-hidden="true" />
     <div className="home-shade" aria-hidden="true" />
-    <SeoMeta title="Websites, Google Help & Social Media Support" description="The Ivana Collective helps small businesses build a website, get found on Google, and stay active online." canonicalPath="/" />
+    <SeoMeta title="Custom Web Designer. Automated Systems for Businesses, SEO, Social Media" description="The Ivana Collective helps businesses with custom website design, automated systems, SEO and social media support." canonicalPath="/" />
     <section id="hero" className="relative z-40 min-h-[72vh] flex items-center px-5 pt-28 pb-16 overflow-hidden">
       <div className="relative z-40 max-w-4xl mx-auto w-full">
         <p className="font-mono text-xs tracking-[.2em] uppercase text-[#B9D8CE]">The Ivana Collective</p>

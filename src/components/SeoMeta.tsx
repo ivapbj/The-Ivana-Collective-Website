@@ -15,8 +15,8 @@ interface SeoMetaProps {
 }
 
 const SITE_URL = "https://theivanacollective.com";
-const SOCIAL_IMAGE = `${SITE_URL}/images/ivana-collective-social-preview.jpg`;
-const SOCIAL_IMAGE_ALT = "The Ivana Collective web design, SEO and social media management studio";
+const SOCIAL_IMAGE = `${SITE_URL}/images/ic-site-preview.png`;
+const SOCIAL_IMAGE_ALT = "The Ivana Collective monogram";
 
 function upsertMeta(attribute: "name" | "property", key: string, content: string) {
   let meta = document.querySelector(`meta[${attribute}="${key}"]`);
@@ -30,7 +30,7 @@ function upsertMeta(attribute: "name" | "property", key: string, content: string
 
 export default function SeoMeta({ title, description, canonicalPath, schema, breadcrumbs, noIndex = false }: SeoMetaProps) {
   useEffect(() => {
-    const fullTitle = title.includes("The Ivana Collective")
+    const fullTitle = canonicalPath === "/" || title.includes("The Ivana Collective")
       ? title
       : `${title} | The Ivana Collective`;
     const canonicalUrl = `${SITE_URL}${canonicalPath === "/" ? "/" : canonicalPath}`;

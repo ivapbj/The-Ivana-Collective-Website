@@ -12,6 +12,7 @@ import ServicesOverview from "./pages/ServicesOverview";
 import WebDesign from "./pages/WebDesign";
 import SeoService from "./pages/SeoService";
 import ContentGrowth from "./pages/ContentGrowth";
+import SocialMediaPage from "./pages/SocialMediaPage";
 import WorkPage from "./pages/WorkPage";
 import PricingPage from "./pages/PricingPage";
 import AboutPage from "./pages/AboutPage";
@@ -84,6 +85,8 @@ function AppContent() {
         navigate("/services/seo");
         break;
       case "social-media":
+        navigate("/services/social-media");
+        break;
       case "content-growth":
         navigate("/services/content-growth");
         break;
@@ -196,6 +199,8 @@ function AppContent() {
               return <SeoService onScheduleCall={handleScheduleGeneral} />;
             case "/services/content-growth":
               return <ContentGrowth onScheduleCall={handleScheduleGeneral} />;
+            case "/services/social-media":
+              return <SocialMediaPage onScheduleCall={handleScheduleGeneral} />;
             case "/services/website-redesign":
               return <OngoingServicesPage offering="website-redesign" onScheduleCall={handleScheduleGeneral} />;
             case "/services/website-maintenance":

@@ -105,7 +105,7 @@ export default function Footer({ onScheduleCall }: FooterProps) {
                 { label: "Enfield, CT Web Design", id: "enfield-town", path: "/locations/enfield-ct-web-design" },
                 { label: "Property Management Websites", id: "property", path: "/industries/property-management" },
                 { label: "Custom Auction Platforms", id: "auctions", path: "/industries/auction-platforms" },
-                { label: "Social Media Help", id: "services", path: "/services" },
+                { label: "Social Media Management & Pricing", id: "social-media", path: "/services/social-media" },
                 { label: "Content & Email Support", id: "services", path: "/services" }
               ].map((link, idx) => (
                 <li key={idx}>

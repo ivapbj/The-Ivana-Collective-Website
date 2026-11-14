@@ -1,4 +1,5 @@
 import React from "react";
+import "./SocialMediaPage.css";
 import SeoMeta from "../components/SeoMeta";
 import { Link } from "../context/NavigationContext";
 import { BOOKING_CALENDAR_URL } from "../data";
@@ -38,10 +39,11 @@ const plans = [
 ];
 
 const setupFees = [
-  ["Instagram", "$149"],
-  ["Facebook", "$99"],
-  ["TikTok", "$149"],
-  ["All three platforms", "$397"],
+  ["Instagram", "$125"],
+  ["Facebook", "$125"],
+  ["TikTok", "$99"],
+  ["All three social platforms", "$349"],
+  ["Google Business Profile (separate setup)", "$150"],
 ];
 
 const faqs = [
@@ -49,7 +51,7 @@ const faqs = [
   ["Are the videos and posts created separately for every platform?", "The monthly counts are unique content pieces. We adapt and cross-post them across Facebook, Instagram and TikTok rather than counting the same piece three times."],
   ["What do you need from me?", "We start with your goals, brand information, and access to any existing photos or video clips. We will discuss what source material is needed for your content plan."],
   ["Do you guarantee followers, leads, or sales?", "No agency can responsibly guarantee specific results. We focus on consistent quality, relevant messaging, strategic publishing, and transparent reporting."],
-  ["Is there a commitment?", "Packages have a three-month initial commitment. Choose a six-month agreement and setup fees for Facebook, Instagram and TikTok are waived."],
+  ["Is there a commitment?", "Packages have a three-month initial commitment. Choose a six-month agreement and setup fees for Facebook, Instagram and TikTok are waived. Google Business Profile setup remains a separate service."],
 ];
 
 export default function SocialMediaPage({ onScheduleCall }: { onScheduleCall: () => void }) {
@@ -74,7 +76,7 @@ export default function SocialMediaPage({ onScheduleCall }: { onScheduleCall: ()
     })),
   };
   return (
-    <div className="relative z-10 mx-auto max-w-7xl px-4 pb-24 pt-24 text-[#F4F5F1] sm:px-6 md:pt-32 lg:px-8">
+    <div className="social-media-page relative z-10 mx-auto max-w-7xl px-4 pb-24 pt-24 text-[#F4F5F1] sm:px-6 md:pt-32 lg:px-8">
       <SeoMeta
         title="Social Media Management Packages & Pricing | The Ivana Collective"
         description="Social media management for small businesses in Western MA and Northern CT. Explore Instagram, Facebook, TikTok packages starting at $449/month."
@@ -136,30 +138,40 @@ export default function SocialMediaPage({ onScheduleCall }: { onScheduleCall: ()
         </div>
         <div className="grid gap-5 lg:grid-cols-3">
           {plans.map((plan) => (
-            <article key={plan.name} className={`flex flex-col rounded-2xl border p-6 sm:p-8 ${plan.featured ? "border-[#B9D8CE] bg-[#123B35]/95" : "border-white/20 bg-[#0B2823]/90"}`}>
+            <article key={plan.name} className={`social-package-card flex flex-col rounded-2xl border p-6 sm:p-8 ${plan.featured ? "border-[#B9D8CE]" : "border-[#D9D5C9]"}`}>
               <h3 className="font-serif text-2xl">{plan.name}</h3>
-              <p className="mt-2 min-h-16 text-sm leading-6 text-[#D4DEDA]">{plan.description}</p>
-              <div className="mt-5 flex items-end gap-2 border-b border-white/15 pb-6">
-                <strong className="font-serif text-5xl font-medium">{plan.price}</strong><span className="mb-2 text-sm text-[#D4DEDA]">/ month</span>
+              <p className="mt-2 min-h-16 text-sm leading-6 text-[#263D36]">{plan.description}</p>
+              <div className="mt-5 flex items-end gap-2 border-b border-[#A7B4AA] pb-6">
+                <strong className="font-serif text-5xl font-medium">{plan.price}</strong><span className="mb-2 text-sm text-[#263D36]">/ month</span>
               </div>
-              <p className="mt-6 font-semibold text-[#B9D8CE]">{plan.platforms}</p>
+              <p className="mt-6 font-semibold text-[#103F34]">{plan.platforms}</p>
               <div className="mt-4 grid gap-2 text-base font-medium"><p>{plan.videos} / month</p><p>{plan.posts} / month</p></div>
-              <ul className="mt-6 flex-1 space-y-3 border-t border-white/10 pt-6">
+              <ul className="mt-6 flex-1 space-y-3 border-t border-[#A7B4AA] pt-6">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3 text-sm leading-6 text-[#E1E9E4]"><Check className="mt-1 h-4 w-4 shrink-0 text-[#B9D8CE]" aria-hidden="true" />{feature}</li>
+                  <li key={feature} className="flex items-start gap-3 text-sm leading-6 text-[#23372E]"><Check className="mt-1 h-4 w-4 shrink-0 text-[#103F34]" aria-hidden="true" />{feature}</li>
                 ))}
               </ul>
-              <a href={BOOKING_CALENDAR_URL} target="_blank" rel="noreferrer" className={`mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 py-3 text-center text-sm font-bold ${plan.featured ? "bg-[#B9D8CE] text-[#061C1A] hover:bg-white" : "border border-[#B9D8CE] text-white hover:bg-[#123B35]"}`}>Let's talk about this plan <ChevronRight size={16} /></a>
+              <a href={BOOKING_CALENDAR_URL} target="_blank" rel="noreferrer" className={`mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 py-3 text-center text-sm font-bold ${plan.featured ? "bg-[#103F34] text-white hover:bg-[#1D594A]" : "border border-[#103F34] text-[#103F34] hover:bg-[#E0E8DE]"}`}>Let's talk about this plan <ChevronRight size={16} /></a>
             </article>
           ))}
         </div>
         <p className="mt-5 text-sm leading-6 text-[#D4DEDA]">Content counts represent unique assets each month, adapted and cross-posted across the included platforms. Paid advertising spend, on-site filming, and additional services are not included unless agreed separately.</p>
       </section>
 
+      <section className="mb-12 rounded-3xl border border-[#B9D8CE]/30 bg-[#0B2823]/95 p-7 sm:p-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#B9D8CE]">Google Business Profile</p>
+        <h2 className="mt-3 font-serif text-3xl sm:text-4xl">Help customers find you on Google.</h2>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-[#E1E9E4]">Your Google Business Profile helps people see your business in Google Search and Maps. We can help you set it up with accurate business details, categories, contact information, and essential profile settings.</p>
+        <div className="mt-6 flex flex-wrap items-center gap-5">
+          <p className="font-serif text-4xl text-white">$150 <span className="font-sans text-sm text-[#D4DEDA]">one-time setup</span></p>
+          <a href={BOOKING_CALENDAR_URL} target="_blank" rel="noreferrer" className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[#B9D8CE] px-6 py-3 text-sm font-bold text-[#061C1A] hover:bg-white">Ask about Google Business Profile</a>
+        </div>
+        <p className="mt-4 text-sm leading-6 text-[#D4DEDA]">Separate from the Facebook, Instagram and TikTok monthly content packages. Ongoing Google profile management is not included in the one-time setup.</p>
+      </section>
       <section className="my-20 rounded-3xl border border-[#B9D8CE]/30 bg-[#0B2823]/90 p-7 sm:p-10">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#B9D8CE]">Six-month partnership offer</p>
         <h2 className="mt-3 max-w-3xl font-serif text-3xl sm:text-4xl">Commit to six months. We'll waive your account setup fees.</h2>
-        <p className="mt-4 max-w-3xl text-base leading-7 text-[#D4DEDA]">Our regular plans have a three-month initial commitment. When you choose six months, Facebook, Instagram and TikTok setup fees are waived.</p>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-[#D4DEDA]">Our regular plans have a three-month initial commitment. When you choose six months, Facebook, Instagram and TikTok setup fees are waived. Google Business Profile setup is quoted separately.</p>
         <div className="mt-8 grid gap-8 md:grid-cols-2">
           <div>
             <h3 className="text-lg font-semibold">One-time account setup prices</h3>
@@ -168,7 +180,7 @@ export default function SocialMediaPage({ onScheduleCall }: { onScheduleCall: ()
                 <div key={label} className="flex justify-between gap-4 py-3 text-sm"><dt className="text-[#D4DEDA]">{label}</dt><dd className="font-semibold text-white">{price}</dd></div>
               ))}
             </dl>
-            <p className="mt-3 text-sm text-[#B9D8CE]">Three-platform setup is $397 total, or included at no setup charge with a six-month agreement.</p>
+            <p className="mt-3 text-sm text-[#B9D8CE]">Facebook, Instagram and TikTok total $349 in one-time setup fees, waived with a six-month management agreement. Google Business Profile setup is a separate $150 service.</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-[#071F1B] p-6">
             <h3 className="font-serif text-2xl">Need extra content?</h3>

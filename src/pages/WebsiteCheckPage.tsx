@@ -31,9 +31,12 @@ export default function WebsiteCheckPage() {
     key.current = crypto.randomUUID();
   };
 
+  const hasValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim());
+  const canSubmit = form.contactConsent && hasValidEmail && form.websiteUrl.trim().length > 0 && !busy;
+
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (busy) return;
+    if (!canSubmit) return;
     setBusy(true);
     setError("");
 
@@ -108,7 +111,7 @@ export default function WebsiteCheckPage() {
             <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-[#B8C6C1]"><input className="mt-1 size-4 accent-[#B9D8CE]" type="checkbox" checked={form.marketingConsent} onChange={event => update("marketingConsent", event.target.checked)} /><span>Optional: send me occasional website and marketing tips. I can unsubscribe any time.</span></label>
             <label className="hidden" aria-hidden="true">Leave this blank<input tabIndex={-1} autoComplete="off" value={form.botField} onChange={event => update("botField", event.target.value)} /></label>
             {error && <p role="alert" className="rounded-lg border border-[#D69292]/50 bg-[#601e24]/30 p-3 text-sm text-[#FFD9D9]">{error}</p>}
-            <button disabled={busy} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#B9D8CE] px-5 py-3 font-semibold text-[#061C1A] transition-colors hover:bg-[#F4F5F1] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">{busy ? <><Loader2 className="size-4 animate-spin" aria-hidden="true" />Sending your request…</> : <>Get My Free Website Check <ArrowRight className="size-4" aria-hidden="true" /></>}</button>
+            <button disabled={!canSubmit} aria-disabled={!canSubmit} title={!canSubmit ? "Enter a valid email and website address, then agree to be contacted to continue." : undefined} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#B9D8CE] px-5 py-3 font-semibold text-[#061C1A] transition-colors hover:bg-[#F4F5F1] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">{busy ? <><Loader2 className="size-4 animate-spin" aria-hidden="true" />Sending your request…</> : <>Get My Free Website Check <ArrowRight className="size-4" aria-hidden="true" /></>}</button>
           </form>
         </>}
       </section>

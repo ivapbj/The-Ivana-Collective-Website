@@ -1,12 +1,19 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { validate, token, authorized, handlePreview } from './preview';
-const valid={fullName:'Test Visitor',email:'visitor@example.com',businessName:'Acme',industry:'Design',description:'Personal design',services:'Planning\nConsulting',template:'Portfolio',colors:['#163c36','#f4efe5','#17231f'],contactConsent:true,marketingConsent:false};
+const valid={fullName:'Test Visitor',email:'visitor@example.com',businessName:'Acme',industry:'Design',description:'Personal design',services:'Planning\nConsulting',template:'Portfolio',colors:['#163c36','#f4efe5','#17231f'],contactConsent:true,marketingConsent:false,launchTimeline:'In 1–3 months',projectRequirements:'Online booking'};
 process.env.PREVIEW_SIGNING_SECRET='test-secret-with-at-least-thirty-two-characters';
 test('validates consent, email, template, colors and unsafe images',()=>{
  assert.equal(validate(valid).marketingConsent,false);
- assert.throws(()=>validate({...valid,requestType:'quote'}), /launch timeline/);
+ assert.throws(()=>validate({...valid,launchTimeline:''}), /launch timeline/);
  for(const change of [{email:'invalid'},{contactConsent:false},{marketingConsent:'yes'},{template:'unknown'},{logo:'data:image/svg+xml;base64,AAAA'},{colors:['red']},{fullName:''}])assert.throws(()=>validate({...valid,...change}));
+});
+test('validates a website check without requiring generator-only fields',()=>{
+ const websiteCheck={...valid,requestType:'website-check',websiteUrl:'https://acme.example',description:'Website to review: https://acme.example',industry:'Website check request',services:'Website review',theme:'Website Check'};
+ const checked=validate(websiteCheck);
+ assert.equal(checked.requestType,'website-check');
+ assert.equal(checked.websiteUrl,'https://acme.example');
+ assert.throws(()=>validate({...websiteCheck,websiteUrl:''}), /website address/);
 });
 test('signed access rejects tampering, expired links and another submission',()=>{
  const signed=token('record','owner',60);

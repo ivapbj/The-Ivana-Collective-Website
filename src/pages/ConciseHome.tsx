@@ -23,6 +23,14 @@ export default function ConciseHome({ onScheduleCall }: { onScheduleCall: () => 
       </div>
     </section>
     <StylePreviewSection onScheduleCall={onScheduleCall} />
+    <div className="relative z-10 -mt-4 px-5 pb-12 text-center sm:-mt-6 sm:pb-16">
+      <Link
+        href="/website-check"
+        className="inline-flex items-center gap-2 text-sm font-semibold text-[#DCEBE4] underline decoration-[#B9D8CE]/60 underline-offset-4 transition-colors hover:text-[#B9D8CE]"
+      >
+        Already have a website? Get a Free Website Check <ArrowRight size={15} aria-hidden="true" />
+      </Link>
+    </div>
 
     <PortfolioShowcase onScheduleCall={onScheduleCall} />
 

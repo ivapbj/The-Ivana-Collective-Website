@@ -49,6 +49,10 @@
       "destination": "/website-generator/index.html"
     },
     {
+      "source": "/website-check",
+      "destination": "/website-check/index.html"
+    },
+    {
       "source": "/industries/property-management",
       "destination": "/industries/property-management/index.html"
     },

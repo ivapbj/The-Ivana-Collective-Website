@@ -1,5 +1,5 @@
 import React from "react";
-import { Mail, MapPin, ArrowUp, Calendar, Instagram, Facebook, FileText } from "lucide-react";
+import { Mail, MapPin, ArrowUp, Calendar, Instagram, Facebook, FileText, SearchCheck } from "lucide-react";
 import { useNavigation } from "../context/NavigationContext";
 
 interface FooterProps {
@@ -164,6 +164,15 @@ export default function Footer({ onScheduleCall }: FooterProps) {
                 <span>Boutique Remote agency. Servicing globally with localized SEO focus.</span>
               </div>
             </div>
+            <a
+              href="/website-check"
+              onClick={(event) => { event.preventDefault(); navigate("/website-check"); }}
+              className="w-full flex items-center justify-center space-x-2 py-3 rounded-lg font-mono text-[10px] uppercase tracking-wider font-semibold bg-[#F4F5F1] text-[#061C1A] hover:bg-[#B9D8CE] border border-[#F4F5F1] transition-all duration-200 cursor-pointer shadow-md"
+              id="footer-cta-website-check"
+            >
+              <SearchCheck className="w-3.5 h-3.5" />
+              <span>Get My Free Website Check</span>
+            </a>
             <button
               onClick={onScheduleCall}
               className="

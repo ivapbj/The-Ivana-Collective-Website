@@ -100,22 +100,6 @@ export default function Home({
         </div>
       </section>
 
-      {/* Credibility Strip */}
-      <section id="credibility-strip" className="bg-[#0A2C28] py-8 border-b border-white/5 text-center relative z-10 select-none">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-[9px] tracking-widest text-[#7CA99B] uppercase mb-5">
-            SUPPORTING & OPTIMIZING PRIMARY ECOSYSTEMS
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 opacity-30">
-            {["WordPress", "Hostinger", "Shopify", "WooCommerce", "Google Maps", "Meta Ads", "Stripe API"].map((brand, idx) => (
-              <span key={idx} className="font-serif text-sm sm:text-base tracking-widest text-[#F4F5F1] font-light">
-                {brand.toUpperCase()}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Interactive Website Style Preview Section */}
       <StylePreviewSection onScheduleCall={onScheduleCall} />
 
@@ -845,6 +829,27 @@ export default function Home({
             ))}
           </div>
 
+        </div>
+      </section>
+
+      {/* Platform ecosystem near the end of the homepage */}
+      <section id="platforms" aria-labelledby="platforms-heading" className="py-16 md:py-20 bg-[#0A2C28] border-y border-white/5 text-center relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto mb-8 space-y-3">
+            <p className="font-mono text-[10px] tracking-widest text-[#7CA99B] uppercase">
+              THE TOOLS BEHIND YOUR DIGITAL PRESENCE
+            </p>
+            <h2 id="platforms-heading" className="font-serif text-2xl sm:text-3xl text-[#F4F5F1]">
+              Platforms and tools we support.
+            </h2>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 max-w-4xl mx-auto">
+            {["WordPress", "Hostinger", "Shopify", "WooCommerce", "Google Maps", "Meta Ads", "Stripe API"].map((brand) => (
+              <span key={brand} className="rounded-full border border-[#B9D8CE]/20 bg-[#061C1A]/40 px-4 py-2 font-serif text-sm sm:text-base tracking-wide text-[#F4F5F1]">
+                {brand}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 

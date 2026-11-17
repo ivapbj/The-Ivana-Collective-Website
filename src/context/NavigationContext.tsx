@@ -86,7 +86,8 @@ export function useRouter() {
 export const useNavigation = useRouter;
 
 // Helper component for accessible SEO-crawlable Link
-interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement>, React.Attributes {
+  key?: React.Key | null;
   href: string;
   children: React.ReactNode;
   className?: string;

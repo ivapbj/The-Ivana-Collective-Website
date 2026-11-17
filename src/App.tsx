@@ -18,6 +18,7 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import ConciseHome from "./pages/ConciseHome";
 import WebsiteGeneratorPage from "./pages/WebsiteGeneratorPage";
+import WebsiteCheckPage from "./pages/WebsiteCheckPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import IndustrySolutionsPage from "./pages/IndustrySolutionsPage";
 import OngoingServicesPage from "./pages/OngoingServicesPage";
@@ -188,6 +189,8 @@ function AppContent() {
               return <ConciseHome onScheduleCall={handleScheduleGeneral} />;
             case "/website-generator":
               return <WebsiteGeneratorPage onScheduleCall={handleScheduleGeneral} />;
+            case "/website-check":
+              return <WebsiteCheckPage />;
             case "/services":
               return <ServicesOverview onScheduleCall={handleScheduleGeneral} />;
             case "/services/web-design":

@@ -6,9 +6,9 @@ const ownerEmail = 'info@theivanacollective.com';
 export function validate(body: any) {
   if (!body || body.botField || typeof body.marketingConsent !== 'boolean') throw Error('Invalid form data.');
   const requestType = body.requestType || 'quote';
-  if (!['quote','email-preview'].includes(requestType)) throw Error('Invalid request type.');
-  if (requestType === 'quote' && body.contactConsent !== true) throw Error('Please agree to be contacted about your website request.');
-  const fields = ['fullName','email','businessName','industry','description','services','phone','tagline','theme'];
+  if (!['quote','email-preview','website-check'].includes(requestType)) throw Error('Invalid request type.');
+  if ((requestType === 'quote' || requestType === 'website-check') && body.contactConsent !== true) throw Error('Please agree to be contacted about your request.');
+  const fields = ['fullName','email','businessName','websiteUrl','industry','description','services','phone','tagline','theme'];
   const clean: any = {};
   for (const field of fields) {
     if (body[field] != null && typeof body[field] !== 'string') throw Error('Invalid form data.');
@@ -16,6 +16,7 @@ export function validate(body: any) {
     if (clean[field].length > (field === 'description' || field === 'services' ? 3000 : 200)) throw Error('Please shorten your information.');
   }
   if (requestType === 'quote' && (!clean.fullName || !clean.businessName || !clean.industry || !clean.description || !clean.services || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean.email))) throw Error('Please complete your name, valid email and business details.');
+  if (requestType === 'website-check' && (!clean.fullName || !clean.businessName || !clean.websiteUrl || !clean.description || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean.email))) throw Error('Please complete your name, valid email, business name and website address.');
   if (requestType === 'email-preview' && (!clean.fullName || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean.email) || body.contactConsent !== true)) throw Error('Enter your name and a valid email, then agree to receive the requested preview.');
   if (!templates.includes(body.template)) throw Error('Select a website template.');
   if (!Array.isArray(body.colors) || body.colors.length !== 3 || !body.colors.every((c: unknown) => typeof c === 'string' && /^#[a-f0-9]{6}$/i.test(c))) throw Error('Choose valid colors.');
@@ -41,14 +42,16 @@ export function validate(body: any) {
     clean.requestType = 'quote';
     clean.launchTimeline = body.launchTimeline;
     clean.projectRequirements = body.projectRequirements.trim();
-  } else {
+  } else if (requestType === 'email-preview') {
     if (typeof body.previewImage !== 'string' || body.previewImage.length > 3000000 || !/^data:image\/jpeg;base64,[A-Za-z0-9+/]+={0,2}$/.test(body.previewImage)) throw Error('The preview image could not be prepared. Please try again.');
     const bytes = Buffer.from(body.previewImage.split(',')[1], 'base64');
     if (bytes.length < 4 || bytes[0] !== 255 || bytes[1] !== 216 || bytes[2] !== 255) throw Error('Invalid preview image.');
     clean.previewImage = body.previewImage;
     clean.requestType = 'email-preview';
+  } else {
+    clean.requestType = 'website-check';
   }
-  return {...clean, email:clean.email.toLowerCase(), template:body.template, colors:body.colors, contactConsent:true, marketingConsent:body.marketingConsent, consentTextVersion:'website-preview-v4'};
+  return {...clean, email:clean.email.toLowerCase(), template:body.template, colors:body.colors, contactConsent:true, marketingConsent:body.marketingConsent, consentTextVersion:requestType === 'website-check' ? 'website-check-v1' : 'website-preview-v4'};
 }
 function signature(value: string) { return createHmac('sha256', process.env.PREVIEW_SIGNING_SECRET!).update(value).digest('base64url'); }
 function tokenUntil(id: string, role: string, expires: number) {
@@ -148,10 +151,12 @@ async function sendNotifications(row: Notification) {
   const from = process.env.FROM_EMAIL!;
   const ids = row.email_ids ?? [null, null];
   const expires = Math.floor(Date.parse(row.created_at)/1000) + 7*86400;
+  const isEmailPreview = config.requestType === 'email-preview';
+  const isWebsiteCheck = config.requestType === 'website-check';
   // The same record always produces the same URL and provider payload on retry.
   const ownerUrl = `https://theivanacollective.com/?preview=${row.id}&access=${tokenUntil(row.id,'owner',expires)}#interactive-preview`;
   const fields = [
-    ['Full name',config.fullName], ['Email',config.email], ['Business',config.businessName],
+    ['Full name',config.fullName], ['Email',config.email], ['Business',config.businessName], ['Website',config.websiteUrl],
     ['Category',config.industry], ['Description',config.description], ['Template',config.template],
     ['Preferred colors',config.colors.join(', ')], ['Services or products',config.services],
     ['Phone',config.phone], ['Tagline',config.tagline], ['Design direction',config.theme],
@@ -159,9 +164,10 @@ async function sendNotifications(row: Notification) {
     ['Logo provided',config.logo ? 'Yes' : 'No'], ['Hero image provided',config.image ? 'Yes' : 'No'],
     ['Marketing opt-in',config.marketingConsent ? 'Yes' : 'No'], ['Submitted (UTC)',row.created_at],
   ].filter(([,value])=>value);
-  const isEmailPreview = config.requestType === 'email-preview';
   const confirmation = isEmailPreview
     ? 'Here is the image of the website idea you requested. Your preview is only a starting point, and you can keep exploring and adjusting it on the website.'
+    : isWebsiteCheck
+      ? 'Thank you for requesting a website check. I’ll review the details you shared and follow up with practical next steps.'
     : 'Thank you for sharing your website plans. I’ll review your request and follow up about the next steps.';
   const previewAttachment = isEmailPreview ? [{
     filename: `${config.businessName.replace(/[^a-z0-9-_]+/gi,'-').slice(0,60) || 'website'}-preview.jpg`,
@@ -170,15 +176,15 @@ async function sendNotifications(row: Notification) {
   const messages = [
     {
       from, to:ownerEmail, replyTo:config.email,
-      subject:`New Website Generator Lead — ${config.businessName.replace(/[\r\n]+/g,' ')}`,
-      text:`${fields.map(([label,value])=>`${label}: ${value}`).join('\n')}\n\nOpen saved preview (expires in 7 days): ${ownerUrl}`,
-      html:brandedEmail('New website generator lead', `${fields.map(([label,value])=>`<p style="white-space:pre-wrap"><strong>${label}</strong><br>${escapeHtml(value)}</p>`).join('')}<p><a href="${escapeHtml(ownerUrl)}">Open saved preview</a> · expires in 7 days</p>`),
+      subject:`${isWebsiteCheck ? 'New Website Check Request' : 'New Website Generator Lead'} — ${config.businessName.replace(/[\r\n]+/g,' ')}`,
+      text:`${fields.map(([label,value])=>`${label}: ${value}`).join('\n')}${isWebsiteCheck ? '' : `\n\nOpen saved preview (expires in 7 days): ${ownerUrl}`}`,
+      html:brandedEmail(isWebsiteCheck ? 'New website check request' : 'New website generator lead', `${fields.map(([label,value])=>`<p style="white-space:pre-wrap"><strong>${label}</strong><br>${escapeHtml(value)}</p>`).join('')}${isWebsiteCheck ? '' : `<p><a href="${escapeHtml(ownerUrl)}">Open saved preview</a> · expires in 7 days</p>`}`),
     },
     {
       from, to:config.email, replyTo:ownerEmail,
-      subject:isEmailPreview ? 'Your website preview image | The Ivana Collective' : 'We received your website request | The Ivana Collective',
+      subject:isEmailPreview ? 'Your website preview image | The Ivana Collective' : isWebsiteCheck ? 'We received your website check request | The Ivana Collective' : 'We received your website request | The Ivana Collective',
       text:`Hi ${config.fullName},\n\n${confirmation}${isEmailPreview?' The image is attached.':''}\n\nSchedule a consultation: ${booking}\n\nIvana\nThe Ivana Collective`,
-      html:brandedEmail(isEmailPreview ? 'Your website preview image' : 'We received your website request', `<p>Hi ${escapeHtml(config.fullName)},</p><p>${confirmation}${isEmailPreview?' The image is attached.':''}</p><p><a href="${booking}">Schedule a consultation</a></p><p>Ivana<br>The Ivana Collective</p>`),
+      html:brandedEmail(isEmailPreview ? 'Your website preview image' : isWebsiteCheck ? 'We received your website check request' : 'We received your website request', `<p>Hi ${escapeHtml(config.fullName)},</p><p>${confirmation}${isEmailPreview?' The image is attached.':''}</p><p><a href="${booking}">Schedule a consultation</a></p><p>Ivana<br>The Ivana Collective</p>`),
       ...(previewAttachment ? {attachments:previewAttachment} : {}),
     },
   ];
